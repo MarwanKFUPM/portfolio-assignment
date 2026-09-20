@@ -5,9 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>My Portfolio | About Me</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .sparkle-background {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(92, 139, 255, .08), transparent 28%),
+        radial-gradient(circle at 85% 75%, rgba(201, 112, 255, .07), transparent 30%);
+    }
+
+    .sparkle-background span {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #8eb5ff;
+      box-shadow: 0 0 9px 2px #8eb5ff;
+      opacity: 0;
+      animation: sparkle-twinkle var(--sparkle-duration) ease-in-out var(--sparkle-delay) infinite;
+    }
+
+    .sparkle-background span:nth-child(3n) {
+      background: #d69cff;
+      box-shadow: 0 0 9px 2px #d69cff;
+    }
+
+    @keyframes sparkle-twinkle {
+      0%, 100% { opacity: 0; transform: scale(.5); }
+      45%, 60% { opacity: .7; transform: scale(1); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sparkle-background span { animation: none; opacity: .25; }
+    }
+
+    .author-preview {
+      margin-top: 1.25rem;
+      min-height: 210px;
+      padding: .75rem;
+      border: 1px solid rgba(142, 181, 255, .45);
+      border-radius: 14px;
+      background: rgba(20, 25, 48, .6);
+      text-align: center;
+    }
+
+    .author-preview img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 9px;
+      display: block;
+    }
+
+    .author-preview figcaption { margin-top: .5rem; font-size: .9rem; }
+
+    .author-name {
+      color: inherit;
+      cursor: pointer;
+      text-decoration: underline dotted;
+      text-underline-offset: 3px;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="sparkle-background" aria-hidden="true">
+    <span style="left: 7%; top: 16%; --sparkle-duration: 4.8s; --sparkle-delay: -1s"></span>
+    <span style="left: 18%; top: 68%; --sparkle-duration: 5.7s; --sparkle-delay: -3s"></span>
+    <span style="left: 31%; top: 34%; --sparkle-duration: 4.1s; --sparkle-delay: -2s"></span>
+    <span style="left: 44%; top: 82%; --sparkle-duration: 6.2s; --sparkle-delay: -4s"></span>
+    <span style="left: 57%; top: 21%; --sparkle-duration: 5.3s; --sparkle-delay: -1.8s"></span>
+    <span style="left: 69%; top: 57%; --sparkle-duration: 4.6s; --sparkle-delay: -3.5s"></span>
+    <span style="left: 82%; top: 12%; --sparkle-duration: 6.5s; --sparkle-delay: -.7s"></span>
+    <span style="left: 94%; top: 84%; --sparkle-duration: 5s; --sparkle-delay: -2.6s"></span>
+    <span style="left: 12%; top: 91%; --sparkle-duration: 6.8s; --sparkle-delay: -4.8s"></span>
+    <span style="left: 76%; top: 38%; --sparkle-duration: 4.3s; --sparkle-delay: -1.4s"></span>
+  </div>
   <header class="navbar">
     <a href="index.html" class="logo">SWE363Portfolio</a>
 
@@ -42,7 +118,7 @@
 
       <div class="hero-image">
         <div class="profile-placeholder">
-          👨‍💻
+          <img id="profileImage" src="marwanwedding.png" alt="Marwan Al-Hamdan" style="width: 100%; height: 100%; object-fit: cover; border: 3px solid #8eb5ff; border-radius: 50%; transition: border-color .15s ease-out;">
         </div>
       </div>
     </section>
@@ -51,11 +127,31 @@
       <div>
         <p class="eyebrow">About Me</p>
         <h2>My Hobbies</h2>
+        <figure class="author-preview" aria-live="polite" height="400">
+          <img id="authorPreviewImage" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx9iA65xD4Om5QjF14hHWo1R7AFF6XeVEbRaKVhib_kMz4wjd17YOmkIL9&s=10" alt="William Blake">
+          <figcaption id="authorPreviewCaption">William Blake</figcaption>
+        </figure>
       </div>
 
       <div>
         <p>
-          I'm a devoted reader of the great classic books, currently reading The Master and Margarita, Works by Aristotle, and Various writings, including the poetry of Blake, Frost, and Milton, the essays of Orwell, Bacon, and Johnson, and the plays of Sophocles, Browning, and Shakespeare.
+          I'm a devoted reader of the great classic books, currently 
+          reading The Master and Margarita, Works by Aristotle, and Various writings, 
+          including the poetry of <span class="author-name" data-author="William Blake" 
+          data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTx9iA65xD4Om5QjF14hHWo1R7AFF6XeVEbRaKVhib_kMz4wjd17YOmkIL9&s=10">Blake
+        </span>, <span class="author-name" data-author="Robert Frost" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnjQD0CSNzO6XJAsLbDzZRRLZ4gJ5wg9G5ItqOxuPMRIv3QsaZ682esMSFe5WAzy2AUVi2B8BeiLssyZXS6sbSEbAZwSP5EDPEHaO89fpPHA&s=10">
+          Frost</span>, and <span class="author-name" data-author="John Milton" 
+          data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQImqcmO1zqjj9aQQ6PM9AsOANL2Ybq1A0nM9wnugK3BA&s=10">Milton
+        </span>, the essays of <span class="author-name" data-author="George Orwell" 
+        data-image="https://upload.wikimedia.org/wikipedia/commons/7/7e/George_Orwell_press_photo.jpg">Orwell</span>, 
+        <span class="author-name" data-author="Francis Bacon" 
+        data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvz0UmTXrqPerJz8ShkDis9jN6A1M1QFPhlTziXMsZDA&s">Bacon</span>, and 
+        <span class="author-name" data-author="Samuel Johnson" data-image="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Portrait_of_Samuel_Johnson_%28%22Blinking_Sam%22%29.jpg/250px-Portrait_of_Samuel_Johnson_%28%22Blinking_Sam%22%29.jpg?utm_source=en.wikipedia.org&utm_campaign=parser&utm_content=thumbnail">
+          Johnson</span>, and the plays of <span class="author-name" data-author="Sophocles" 
+          data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQjmQj1RUPxNCgXfuLcwppKK_W_sBSfFN9pE6oM_enQEUnGJD6vaFdGPMgcZs1RpyOJXUnKw-pYq22RCBKxRXFjuhJI7f23GLVpZlKuYXqjGQ&s=10">Sophocles</span>, 
+          <span class="author-name" data-author="Robert Browning" data-image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgPs2nKVHnlDZR8EGwUH-ftZoqrsizL71Gpk23PC_aVArN-B1jbnVE9CVwNKbOtm7EDcoPRs54jk7YZmE0nStgUhR6Pi2DNlFS6yI4roCF&s=10">Browning
+      </span>, and <span class="author-name" data-author="William Shakespeare" data-image="https://upload.wikimedia.org/wikipedia/commons/a/a2/Shakespeare.jpg">Shakespeare
+      </span>.
         </p>
           <p>
             I also enjoy writing poetry and essays. You can find some of my writings on my <a href="https://marwanpgx.substack.com/" id="linkhover">Substack</a> profile.
@@ -63,6 +159,7 @@
         <p>
           I love solving puzzles, playing unique and interesting games, and exploring new possibilities in limited fields. I believe this mental flexibility translates well into my learning, social life, and person health.
         </p>
+        
       </div>
     </section>
 
@@ -70,11 +167,11 @@
       <h2>My Skills</h2>
 
       <div class="skill-grid">
-        <div class="skill-card">HTML</div>
-        <div class="skill-card">CSS</div>
-        <div class="skill-card">JavaScript</div>
-        <div class="skill-card">Responsive Design</div>
-        <div class="skill-card">Git</div>
+        <div class="skill-card">HTML/CSS</div>
+        <div class="skill-card">JavaScript/Python</div>
+        <div class="skill-card">SQL</div>
+        <div class="skill-card">C, C++, C#</div>
+        <div class="skill-card">Data Science and Machine Learning</div>
         <div class="skill-card">UI/UX</div>
       </div>
     </section>
@@ -85,5 +182,37 @@
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    const authorNames = [...document.querySelectorAll('.author-name')];
+    const authorPreviewImage = document.getElementById('authorPreviewImage');
+    const authorPreviewCaption = document.getElementById('authorPreviewCaption');
+    let authorIndex = 0;
+
+    function showAuthor(author) {
+      authorPreviewImage.src = author.dataset.image;
+      authorPreviewImage.alt = author.dataset.author;
+      authorPreviewCaption.textContent = author.dataset.author;
+    }
+
+    authorNames.forEach((author) => author.addEventListener('pointerenter', () => showAuthor(author)));
+    setInterval(() => {
+      authorIndex = (authorIndex + 1) % authorNames.length;
+      showAuthor(authorNames[authorIndex]);
+    }, 5000);
+
+    const profileImage = document.getElementById('profileImage');
+
+    document.addEventListener('pointermove', (event) => {
+      const bounds = profileImage.getBoundingClientRect();
+      const centerX = bounds.left + bounds.width / 2;
+      const centerY = bounds.top + bounds.height / 2;
+      const distance = Math.hypot(event.clientX - centerX, event.clientY - centerY);
+      const radius = Math.max(bounds.width, bounds.height) / 2;
+      const proximity = Math.max(0, 1 - distance / radius);
+      const hue = 220 - proximity * 100;
+
+      profileImage.style.borderColor = `hsl(${hue}, 100%, 75%)`;
+    });
+  </script>
 </body>
 </html>
