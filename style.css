@@ -145,6 +145,30 @@ main {
   padding: 0 1.5rem;
 }
 
+/*=========================
+   Sections
+==========================*/
+
+    :root {
+      --sparkle-color: #8eb5ff;
+      --sparkle-accent: #d69cff;
+    }
+
+    body.light-mode,
+    body[data-theme="light"] {
+      --sparkle-color: #315fc4;
+      --sparkle-accent: #8b3fb8;
+    }
+
+    .sparkle-background span {
+      background: var(--sparkle-color);
+      box-shadow: 0 0 9px 2px var(--sparkle-color);
+    }
+
+    .sparkle-background span:nth-child(3n) {
+      background: var(--sparkle-accent);
+      box-shadow: 0 0 9px 2px var(--sparkle-accent);
+    }
 /* =========================
    Hero
 ========================= */
