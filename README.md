@@ -24,6 +24,7 @@ Running index.html begins the webpage. There are no additional features or any c
 You will be greeted with index.html, which is ordered in three segments, the introduction, which contains a short line regarding my interests and a picture of myself. The second segment consists of listing my interests in more details with references to share in case you were interested. The third documents what skills I have in any technical fields.
 
 The header of the pages contains navigation buttons to move between pages, a universal nav with the name of the project, and a light/dark mode button to match the preferences of the user. The footer contains a simple trademark featuring my name.
+The project features interactive modules such as remembering and storing light/dark mode settings, input checking for comments in the contact me page, and interactive hover window in the about me page. It safely fulfills the interactive features requirement.
 
 Project.html contains a simple
 
