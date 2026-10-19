@@ -51,6 +51,20 @@
 
       <form class="contact-form">
 
+        <label for="honorific">Honorific</label>
+        <div>
+          <select id="honorific" name="honorific" required>
+            <option value="" selected disabled>Select an honorific</option>
+            <option value="mr">Mr.</option>
+            <option value="mrs">Mrs.</option>
+            <option value="ms">Ms.</option>
+            <option value="dr">Dr.</option>
+            <option value="prof">Prof.</option>
+            <option value="mx">Mx.</option>
+          </select>
+          <span id="honorificEmoji" aria-hidden="true">👋</span>
+        </div>
+
         <label for="name">Name</label>
         <input
           type="text"
@@ -91,6 +105,66 @@
     <p>© 2026 Marwan Al-Hamdan. All rights reserved.</p>
   </footer>
 
+  <script>
+    const contactForm = document.querySelector(".contact-form");
+    const honorificSelect = document.getElementById("honorific");
+    const honorificEmoji = document.getElementById("honorificEmoji");
+    const nameInput = document.getElementById("name");
+    const messageInput = document.getElementById("message");
+
+    const honorificEmojis = {
+      mr: "👨",
+      mrs: "👩",
+      ms: "👩",
+      dr: "🩺",
+      prof: "🎓",
+      mx: "🧑"
+    };
+
+    honorificSelect.addEventListener("change", () => {
+      honorificEmoji.textContent = honorificEmojis[honorificSelect.value] || "👋";
+    });
+
+    // For code reference: https://github.com/swaraj-das/Collect-your-GamingTools/blob/754593564f909590af6a71fd2871afa15c143d9d/script.js#L528
+    
+    contactForm.addEventListener("submit", (event) => {
+      nameInput.setCustomValidity(nameInput.value.trim() ? "" : "Please enter your name.");
+      messageInput.setCustomValidity(messageInput.value.trim() ? "" : "Please enter a message.");
+
+      if (!contactForm.checkValidity()) {
+        event.preventDefault();
+        contactForm.reportValidity();
+      } else {
+        event.preventDefault();
+        alert("Your message was submitted successfully!");
+        contactForm.reset();
+      }
+    });
+  </script>
   <script src="script.js"></script>
+  <script>
+    (() => {
+      const themeToggle = document.getElementById("themeToggle");
+      const storageKey = "portfolio-theme";
+
+      try {
+        const savedTheme = localStorage.getItem(storageKey);
+        if (savedTheme === "dark" || savedTheme === "light") {
+          document.body.classList.toggle("dark-mode", savedTheme === "dark");
+        }
+      } catch (error) {
+        // Keep the page usable when localStorage is unavailable.
+      }
+
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = document.body.classList.contains("dark-mode") ? "dark" : "light";
+        try {
+          localStorage.setItem(storageKey, currentTheme);
+        } catch (error) {
+          console.alert("Unable to save theme preference. Your preference will not be remembered.");
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

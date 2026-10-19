@@ -14,3 +14,5 @@ Used to AI to create sparkly background effects and a responsive border to the P
 
 Used AI to create the Author preview window, was very buggy, required tinkering 
 
+In general, I will look for already existing references on Github and StackOverflow before using AI. 
+
