@@ -12,5 +12,5 @@ Deleted many components to whittle down the code to key tags and components.
 
 Used to AI to create sparkly background effects and a responsive border to the Portfolio cover image.
 
-Used AI to create the Author preview window
+Used AI to create the Author preview window, was very buggy, required tinkering 
 
