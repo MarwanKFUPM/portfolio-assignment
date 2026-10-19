@@ -48,4 +48,9 @@ This project is not licensed.
 AI usage, as mentioned in the description, will be mentioned in ai-usage-report.md
 References: 
 https://gist.github.com/DomPizzie/7a5ff55ffa9081f2de27c315f5018afc
-
+https://www.awwwards.com/sites/hanseatic-media-harbour
+https://aashay-dev-ed.develop.my.site.com/AashayWase/s
+https://www.abdallaahmed.icu/en
+https://www.w3schools.com/html/html_intro.asp
+https://www.w3schools.com/css/
+https://www.w3schools.com/js/default.asp
