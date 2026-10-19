@@ -4,8 +4,13 @@ Generated the html, css, js files using a single prompt from ChatGPT describing 
 
 <img width="430" height="180" alt="image" src="https://github.com/user-attachments/assets/ca83e953-ab03-42fd-a41f-d1ce5ea55161" />
 
+Used the generated code as guidelines to recreate it and discard what is not needed.
+
 Modified all the placeholders to contain my name and assignment details. Initial website commit is the original prompt's result.
+
+Deleted many components to whittle down the code to key tags and components.
 
 Used to AI to create sparkly background effects and a responsive border to the Portfolio cover image.
 
 Used AI to create the Author preview window
+
