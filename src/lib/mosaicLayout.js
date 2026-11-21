@@ -164,7 +164,9 @@ function layoutCompact(entries, metrics, archive) {
   // Every rail tile is exactly as wide as the visible rail, not wider and
   // clipped off-screen. This preserves squares AND exposes the imagery.
   const streamUnit = leftEdge;
-  const minimumPerSide = Math.ceil(height / streamUnit) + 4;
+  // Give the two mobile/tablet side streams a genuine scroll range.
+  // One screen of content would make passive scrolling appear stationary.
+  const minimumPerSide = Math.ceil((height * 1.85) / streamUnit) + 2;
   const archiveUnit = width / gridColumns;
   const minimumArchiveSlots = gridColumns * Math.ceil(height / archiveUnit);
   const slotsPerSide = Math.max(Math.ceil(entries.length / 2), minimumPerSide, Math.ceil(minimumArchiveSlots / 2));

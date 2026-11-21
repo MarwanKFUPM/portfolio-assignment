@@ -78,10 +78,19 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     const pause = () => {
       pauseUntil.current = performance.now() + SCROLL_RESUME_DELAY_MS;
-      // Allow manual scrolling to take precedence, even during the quick rewind.
+      // Manual touch/wheel input takes precedence and restarts the motion from
+      // the user's actual position. The fractional auto-scroll offset is kept
+      // separately so iOS scrollTop rounding cannot freeze subpixel movement.
       scrollState.current = { ...initialAutoScrollState(), position: element.scrollTop };
     };
-    const scroll = () => syncWindow();
+    const scroll = () => {
+      // Touch gestures can continue moving after touchstart (momentum scroll).
+      // Remember the *latest* manual position so autoplay resumes smoothly.
+      if (performance.now() < pauseUntil.current) {
+        scrollState.current = { ...initialAutoScrollState(), position: element.scrollTop };
+      }
+      syncWindow();
+    };
     const hoverEntry = event => {
       if (event.target.closest?.('.mosaic-tile--entry')) pause();
     };
@@ -102,11 +111,14 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
       if (!document.hidden && !reduce.matches && time >= pauseUntil.current) {
         const max = element.scrollHeight - element.clientHeight;
         if (max > 40) {
-          const next = advanceAutoScroll(
-            { ...scrollState.current, position: element.scrollTop }, delta, max
-          );
+          // Do not read scrollTop back on each frame: mobile WebKit may round
+          // it to whole pixels, while each frame only advances ~0.4px.
+          // Reinjecting the rounded value loses that fraction forever.
+          const next = advanceAutoScroll(scrollState.current, delta, max);
           scrollState.current = next;
-          element.scrollTop = next.position;
+          if (Math.abs(element.scrollTop - next.position) >= 0.5) {
+            element.scrollTop = next.position;
+          }
         }
       }
       frame = window.requestAnimationFrame(tick);

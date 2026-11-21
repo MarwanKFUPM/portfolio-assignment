@@ -184,8 +184,9 @@ a { color: inherit; }
 .transition-layer--zoom .transition-wash { opacity:.1; }
 /* Narrow screens retain a readable paper column and two square-only side streams.
    The same achievement buttons join a grid when Archive Mode opens. */
-.mosaic-scroll--compact:not(.mosaic-scroll--archive) { overflow: hidden; }
-.mosaic-scroll--compact.mosaic-scroll--archive { overflow-y: auto; overflow-x: hidden; }
+/* Both mobile side streams share one vertical scroll plane. Keep it scrollable
+   in Portfolio Mode as well as Archive Mode, including on iOS Safari. */
+.mosaic-scroll--compact { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
 .mosaic-scroll--archive .mosaic-tile--concealed { opacity: 0; pointer-events: none; }
 .mosaic-scroll--compact .mosaic-tile--responsive .tile-title { font-size: clamp(16px, 9cqi, 28px); line-height: 1.08; white-space: normal; }
 .mosaic-scroll--compact .mosaic-tile--responsive .tile-category { font-size: clamp(9px, 3cqi, 11px); }
