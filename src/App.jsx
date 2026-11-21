@@ -7,6 +7,7 @@ import Icon from './components/Icons.jsx';
 import { achievements, createSampleBatch } from './data/achievements.js';
 import { i18n } from './content/translations.js';
 import { useViewport } from './hooks/useViewport.js';
+import { computeMetrics } from './lib/mosaicLayout.js';
 
 function readPreference(key, fallback) {
   try { return localStorage.getItem(key) || fallback; } catch { return fallback; }
@@ -16,6 +17,7 @@ function readPathname() { return window.location.pathname.replace(/\/$/, '') || 
 
 export default function App() {
   const viewport = useViewport();
+  const responsive = useMemo(() => computeMetrics({ ...viewport, archive: false }), [viewport]);
   const [pathname, setPathname] = useState(readPathname);
   const [theme, setTheme] = useState(() => readPreference('living-archive-theme', 'light'));
   const [lang, setLang] = useState(() => readPreference('living-archive-language', 'en'));
@@ -73,7 +75,7 @@ export default function App() {
   const onTileOpen = useCallback((item, element) => navigate(`/archive/${encodeURIComponent(item.id)}`, element, item), [navigate]);
 
   return (
-    <div className={`site-shell ${archive ? 'site-shell--archive' : ''}`}>
+    <div className={`site-shell ${archive ? 'site-shell--archive' : ''} ${responsive.compact ? 'site-shell--compact' : ''}`} style={{ '--panel-width': `${responsive.panelWidth}px` }}>
       <div className="site-grain" aria-hidden="true" />
       <ArchiveMosaic entries={entries} viewport={viewport} archive={archive} lang={lang} onOpen={onTileOpen} />
       <div className="panel-shadow" aria-hidden="true" />
