@@ -1,6 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { layoutMosaic } from '../lib/mosaicLayout.js';
 import { visibleMosaicTiles } from '../lib/visibleMosaicTiles.js';
+import { advanceAutoScroll, initialAutoScrollState, SCROLL_RESUME_DELAY_MS } from '../lib/autoScroll.js';
 import Icon from './Icons.jsx';
 import { createAmbientBackground } from '../lib/ambientPattern.js';
 
@@ -49,7 +50,7 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
   const scrollRef = useRef(null);
   const pauseUntil = useRef(0);
   const lastTime = useRef(0);
-  const direction = useRef(1);
+  const scrollState = useRef(initialAutoScrollState());
   const [viewTop, setViewTop] = useState(0);
   const layout = useMemo(() => layoutMosaic(entries, viewport, archive, layoutSeed), [entries, viewport.width, viewport.height, archive, layoutSeed]);
   const viewportHeight = viewport.height;
@@ -67,14 +68,19 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
     element.scrollTop = 0;
     syncWindow(true);
     lastTime.current = 0;
-    direction.current = 1;
+    scrollState.current = initialAutoScrollState();
+    pauseUntil.current = performance.now() + SCROLL_RESUME_DELAY_MS;
   }, [archive, layout.metrics.compact, syncWindow]);
 
   useEffect(() => {
     const element = scrollRef.current;
     if (!element) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const pause = () => { pauseUntil.current = performance.now() + 7000; };
+    const pause = () => {
+      pauseUntil.current = performance.now() + SCROLL_RESUME_DELAY_MS;
+      // Allow manual scrolling to take precedence, even during the quick rewind.
+      scrollState.current = { ...initialAutoScrollState(), position: element.scrollTop };
+    };
     const scroll = () => syncWindow();
     const hoverEntry = event => {
       if (event.target.closest?.('.mosaic-tile--entry')) pause();
@@ -93,10 +99,11 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
       if (document.hidden || reduce.matches || time < pauseUntil.current) return;
       const max = element.scrollHeight - element.clientHeight;
       if (max <= 40) return;
-      const next = element.scrollTop + direction.current * delta * 0.019;
-      if (next >= max) { element.scrollTop = max; direction.current = -1; }
-      else if (next <= 0) { element.scrollTop = 0; direction.current = 1; }
-      else element.scrollTop = next;
+      const next = advanceAutoScroll(
+        { ...scrollState.current, position: element.scrollTop }, delta, max
+      );
+      scrollState.current = next;
+      element.scrollTop = next.position;
     }, 40);
     return () => {
       window.clearInterval(timer);
