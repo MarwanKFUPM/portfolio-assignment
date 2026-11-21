@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import Icon from './Icons.jsx';
+import { localizeEntryField, localizeCaption, localizeImageAlt } from '../content/localizeEntry.js';
 
 function InternalLink({ children, href, onNavigate, className = 'text-link', item = null }) {
   return <button type="button" className={className} onClick={(e) => onNavigate(href, e.currentTarget, item)}>{children}</button>;
@@ -20,27 +21,27 @@ function PanelHeader({ t, onNavigate, pathname }) {
       <InternalLink className="panel-monogram" href="/" onNavigate={onNavigate}>
         M<span>.</span>
       </InternalLink>
-      <span className="panel-label">PERSONAL ARCHIVE <span className="tiny-asterisk">✳</span> 2026</span>
+      <span className="panel-label">{t.panelLabel} <span className="tiny-asterisk">✳</span> 2026</span>
       <span className="panel-index">{pathname === '/' ? '01' : pathname === '/projects' ? '02' : pathname === '/writing' ? '03' : pathname === '/contact' ? '04' : '✦'}</span>
     </div>
   );
 }
 
-function HomeView({ t, onNavigate, entries }) {
+function HomeView({ t, onNavigate, entries, lang }) {
   return <>
     <section className="intro-section">
       <span className="micro-label">{t.introKicker}</span>
       <div className="hero-intro">
         <div className="hero-copy">
           <span className="hero-greeting">{t.greeting}</span>
-          <h1>Marwan<br/><em>Al-Hamdan.</em></h1>
+          <h1>{lang === 'ar' ? 'مروان' : 'Marwan'}<br/><em>{lang === 'ar' ? 'الحمدان.' : 'Al-Hamdan.'}</em></h1>
           <div className="hero-rule" />
           <p className="hero-role">{t.occupation}</p>
           <p className="hero-description">{t.lead}</p>
         </div>
         <div className="portrait-frame">
-          <img src="/portrait.png" alt="Portrait supplied with the original portfolio" />
-          <span className="portrait-credit">FIG. 01 / PORTRAIT</span>
+          <img src="/portrait.png" alt={t.portraitAlt} />
+          <span className="portrait-credit">{t.portraitCredit}</span>
         </div>
       </div>
       <div className="hero-actions">
@@ -50,22 +51,22 @@ function HomeView({ t, onNavigate, entries }) {
       </div>
     </section>
     <section className="editorial-block">
-      <div className="section-heading"><span className="number-label">01 / A NOTE ON CURIOSITY</span><span className="section-star">✳</span></div>
-      <h2>Between code<br/>and <em>curiosity.</em></h2>
-      <p>{t.discover} I enjoy finding the connections between the things I study, build and read.</p>
+      <div className="section-heading"><span className="number-label">01 / {t.curiosityKicker.toUpperCase()}</span><span className="section-star">✳</span></div>
+      <h2>{t.curiosityLine}<br/>{t.curiosityAnd} <em>{t.curiosityEmphasis}</em></h2>
+      <p>{t.discover} {t.curiosityBody}</p>
       <div className="ink-divider" />
       <span className="number-label">02 / {t.myWork.toUpperCase()}</span>
       <div className="feature-links">
         {entries.slice(0, 3).map((item, i) => (
           <InternalLink key={item.id} href={`/archive/${item.id}`} onNavigate={onNavigate} item={item} className="feature-link">
-            <span className="feature-number">0{i + 1}</span><span>{item.title}</span><Icon name="upRight" size={16}/>
+            <span className="feature-number">0{i + 1}</span><span>{localizeEntryField(item, 'title', lang)}</span><Icon name="upRight" size={16}/>
           </InternalLink>
         ))}
       </div>
     </section>
     <section className="editorial-block editorial-block--bottom">
       <div className="section-heading"><span className="number-label">03 / {t.readingNext.toUpperCase()}</span></div>
-      <h2>The library<br/>of <em>ideas.</em></h2>
+      <h2>{t.libraryLine}<br/>{t.libraryAnd} <em>{t.libraryEmphasis}</em></h2>
       <p>{t.readingBody}</p>
       <InternalLink className="resource-link" href="/writing" onNavigate={onNavigate}>
         <span>{t.writing}</span><span className="resource-link-icon"><Icon name="arrow" size={18}/></span>
@@ -78,31 +79,31 @@ function ProjectsView({ t, onNavigate, entries, lang }) {
   const items = entries.filter((e) => !e.sample && ['portfolio-website', 'ecommerce', 'mobile-ui', 'dashboard'].includes(e.id));
   return <section className="inner-view">
     <span className="micro-label">02 / {t.projects.toUpperCase()}</span>
-    <h1 className="view-title">Things <em>built.</em></h1>
+    <h1 className="view-title">{t.projectsTitleLine} <em>{t.projectsTitleEmphasis}</em></h1>
     <p className="view-lede">{t.workLead}</p>
     <div className="project-list">
       {items.map((item, index) => <InternalLink key={item.id} href={`/archive/${item.id}`} onNavigate={onNavigate} item={item} className="project-row">
         <span className="project-row-number">0{index + 1}</span>
         <img src={item.image} alt="" />
-        <span className="project-row-description"><strong>{lang === 'ar' ? item.titleAr || item.title : item.title}</strong><small>{item.meta}</small></span>
+        <span className="project-row-description"><strong>{localizeEntryField(item, 'title', lang)}</strong><small>{localizeEntryField(item, 'meta', lang)}</small></span>
         <Icon name="upRight" size={18}/>
       </InternalLink>)}
     </div>
-    <div className="source-disclosure">{t.sourceBadge} · Illustrations are not screenshots.</div>
+    <div className="source-disclosure">{t.sourceBadge}</div>
   </section>;
 }
 
 function WritingView({ t, onNavigate, entries, lang }) {
   return <section className="inner-view">
     <span className="micro-label">03 / {t.writing.toUpperCase()}</span>
-    <h1 className="view-title">Words &<br/><em>worlds.</em></h1>
+    <h1 className="view-title">{t.writingTitleLine}<br/><em>{t.writingTitleEmphasis}</em></h1>
     <p className="view-lede">{t.writingLead}</p>
-    <img className="editorial-illustration" src="/art/reading.svg" alt="Abstract illustration of books and reading" />
+    <img className="editorial-illustration" src="/art/reading.svg" alt={t.writingIllustrationAlt} />
     <h2 className="subheading">{t.readingTitle}</h2>
     <p className="body-copy">{t.readingBody}</p>
     <div className="writing-resource-list">
       <InternalLink className="resource-link" href="/archive/writing" onNavigate={onNavigate} item={entries.find(e => e.id === 'writing')}>
-        <span>Poetry & Essays</span><span className="resource-link-icon"><Icon name="arrow" size={18}/></span>
+        <span>{localizeEntryField(entries.find(e => e.id === 'writing'), 'title', lang) || t.writingTitleLine}</span><span className="resource-link-icon"><Icon name="arrow" size={18}/></span>
       </InternalLink>
       <ExternalResourceLink href="https://marwanpgx.substack.com/">Substack</ExternalResourceLink>
     </div>
@@ -112,7 +113,7 @@ function WritingView({ t, onNavigate, entries, lang }) {
 function ContactView({ t }) {
   return <section className="inner-view contact-view">
     <span className="micro-label">04 / {t.contact.toUpperCase()}</span>
-    <h1 className="view-title">Let's make<br/><em>something.</em></h1>
+    <h1 className="view-title">{t.contactTitleLine}<br/><em>{t.contactTitleEmphasis}</em></h1>
     <p className="view-lede">{t.reachLead}</p>
     <div className="contact-options">
       <ExternalResourceLink href="https://www.linkedin.com/in/marwan-al-hamdan-a64043331/">LinkedIn</ExternalResourceLink>
@@ -123,20 +124,20 @@ function ContactView({ t }) {
 }
 
 function EntryView({ entry, t, lang, onNavigate }) {
-  if (!entry) return <section className="inner-view"><h1 className="view-title">Not found.</h1><InternalLink href="/" onNavigate={onNavigate} className="inline-arrow"><Icon name="back" size={18}/> {t.back}</InternalLink></section>;
-  const title = lang === 'ar' ? entry.titleAr || entry.title : entry.title;
-  const summary = lang === 'ar' ? entry.summaryAr || entry.summary : entry.summary;
+  if (!entry) return <section className="inner-view"><h1 className="view-title">{t.notFound}</h1><InternalLink href="/" onNavigate={onNavigate} className="inline-arrow"><Icon name="back" size={18}/> {t.back}</InternalLink></section>;
+  const title = localizeEntryField(entry, 'title', lang);
+  const summary = localizeEntryField(entry, 'summary', lang);
   return <article className="entry-view inner-view">
-    <span className="micro-label">ARCHIVE / {entry.category.toUpperCase()}</span>
+    <span className="micro-label">{t.archiveEntryLabel.toUpperCase()} / {localizeEntryField(entry, 'category', lang).toUpperCase()}</span>
     {entry.sample && <div className="sample-alert">{t.sampleBadge}</div>}
     <h1 className="view-title">{title}</h1>
     <p className="view-lede">{summary}</p>
     <figure className="entry-figure">
-      <img src={entry.image} className="entry-hero-image" alt={`Illustrative artwork for ${entry.title}`} />
-      <figcaption className="entry-caption number-label">{entry.meta}</figcaption>
+      <img src={entry.image} className="entry-hero-image" alt={localizeImageAlt(entry, lang)} />
+      <figcaption className="entry-caption number-label">{localizeCaption(entry, lang)}</figcaption>
     </figure>
-    <p className="body-copy">{entry.body}</p>
-    {entry.links?.length > 0 && <div className="entry-links">{entry.links.map(link => <ExternalResourceLink key={link.href} href={link.href}>{link.label}</ExternalResourceLink>)}</div>}
+    <p className="body-copy">{localizeEntryField(entry, 'body', lang)}</p>
+    {entry.links?.length > 0 && <div className="entry-links">{entry.links.map(link => <ExternalResourceLink key={link.href} href={link.href}>{localizeEntryField(link, 'label', lang)}</ExternalResourceLink>)}</div>}
     <InternalLink href="/" onNavigate={onNavigate} className="pill-link pill-link--outline"><Icon name="back" size={16}/> {t.back}</InternalLink>
   </article>;
 }
@@ -148,7 +149,7 @@ export default function PortfolioPanel({ pathname, archive, entries, t, lang, on
   return (
     <main className={`portfolio-panel ${archive ? 'portfolio-panel--hidden' : ''}`} aria-hidden={archive} inert={archive} ref={scrollRef} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <PanelHeader t={t} onNavigate={onNavigate} pathname={pathname}/>
-      {pathname === '/' ? <HomeView t={t} onNavigate={onNavigate} entries={entries}/>
+      {pathname === '/' ? <HomeView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
         : pathname === '/projects' ? <ProjectsView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
           : pathname === '/writing' ? <WritingView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
             : pathname === '/contact' ? <ContactView t={t}/>

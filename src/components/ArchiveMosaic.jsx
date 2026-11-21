@@ -3,6 +3,7 @@ import { layoutMosaic } from '../lib/mosaicLayout.js';
 import { visibleMosaicTiles } from '../lib/visibleMosaicTiles.js';
 import { advanceAutoScroll, initialAutoScrollState, pauseAutoScroll, resumeAutoScroll, SCROLL_RESUME_DELAY_MS } from '../lib/autoScroll.js';
 import Icon from './Icons.jsx';
+import { localizeEntryField } from '../content/localizeEntry.js';
 import { createAmbientBackground } from '../lib/ambientPattern.js';
 
 // The artwork generator is costly when hundreds of SVG backgrounds are encoded.
@@ -26,14 +27,14 @@ const ArchiveTile = memo(function ArchiveTile({ tile, onOpen, lang }) {
   if (decorative) {
     return <div className="mosaic-tile mosaic-tile--ambient" style={style} aria-hidden="true" />;
   }
-  const title = lang === 'ar' ? entry.titleAr || entry.title : entry.title;
-  const category = lang === 'ar' ? entry.categoryAr || entry.category : entry.category;
+  const title = localizeEntryField(entry, 'title', lang);
+  const category = localizeEntryField(entry, 'category', lang);
   return (
     <button type="button"
       className={`mosaic-tile mosaic-tile--entry ${entry.sample ? 'mosaic-tile--sample' : ''} ${tile.compact ? 'mosaic-tile--responsive' : tile.size === 1 ? 'mosaic-tile--tiny' : ''}`}
       style={style} onClick={event => onOpen(entry, event.currentTarget)}
       data-side={tile.side} data-entry-id={entry.id} title={title}
-      aria-label={`${title}${entry.sample ? ' — sample' : ''}`}>
+      aria-label={`${title}${entry.sample ? (lang === 'ar' ? ' — مثال' : ' — sample') : ''}`}>
       <span className="tile-visual" aria-hidden="true" />
       <span className="tile-content">
         <span className="tile-category">{entry.sample ? '◇ ' : '✦ '}{category}</span>
@@ -143,7 +144,7 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
   return (
     <div ref={scrollRef}
       className={`mosaic-scroll ${archive ? 'mosaic-scroll--archive' : ''} ${layout.metrics.compact ? 'mosaic-scroll--compact' : ''}`}
-      aria-label="Interactive archive collage">
+      aria-label={lang === 'ar' ? 'مجموعة الأرشيف التفاعلية' : 'Interactive archive collage'} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
       <div className="mosaic-plane" style={{ height: `${layout.contentHeight}px` }}>
         {visible.map(tile => <ArchiveTile key={tile.id} tile={tile} onOpen={onOpen} lang={lang} />)}
       </div>
