@@ -1,0 +1,132 @@
+{
+  "/portrait.png": [
+    {
+      "width": 320,
+      "src": "/optimized/portrait-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/portrait-640w.webp"
+    },
+    {
+      "width": 796,
+      "src": "/optimized/portrait-796w.webp"
+    }
+  ],
+  "/art/GESpeech.jpeg": [
+    {
+      "width": 320,
+      "src": "/optimized/GESpeech-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/GESpeech-640w.webp"
+    },
+    {
+      "width": 720,
+      "src": "/optimized/GESpeech-720w.webp"
+    }
+  ],
+  "/art/LitClubMeet.jpeg": [
+    {
+      "width": 320,
+      "src": "/optimized/LitClubMeet-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/LitClubMeet-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/LitClubMeet-960w.webp"
+    },
+    {
+      "width": 1048,
+      "src": "/optimized/LitClubMeet-1048w.webp"
+    }
+  ],
+  "/art/MPortfolio.png": [
+    {
+      "width": 320,
+      "src": "/optimized/MPortfolio-320w.webp"
+    },
+    {
+      "width": 396,
+      "src": "/optimized/MPortfolio-396w.webp"
+    }
+  ],
+  "/art/MarwanWriting.jpeg": [
+    {
+      "width": 320,
+      "src": "/optimized/MarwanWriting-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/MarwanWriting-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/MarwanWriting-960w.webp"
+    },
+    {
+      "width": 1213,
+      "src": "/optimized/MarwanWriting-1213w.webp"
+    }
+  ],
+  "/art/PotentialBOT.png": [
+    {
+      "width": 320,
+      "src": "/optimized/PotentialBOT-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/PotentialBOT-640w.webp"
+    },
+    {
+      "width": 701,
+      "src": "/optimized/PotentialBOT-701w.webp"
+    }
+  ],
+  "/art/Sec+.webp": [
+    {
+      "width": 320,
+      "src": "/optimized/Sec+-320w.webp"
+    },
+    {
+      "width": 480,
+      "src": "/optimized/Sec+-480w.webp"
+    }
+  ],
+  "/art/TrafficLightSystem.jpg": [
+    {
+      "width": 320,
+      "src": "/optimized/TrafficLightSystem-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/TrafficLightSystem-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/TrafficLightSystem-960w.webp"
+    },
+    {
+      "width": 1280,
+      "src": "/optimized/TrafficLightSystem-1280w.webp"
+    }
+  ],
+  "/art/circuit.jpg": [
+    {
+      "width": 320,
+      "src": "/optimized/circuit-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/circuit-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/circuit-960w.webp"
+    }
+  ]
+}

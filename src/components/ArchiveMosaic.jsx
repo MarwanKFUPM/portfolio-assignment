@@ -5,6 +5,7 @@ import { advanceAutoScroll, initialAutoScrollState, pauseAutoScroll, resumeAutoS
 import Icon from './Icons.jsx';
 import { localizeEntryField } from '../content/localizeEntry.js';
 import { createAmbientBackground } from '../lib/ambientPattern.js';
+import { responsiveImageProps } from '../lib/imageAssets.js';
 
 // The artwork generator is costly when hundreds of SVG backgrounds are encoded.
 // Generate once per tile identity, only when the tile enters the viewport.
@@ -21,7 +22,6 @@ const ArchiveTile = memo(function ArchiveTile({ tile, onOpen, lang }) {
   const { entry, pixels, x, y, decorative } = tile;
   const style = {
     '--tile-x': `${x}px`, '--tile-y': `${y}px`, '--tile-size': `${pixels}px`,
-    '--tile-image': entry ? `url("${entry.image}")` : undefined,
     ...(decorative ? { '--ambient-art': artworkFor(tile.id) } : {}),
   };
   if (decorative) {
@@ -35,7 +35,7 @@ const ArchiveTile = memo(function ArchiveTile({ tile, onOpen, lang }) {
       style={style} onClick={event => onOpen(entry, event.currentTarget)}
       data-side={tile.side} data-entry-id={entry.id} title={title}
       aria-label={`${title}${entry.sample ? (lang === 'ar' ? ' — مثال' : ' — sample') : ''}`}>
-      <span className="tile-visual" aria-hidden="true" />
+      <span className="tile-visual" aria-hidden="true"><img {...responsiveImageProps(entry.image, `${Math.ceil(pixels)}px`)} alt="" loading="lazy" decoding="async" /></span>
       <span className="tile-content">
         <span className="tile-category">{entry.sample ? '◇ ' : '✦ '}{category}</span>
         <span className="tile-title">{title}</span>

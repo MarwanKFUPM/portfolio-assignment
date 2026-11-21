@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Illustrative artwork for RESEARCH NOTES">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#34364e"/><stop offset="1" stop-color="#121c20"/></linearGradient><pattern id="noise" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 0H28M0 0V28" stroke="#fff" stroke-opacity=".07" stroke-width=".7"/></pattern></defs>
+<rect width="800" height="800" fill="url(#g)"/><circle cx="790" cy="50" r="490" fill="#c6c3e9" opacity=".08"/><rect width="800" height="800" fill="url(#noise)"/><rect x="37" y="37" width="726" height="726" rx="3" fill="none" stroke="#c6c3e9" stroke-opacity=".3" stroke-width="2"/>
+<text x="62" y="100" fill="#c6c3e9" font-family="monospace" font-size="20" letter-spacing="5">ARCHIVE / RESEARCH</text>
+<circle cx="400" cy="406" r="185" fill="none" stroke="#ddd9ef" stroke-width="8"/><ellipse cx="400" cy="406" rx="248" ry="96" fill="none" stroke="#c3c4e8" stroke-width="8" transform="rotate(-32 400 406)"/><ellipse cx="400" cy="406" rx="92" ry="250" fill="none" stroke="#9faff1" stroke-width="7" transform="rotate(-18 400 406)"/><circle cx="400" cy="406" r="52" fill="#d8d6f1"/><circle cx="585" cy="310" r="18" fill="#d6c9a1"/>
+<path d="M62 677H738" stroke="#c6c3e9" stroke-opacity=".8" stroke-width="2"/>
+<text x="62" y="716" fill="#c6c3e9" font-family="Georgia,serif" font-size="37">RESEARCH NOTES</text>
+<text x="62" y="748" fill="#c6c3e9" fill-opacity=".8" font-family="monospace" font-size="15" letter-spacing="2">questions worth asking</text>
+</svg>

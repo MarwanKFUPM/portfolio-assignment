@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Icon from './Icons.jsx';
 import { localizeEntryField, localizeCaption, localizeImageAlt } from '../content/localizeEntry.js';
+import { responsiveImageProps } from '../lib/imageAssets.js';
+import LiteraryExplorer from './LiteraryExplorer.jsx';
 
 function InternalLink({ children, href, onNavigate, className = 'text-link', item = null }) {
   return <button type="button" className={className} onClick={(e) => onNavigate(href, e.currentTarget, item)}>{children}</button>;
@@ -40,7 +42,7 @@ function HomeView({ t, onNavigate, entries, lang }) {
           <p className="hero-description">{t.lead}</p>
         </div>
         <div className="portrait-frame">
-          <img src="/portrait.png" alt={t.portraitAlt} />
+          <img {...responsiveImageProps("/portrait.png", "(max-width: 600px) 140px, 220px")} alt={t.portraitAlt} width="796" height="761" decoding="async" fetchPriority="high" />
           <span className="portrait-credit">{t.portraitCredit}</span>
         </div>
       </div>
@@ -84,7 +86,7 @@ function ProjectsView({ t, onNavigate, entries, lang }) {
     <div className="project-list">
       {items.map((item, index) => <InternalLink key={item.id} href={`/archive/${item.id}`} onNavigate={onNavigate} item={item} className="project-row">
         <span className="project-row-number">0{index + 1}</span>
-        <img src={item.image} alt="" />
+        <img {...responsiveImageProps(item.image, "68px")} alt="" width="68" height="68" loading="lazy" decoding="async" />
         <span className="project-row-description"><strong>{localizeEntryField(item, 'title', lang)}</strong><small>{localizeEntryField(item, 'meta', lang)}</small></span>
         <Icon name="upRight" size={18}/>
       </InternalLink>)}
@@ -93,12 +95,12 @@ function ProjectsView({ t, onNavigate, entries, lang }) {
   </section>;
 }
 
-function WritingView({ t, onNavigate, entries, lang }) {
+function WritingView({ t, onNavigate, entries, lang, archive }) {
   return <section className="inner-view">
     <span className="micro-label">03 / {t.writing.toUpperCase()}</span>
     <h1 className="view-title">{t.writingTitleLine}<br/><em>{t.writingTitleEmphasis}</em></h1>
     <p className="view-lede">{t.writingLead}</p>
-    <img className="editorial-illustration" src="/art/reading.svg" alt={t.writingIllustrationAlt} />
+    <img className="editorial-illustration" src="/art/reading.svg" alt={t.writingIllustrationAlt} loading="lazy" decoding="async" />
     <h2 className="subheading">{t.readingTitle}</h2>
     <p className="body-copy">{t.readingBody}</p>
     <div className="writing-resource-list">
@@ -107,6 +109,7 @@ function WritingView({ t, onNavigate, entries, lang }) {
       </InternalLink>
       <ExternalResourceLink href="https://marwanpgx.substack.com/">Substack</ExternalResourceLink>
     </div>
+    <LiteraryExplorer t={t} lang={lang} enabled={!archive} />
   </section>;
 }
 
@@ -123,7 +126,7 @@ function ContactView({ t }) {
   </section>;
 }
 
-function EntryView({ entry, t, lang, onNavigate }) {
+function EntryView({ entry, t, lang, onNavigate, archive }) {
   if (!entry) return <section className="inner-view"><h1 className="view-title">{t.notFound}</h1><InternalLink href="/" onNavigate={onNavigate} className="inline-arrow"><Icon name="back" size={18}/> {t.back}</InternalLink></section>;
   const title = localizeEntryField(entry, 'title', lang);
   const summary = localizeEntryField(entry, 'summary', lang);
@@ -133,10 +136,11 @@ function EntryView({ entry, t, lang, onNavigate }) {
     <h1 className="view-title">{title}</h1>
     <p className="view-lede">{summary}</p>
     <figure className="entry-figure">
-      <img src={entry.image} className="entry-hero-image" alt={localizeImageAlt(entry, lang)} />
+      <img {...responsiveImageProps(entry.image, "(max-width: 720px) 82vw, 550px")} className="entry-hero-image" alt={localizeImageAlt(entry, lang)} loading="lazy" decoding="async" />
       <figcaption className="entry-caption number-label">{localizeCaption(entry, lang)}</figcaption>
     </figure>
     <p className="body-copy">{localizeEntryField(entry, 'body', lang)}</p>
+    {['writing', 'lit-club'].includes(entry.id) && <LiteraryExplorer t={t} lang={lang} enabled={!archive} />}
     {entry.links?.length > 0 && <div className="entry-links">{entry.links.map(link => <ExternalResourceLink key={link.href} href={link.href}>{localizeEntryField(link, 'label', lang)}</ExternalResourceLink>)}</div>}
     <InternalLink href="/" onNavigate={onNavigate} className="pill-link pill-link--outline"><Icon name="back" size={16}/> {t.back}</InternalLink>
   </article>;
@@ -151,9 +155,9 @@ export default function PortfolioPanel({ pathname, archive, entries, t, lang, on
       <PanelHeader t={t} onNavigate={onNavigate} pathname={pathname}/>
       {pathname === '/' ? <HomeView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
         : pathname === '/projects' ? <ProjectsView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
-          : pathname === '/writing' ? <WritingView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
+          : pathname === '/writing' ? <WritingView t={t} onNavigate={onNavigate} entries={entries} lang={lang} archive={archive}/>
             : pathname === '/contact' ? <ContactView t={t}/>
-              : <EntryView entry={entry} t={t} lang={lang} onNavigate={onNavigate}/>}
+              : <EntryView entry={entry} t={t} lang={lang} onNavigate={onNavigate} archive={archive}/>}
       <footer className="panel-footer">
         <span>© 2026 MARWAN AL-HAMDAN</span><span>{t.footer}</span>
       </footer>

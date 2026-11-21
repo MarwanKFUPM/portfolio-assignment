@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Illustrative artwork for A CONVERSATION">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#483b2b"/><stop offset="1" stop-color="#121c20"/></linearGradient><pattern id="noise" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 0H28M0 0V28" stroke="#fff" stroke-opacity=".07" stroke-width=".7"/></pattern></defs>
+<rect width="800" height="800" fill="url(#g)"/><circle cx="790" cy="50" r="490" fill="#e6cb92" opacity=".08"/><rect width="800" height="800" fill="url(#noise)"/><rect x="37" y="37" width="726" height="726" rx="3" fill="none" stroke="#e6cb92" stroke-opacity=".3" stroke-width="2"/>
+<text x="62" y="100" fill="#e6cb92" font-family="monospace" font-size="20" letter-spacing="5">ARCHIVE / TALK</text>
+<rect x="200" y="360" width="400" height="210" fill="#caa67e"/><path d="M240 360V305A160 160 0 0 1 560 305V360" stroke="#e0c591" stroke-width="25" fill="none"/><circle cx="400" cy="261" r="60" fill="#a98562"/><rect x="339" y="417" width="122" height="14" fill="#947258"/><rect x="323" y="458" width="154" height="9" fill="#947258"/><path d="M175 588H625" stroke="#e6c28d" stroke-width="17"/>
+<path d="M62 677H738" stroke="#e6cb92" stroke-opacity=".8" stroke-width="2"/>
+<text x="62" y="716" fill="#e6cb92" font-family="Georgia,serif" font-size="37">A CONVERSATION</text>
+<text x="62" y="748" fill="#e6cb92" fill-opacity=".8" font-family="monospace" font-size="15" letter-spacing="2">ideas on the stage</text>
+</svg>
