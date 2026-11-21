@@ -2,7 +2,9 @@
 
 > **Documentation status:** Reconstructed from the conversation text available in this session and the files currently mounted in the workspace. User prompts below are **condensed/paraphrased** where indicated, and agent responses are **summaries**, not a verbatim chat export. Some early turns and intermediary tool activity are not available in full. This document does **not** falsely claim to contain a complete verbatim transcript. For an authoritative word-for-word record, use ChatGPT's conversation export.
 >
-> **Scope:** Portfolio design, React implementation, responsive tiling, animation, performance, visual styling, documentation, and bilingual translation.
+> **Scope:** Portfolio design, React implementation, responsive tiling, animation, performance, visual styling, documentation, bilingual translation, external literary APIs, image optimization, and visual interface refinements.
+>
+> **Updated:** November 21, 2026. This edition retains the original reconstructed exchanges and source snapshots and adds the later API and UI-polish work.
 
 ## Chronological conversation
 
@@ -258,7 +260,109 @@ The roles are labeled **USER** and **AGENT**. Each item records the request and 
 
 **USER — request:** Lastly, I want a .md of this entire conversation ... every question and reply ... linked files and contents and changes.
 
-**AGENT — response / outcome:** Requested this documentation artifact.
+**AGENT — response / outcome:** Created `PORTFOLIO_DEVELOPMENT_CONVERSATION.md`, a reconstructed record with 42 exchange summaries, linked artifacts, 64 embedded replacement-file snapshots, and ZIP file manifests. The assistant explicitly disclosed that the earliest exchanges could not be reproduced word-for-word from the available context.
+
+### Exchange 43 — API and stateful requirements
+
+**USER — original wording:**
+
+> Im required to integrate some external APIs into the project and some stateful features
+
+**AGENT — response / outcome:** Recommended API features that complemented the portfolio rather than unrelated demonstrations: GitHub REST API for repositories, Open Library for reading/library features, and stateful favorites, search, filters, and reading-list interactions, using React state and `localStorage`. The response asked whether the assignment mandated a specific number or kind of APIs. No source-file patch was delivered in this exchange.
+
+**AGENT — response excerpt (selected wording from available conversation, reformatted):**
+
+~~~~markdown
+Your portfolio already has a good foundation for this. I would integrate APIs that complement your existing projects and literary interests, rather than adding unrelated features simply to satisfy the assignment.
+
+- GitHub project showcase — GitHub REST API — filter repositories by language, sort projects, select a repository to inspect.
+- Personal reading library — Open Library API — search books, save favorites, create a reading list.
+- Achievement explorer — existing achievement data — filter by category, search achievements, bookmark entries.
+
+Your existing theme, language, and Archive Mode controls already demonstrate interactive state, but these additions would provide stronger examples of data-driven state management.
+~~~~
+
+**Decision / subsequent change:** The user chose a narrower literary API feature instead of the general GitHub/showcase recommendations.
+
+### Exchange 44 — Literary APIs and image optimization
+
+**USER — original wording:**
+
+> Add that to my literary pages to integrate API to fetch some authors and their quotes, also add performance enhancers such as image resizing to save processing power
+
+**AGENT — response / outcome:** Implemented an Authors & Quotations feature on the literary routes using **Wikiquote** (quotations) and **Open Library** (author metadata); added author switching, quote pagination, browser-local saved quotes, caching, timeout/abort behavior, error states and English/Arabic UI strings. Included responsive WebP derivatives, image source-size mapping, `<img srcSet>` selection, lazy loading, and asynchronous image decoding. Delivered the replacement patch ZIP below.
+
+**AGENT — visible delivery (principal text reproduced with formatting simplified):**
+
+~~~~markdown
+I've added an interactive **Authors & Quotations** section to your Writing, Poetry & Essays, and Literature Club pages.
+
+It uses two external APIs: **Wikiquote** for quotations and **Open Library** for author information. Visitors can select among six authors, browse quotations, and save favorites that persist after refreshing the page. The interface supports English and Arabic, while quotations retain their original English wording.
+
+I've also added responsive WebP images, lazy loading, and asynchronous decoding. The new 320-pixel image variants are approximately **94% smaller in total** than the nine original raster files, although actual bandwidth savings depend on which images and sizes a visitor loads.
+
+[Download the replacement files (.zip)](sandbox:/mnt/data/portfolio-literary-apis-image-optimization-replacements.zip)
+
+The ZIP contains the React changes, optimized images, API integration, automated tests, and installation instructions.
+
+**Verification:** All 14 new and translation-related tests passed. The full suite passed 36 of 40 tests; the four failures also occur in your original project and concern auto-scrolling.
+
+I couldn't complete a production build because the uploaded dependencies contain Windows-specific binaries, or test live API responses because network access was unavailable. Run `npm install`, `npm test`, and `npm run build` locally.
+
+Apply this ZIP **on top of the previous Arabic translation update**. Your achievement descriptions, translations, and project links are preserved.
+~~~~
+
+**Files added/modified:** See the actual `portfolio-literary-apis-image-optimization-replacements.zip` inventory, documentation, and source snapshots below. The stated test results are historical statements from that delivery, not new live API validation.
+
+### Exchange 45 — UI polish for the literary explorer
+
+**USER — original wording:**
+
+> [Screenshot: `image(20261121-172732).png`]
+>
+> I've added all the files you've sent, they work, but the api needs alot more polishing, it has the old browser graphics and is not smooth nor clean. fix it, make it in line with the themes of the browser, and add spacing and consolidate it and unify it with the rest of the website's css
+
+**AGENT — response / outcome:** Replaced browser-default selector/buttons with consistent custom controls; improved spacing and separation of the author bio and quotations; introduced a styled quote card, pagination progress indicator, subtle fade/slide transitions, and responsive/RTL layouts. Used existing theme variables and delivered only `src/components/LiteraryExplorer.jsx` and the full `src/styles/global.css` plus a patch README. The Wikiquote/Open Library API implementation and favorites logic were unchanged.
+
+**AGENT — visible delivery (principal text reproduced with formatting simplified):**
+
+~~~~markdown
+I've redesigned the **Authors & Quotations** interface to match the rest of your portfolio, replacing the browser-default controls with a cleaner, more cohesive layout.
+
+**Literary Explorer — UI Polish**
+[Download replacement ZIP](sandbox:/mnt/data/portfolio-literary-explorer-polish.zip)
+
+### What's improved
+
+- **Custom author selector:** No more default browser dropdown styling.
+- **Unified typography:** Editorial serif quotations, monospace details, and consistent button typography.
+- **Better spacing:** Clear separation between author information, quotations, actions, and navigation.
+- **Redesigned quote cards:** More readable text, organized actions, and a subtle fade-and-slide transition between quotations.
+- **Smoother navigation:** Previous/Next controls with a thin progress indicator.
+- **Consistent themes:** Uses your existing CSS color variables for both light and dark modes.
+- **Responsive layout:** Controls stack neatly on narrower screens, with Arabic RTL support.
+
+### Files to replace
+
+src/components/LiteraryExplorer.jsx
+src/styles/global.css
+
+Both are included in the ZIP. The updated `global.css` is the complete stylesheet, so replace the existing file rather than appending its contents.
+
+**Verification:** All 14 relevant tests passed. I also checked the layout in Chromium at desktop and mobile widths in both themes, with no detected overflow. The complete React application wasn't rebuilt for this update.
+
+Your existing Wikiquote and Open Library integrations, saved quotations, translations, and other website features remain unchanged.
+~~~~
+
+**Related evidence:** The user's before screenshot and four light/dark responsive preview images are linked below. The actual CSS and component changes, and a unified diff between the two delivered revisions, are embedded later in this document.
+
+### Exchange 46 — Update this conversation document
+
+**USER — original wording:**
+
+> remake the old conversation but add on to it the last few requests from me, apply all same rules and conditions of previous request
+
+**AGENT — response / outcome:** Updated the existing Markdown record, preserving exchanges 01–42 and their existing contents, adding exchanges 43–46, the latest file links and inventories, original source snapshots, a before/after code diff, and validation/provenance notes. As with the first edition, older exchanges remain reconstructed where the full transcript was unavailable. This exchange documents the request that produced this revised file.
 
 ## Design decisions carried forward
 
@@ -272,11 +376,49 @@ The roles are labeled **USER** and **AGENT**. Each item records the request and 
 8. Floating theme/language/archive controls hide after 3 seconds of inactivity and reappear on interaction.
 9. Mosaic colors form a continuous, subdued field, with separate light/dark palettes.
 10. Achievement bodies, image captions, metadata, and links support English/Arabic localized fields.
+11. Literary pages fetch quotations from Wikiquote and author details from Open Library; no API key is needed. Client-side selection, pagination, and favorites demonstrate stateful functionality.
+12. Source images have responsive WebP derivatives and image sizing attributes; original images remain as fallbacks.
+13. Literary controls follow the same color tokens and editorial typography as the main portfolio; themes, mobile and Arabic directionality are supported.
+
+## Additional implementation notes — literary API and performance work
+
+### User requirements and selected implementation
+
+- **Requirement:** Use external APIs in the portfolio and add observable React statefulness.
+- **Selected implementation:** Authors & Quotations on `/writing`, `/archive/writing`, and `/archive/lit-club`, not a GitHub repository widget.
+- **APIs:** Wikiquote MediaWiki Action API and Open Library author-search API, invoked for the selected author and independent of one another.
+- **State:** author selector, currently visible quotation, saved-only view, favorites saved under `living-archive-literary-favorites-v1`, loading/error/retry states.
+- **Correctness and robustness:** API requests canceled on navigation or after 12 seconds, in-session cache for selected authors, links to sources, and avoiding quotations from explicitly dubious sections in the Wikiquote parsing logic. No fabricated fallback quote on API failure.
+- **Source-language treatment:** quoted texts remain in English; surrounding UI labels can switch English/Arabic.
+- **Performance:** nine original raster images have WebP sizes supplied under `public/optimized/`; `srcSet` and `sizes` facilitate browser size selection. Lazy loading and async image decoding reduce unnecessary work; original URLs remain as fallback.
+- **Application compatibility:** The original mosaic, animation, and translated achievements were intended to remain unchanged by the API patch.
+
+### Later UI revision
+
+- **Before:** The initial quotation widget used native-browser-looking `<select>` and buttons with cramped spacing, as shown in the user's screenshot.
+- **After:** Styled author selector with chevron, saved-quotes toggle, separated author biography, editorial blockquote card, source links, quote counter, previous/next pagination, progress line, hover/focus states, loading and empty states, animation, light/dark theme tokens, RTL handling, and mobile stacking.
+- **Visual checks claimed in the delivered update:** Chromium at 980px and 390px in light and dark themes; 14 relevant tests passed. These are reported historical checks, not independently repeated as part of this documentation task.
+- **Patch order:** Complete bilingual achievements update → literary API/image optimization ZIP → Literary Explorer UI polish ZIP. Later files with the same path supersede earlier versions.
+
+### Screenshot and preview references
+
+- [User screenshot — pre-polish literary UI](sandbox:/mnt/data/image(20261121-172732).png)
+- [UI polish preview, desktop, light](sandbox:/mnt/data/literary-ui-work/preview-980-light.png)
+- [UI polish preview, desktop, dark](sandbox:/mnt/data/literary-ui-work/preview-980-dark.png)
+- [UI polish preview, mobile, light](sandbox:/mnt/data/literary-ui-work/preview-390-light.png)
+- [UI polish preview, mobile, dark](sandbox:/mnt/data/literary-ui-work/preview-390-dark.png)
 
 ## Linked deliverables and attachments
 
 The following paths are files **verified in the current working environment**. Links point to the artifacts generated or uploaded in this conversation. A ZIP's manifest and source files are recorded in the following sections.
 
+- [portfolio-literary-apis-image-optimization-replacements.zip](sandbox:/mnt/data/portfolio-literary-apis-image-optimization-replacements.zip) — 914,570 bytes
+- [portfolio-literary-explorer-polish.zip](sandbox:/mnt/data/portfolio-literary-explorer-polish.zip) — 13,052 bytes
+- [Image: image(20261121-172732).png](sandbox:/mnt/data/image(20261121-172732).png) — 172,238 bytes
+- [Image: literary-ui-work/preview-980-light.png](sandbox:/mnt/data/literary-ui-work/preview-980-light.png) — 70,925 bytes
+- [Image: literary-ui-work/preview-980-dark.png](sandbox:/mnt/data/literary-ui-work/preview-980-dark.png) — 71,844 bytes
+- [Image: literary-ui-work/preview-390-light.png](sandbox:/mnt/data/literary-ui-work/preview-390-light.png) — 66,460 bytes
+- [Image: literary-ui-work/preview-390-dark.png](sandbox:/mnt/data/literary-ui-work/preview-390-dark.png) — 67,635 bytes
 - [archive-fullbleed-fix.zip](sandbox:/mnt/data/archive-fullbleed-fix.zip) — 4,727 bytes
 - [portfolio-arabic-translation-fix.zip](sandbox:/mnt/data/portfolio-arabic-translation-fix.zip) — 13,162 bytes
 - [portfolio-arabic-translations-current-project.zip](sandbox:/mnt/data/portfolio-arabic-translations-current-project.zip) — 15,733 bytes
@@ -832,6 +974,104 @@ src/lib/ambientPattern.js (4,317 bytes)
 src/styles/global.css (20,618 bytes)
 src/components/ArchiveMosaic.jsx (2,878 bytes)
 tests/ambientPattern.test.js (849 bytes)
+```
+
+## Additional ZIP inventories — API update and UI polish
+
+The following listings come directly from the archived ZIP member metadata. They include every file in the two recent replacement patches. Each SHA-256 identifies the ZIP binary reviewed for this document.
+
+### `portfolio-literary-apis-image-optimization-replacements.zip`
+
+**Files:** 42; **ZIP SHA-256:** `c636cf9a32079dd0e8f1ae4307746e21376a53f9ed93ff99729ae7a999a52676`
+
+```text
+INSTALL_THIS_UPDATE.md (2,340 bytes)
+docs/LITERARY_APIS_AND_IMAGES.md (4,402 bytes)
+src/components/ArchiveMosaic.jsx (7,666 bytes)
+src/components/PortfolioPanel.jsx (10,057 bytes)
+src/components/TransitionLayer.jsx (833 bytes)
+src/components/LiteraryExplorer.jsx (6,470 bytes)
+src/content/translations.js (8,850 bytes)
+src/lib/literaryApis.js (5,765 bytes)
+src/lib/imageAssets.js (698 bytes)
+src/data/optimizedImages.json (2,550 bytes)
+src/styles/global.css (27,586 bytes)
+scripts/optimize-images.py (2,094 bytes)
+tests/literaryApis.test.js (3,921 bytes)
+tests/optimizedImages.test.js (1,221 bytes)
+public/optimized/GESpeech-320w.webp (13,020 bytes)
+public/optimized/GESpeech-640w.webp (31,662 bytes)
+public/optimized/GESpeech-720w.webp (37,120 bytes)
+public/optimized/LitClubMeet-1048w.webp (22,018 bytes)
+public/optimized/LitClubMeet-320w.webp (4,594 bytes)
+public/optimized/LitClubMeet-640w.webp (11,862 bytes)
+public/optimized/LitClubMeet-960w.webp (18,968 bytes)
+public/optimized/MPortfolio-320w.webp (1,184 bytes)
+public/optimized/MPortfolio-396w.webp (1,462 bytes)
+public/optimized/MarwanWriting-1213w.webp (62,412 bytes)
+public/optimized/MarwanWriting-320w.webp (9,728 bytes)
+public/optimized/MarwanWriting-640w.webp (26,686 bytes)
+public/optimized/MarwanWriting-960w.webp (45,480 bytes)
+public/optimized/PotentialBOT-320w.webp (7,672 bytes)
+public/optimized/PotentialBOT-640w.webp (17,776 bytes)
+public/optimized/PotentialBOT-701w.webp (19,714 bytes)
+public/optimized/Sec+-320w.webp (8,522 bytes)
+public/optimized/Sec+-480w.webp (15,988 bytes)
+public/optimized/TrafficLightSystem-1280w.webp (95,154 bytes)
+public/optimized/TrafficLightSystem-320w.webp (11,804 bytes)
+public/optimized/TrafficLightSystem-640w.webp (36,556 bytes)
+public/optimized/TrafficLightSystem-960w.webp (65,020 bytes)
+public/optimized/circuit-320w.webp (27,330 bytes)
+public/optimized/circuit-640w.webp (69,258 bytes)
+public/optimized/circuit-960w.webp (114,776 bytes)
+public/optimized/portrait-320w.webp (13,532 bytes)
+public/optimized/portrait-640w.webp (37,598 bytes)
+public/optimized/portrait-796w.webp (53,328 bytes)
+```
+
+#### Optimized raster binary checksums
+
+WebP data cannot be meaningfully represented as a text code block. The exact image bytes are retained in the linked ZIP and can be verified with the hashes below.
+
+| File | Bytes | SHA-256 |
+|---|---:|---|
+| `public/optimized/GESpeech-320w.webp` | 13,020 | `187c1a05cbbd9b9f322ca8587da98d7aeea8859b5ef029d6560091e1c3154b06` |
+| `public/optimized/GESpeech-640w.webp` | 31,662 | `64c2cae1189b8d53a65edb7c38ff42d891ab046d8d6f085cf765c9292d07a7d1` |
+| `public/optimized/GESpeech-720w.webp` | 37,120 | `dae5d21f4b31c63a796b62fb42e2428775e8aea0e107e27d6a70ad5d5ff9764c` |
+| `public/optimized/LitClubMeet-1048w.webp` | 22,018 | `621df4b86ffd689d89219bb7d7e226671b3337170e366699ed74565446b0ef35` |
+| `public/optimized/LitClubMeet-320w.webp` | 4,594 | `474efe8a0145e791619a309cbd5a2b0c4f926075f3d2496ff10854b26446b5bd` |
+| `public/optimized/LitClubMeet-640w.webp` | 11,862 | `ebcf3b40daf62ad70f2a92dddae95b537b4f7027a3bde8366fd0303597af5425` |
+| `public/optimized/LitClubMeet-960w.webp` | 18,968 | `d152f2abf1a492492512c88230f6204209a408217f00b52d8db7f75380a6bbea` |
+| `public/optimized/MPortfolio-320w.webp` | 1,184 | `89581f2693928870c17aa77d1ed1646ec8c9038bebfd6ef9583692ee423eeefc` |
+| `public/optimized/MPortfolio-396w.webp` | 1,462 | `6d97f59c8a905777e70bdba2b9254530863e483b4578cedd73d4ac528a91eddf` |
+| `public/optimized/MarwanWriting-1213w.webp` | 62,412 | `11b005a18dc227ddb289e18baff7b08f3acd33505c56c75d8c13277e7bf9f996` |
+| `public/optimized/MarwanWriting-320w.webp` | 9,728 | `88d11a8649d9359be6e8e169540a7c3ce075159bba70be37e398365909c4f7f7` |
+| `public/optimized/MarwanWriting-640w.webp` | 26,686 | `3b80563d574384252f5ec437c270b40b654dcc63fc4e8310fb5a8e504b68024b` |
+| `public/optimized/MarwanWriting-960w.webp` | 45,480 | `6fb9af53e586000173b8964e76056f9bea0ee04f9cefe227565e728d925bde1b` |
+| `public/optimized/PotentialBOT-320w.webp` | 7,672 | `1ccebf53cfabb625935973a33be91fbcc23f4b85a0b4e03966f56da530bd6678` |
+| `public/optimized/PotentialBOT-640w.webp` | 17,776 | `c8ca43dc7b0a2cf9c1d580b48c927f3dddfda445d37f67246bf2b187c0ae6b7a` |
+| `public/optimized/PotentialBOT-701w.webp` | 19,714 | `712b790e7b39c522997f21eecccaaaa02f715d7709791e364d531be8cb7a9b1a` |
+| `public/optimized/Sec+-320w.webp` | 8,522 | `623b8872a326124664f8531392dec8b261b8b0c410364ec5786b14c527d72ee0` |
+| `public/optimized/Sec+-480w.webp` | 15,988 | `5514c3fb3c72ef0b532be9aecbb74da8cd489f78d2ba155e75bede0c386b83fd` |
+| `public/optimized/TrafficLightSystem-1280w.webp` | 95,154 | `4b69426ba42968850b239478f640a15eafac68782240d5edaa85fd46f9343380` |
+| `public/optimized/TrafficLightSystem-320w.webp` | 11,804 | `6b6c99e5ce10a47fa41518f03e5b8cd62bfe8203e01e68f289eb13d694bcdef4` |
+| `public/optimized/TrafficLightSystem-640w.webp` | 36,556 | `2856feb31e9f73020d697563d69938aac04a531838b549a2f144fb59bd566541` |
+| `public/optimized/TrafficLightSystem-960w.webp` | 65,020 | `3c14fdb40f3b7d9a59ebeeb50a5442b13ee6ea6add3be3cd6037f4d504ecb90f` |
+| `public/optimized/circuit-320w.webp` | 27,330 | `7c3193e3eacb5a77c63d825dd1a74c2e97ed18eb3f0ccf0ead6733a8b89947fd` |
+| `public/optimized/circuit-640w.webp` | 69,258 | `28918603f5dfe746a8c15a75fc25986e723cf46cbdb10f2eac5d470513f8ac6a` |
+| `public/optimized/circuit-960w.webp` | 114,776 | `b1256f7a775416063d583427380f41f917067ddffb28897179925c15ba7ac1fe` |
+| `public/optimized/portrait-320w.webp` | 13,532 | `fc9566be528df01663eb321e34a3b1886bf631ab8b9408999dfeb26e6f63f6eb` |
+| `public/optimized/portrait-640w.webp` | 37,598 | `3c9d4201f30a11ca7a5cba38284d755d1e97dc9a198052ac2a8779a7e755c7a7` |
+| `public/optimized/portrait-796w.webp` | 53,328 | `3f2f783faff03a7cc8a129f675530f7fbef1b37eab2d4bef090472c9ecafa2d9` |
+
+### `portfolio-literary-explorer-polish.zip`
+
+**Files:** 3; **ZIP SHA-256:** `07ef18c502f8c034981ab92f04a8f653ea5994ee2d9d5af5480dd68a9876d98f`
+
+```text
+src/components/LiteraryExplorer.jsx (8,490 bytes)
+src/styles/global.css (33,821 bytes)
+README.txt (1,892 bytes)
 ```
 
 ## Textual source contents from delivered replacement archives
@@ -9521,10 +9761,2659 @@ test('background returns URI encoded SVG with no network request', () => {
 ````
 
 
+
+
+## Added source snapshots — latest two replacement patches
+
+The following blocks reproduce the actual UTF-8 text stored in the published replacement ZIPs. The earlier 64 embedded source snapshots above remain preserved. Binary WebP variants are fully indexed above and accessible in the archive links, rather than being dumped into text.
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `INSTALL_THIS_UPDATE.md`
+
+````markdown
+# Literary API + responsive image update
+
+This is a **replacement-file patch**, not a full project ZIP. Apply it on top of the previous **complete Arabic translations** update. It does not replace `src/data/achievements.js` or any of your authored descriptions.
+
+## Install
+
+Copy the files from this ZIP into your project at the same relative paths, allowing the listed files to be replaced. Keep your original `public/art/` and `public/portrait.png` intact; this patch adds `public/optimized/` alongside them.
+
+## Added pages and behavior
+
+- `/writing`: Authors & quotations explorer
+- `/archive/writing`: the same explorer under Poetry & Essays
+- `/archive/lit-club`: the same explorer under Literature Club
+- Author selection, next/previous quote, save/remove favorite, saved-only view
+- Public Wikiquote + Open Library requests, no API keys, graceful failure
+- Bilingual UI; English source quotes remain untranslated
+- Responsive WebP variants for nine raster images, browser `srcSet` selection, lazy loading, async decode
+
+## Files
+
+Updated: `src/components/ArchiveMosaic.jsx`, `src/components/PortfolioPanel.jsx`, `src/components/TransitionLayer.jsx`, `src/content/translations.js`, `src/styles/global.css`.
+
+New: `src/components/LiteraryExplorer.jsx`, `src/lib/literaryApis.js`, `src/lib/imageAssets.js`, `src/data/optimizedImages.json`, `public/optimized/*.webp`, `scripts/optimize-images.py`, `tests/literaryApis.test.js`, `tests/optimizedImages.test.js`, `docs/LITERARY_APIS_AND_IMAGES.md`.
+
+## Validation
+
+- New API tests: **6/6 passed** with mocked responses.
+- Image asset tests: **2/2 passed**.
+- Existing translation tests: **6/6 passed**.
+- Full test suite: **36/40 passed**; the same four auto-scroll tests fail in the untouched uploaded baseline (not introduced by this patch).
+- All 16 JavaScript/JSX source files parsed successfully with Babel.
+- A Vite production build could not be run in this Linux environment because the uploaded dependencies contain Windows-only Rollup native binaries. Run `npm install` and `npm run build` in your own project.
+- Live API responses were not tested from this environment because outbound DNS/network access is unavailable. API endpoint formats were checked against official documentation.
+
+For further details and maintenance instructions, see `docs/LITERARY_APIS_AND_IMAGES.md`.
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `docs/LITERARY_APIS_AND_IMAGES.md`
+
+````markdown
+# Literary API integration & image optimization
+
+## Where the feature appears
+
+The **Authors & quotations** explorer is rendered on:
+
+- `/writing`
+- `/archive/writing` (Poetry & Essays)
+- `/archive/lit-club` (Literature Club)
+
+The rest of the portfolio, existing content, Arabic translations, and procedural tiling remain unchanged. The explorer works in English and Arabic. Quotes are displayed **in their source language, English**, rather than being automatically translated.
+
+## External APIs (no credentials required)
+
+1. **Wikiquote (MediaWiki Action API)** — requests the selected author's page as wikitext and extracts a limited number of short, first-level quotations. Endpoint: `https://en.wikiquote.org/w/api.php?action=parse&page=...&prop=wikitext&format=json&origin=*`. Each quote links to its author page on Wikiquote. Community-edited sources may have disputed attributions; the UI links to the original page for verification. The parser deliberately skips sections labeled misattributed, disputed, unsourced, etc., and does not invent fallback quotes.
+2. **Open Library author search** — retrieves the selected author's name, birth/death dates (when present), notable work, and a profile link. Endpoint: `https://openlibrary.org/search/authors.json?q=...&limit=5`. Only an exact-name match is accepted to avoid attaching an unrelated biography.
+
+The two requests run in parallel and can fail independently. The UI shows a retry action, an explicit empty/error state, and source links. Requests are only made when a literary page is opened and an author is selected, not for all authors at once. A session-level cache avoids repeat requests for the same author. Each request can be aborted after 12 seconds or on navigation. No API keys are stored.
+
+**Stateful features:** selected author, quote pagination, saved-quote view, and per-quote favorites. Favorites persist locally under `living-archive-literary-favorites-v1` (up to 40 entries). They are browser-local, not synchronized to a server.
+
+**Author choices:** edit `LITERARY_AUTHORS` in `src/lib/literaryApis.js`. Use the correct English Wikiquote page title and the Open Library search name.
+
+**Source documentation:**
+- https://www.mediawiki.org/wiki/API:Parsing_wikitext
+- https://www.mediawiki.org/wiki/API:Cross-site_requests
+- https://openlibrary.org/developers/api
+- https://openlibrary.org/dev/docs/api/search
+
+## Responsive image delivery
+
+- `public/optimized/` contains pre-generated WebP variants of all **nine** raster source images in the supplied project, at widths up to their native resolution.
+- `src/data/optimizedImages.json` maps original image URLs to the available WebP widths.
+- `src/lib/imageAssets.js` produces `srcSet`/`sizes` attributes so the browser downloads an appropriately sized image for the portrait, project thumbnails, archive tiles, and detail images.
+- Archive tiles use real `<img>` elements instead of CSS-only background images, enabling browser-native responsive image selection and lazy loading. The mosaic already virtualizes offscreen tiles, which further limits decode and memory work.
+- The transition overlay uses a resized image where available. SVGs remain vector files, and originals remain as fallbacks.
+- Image decoding is asynchronous, and below-the-fold/detail imagery is lazy-loaded. The above-the-fold portrait retains high fetch priority.
+
+To regenerate variants after adding or replacing artwork:
+
+```bash
+python -m pip install Pillow
+python scripts/optimize-images.py
+```
+
+This is a **development-time** script, not a runtime dependency. Commit or deploy the generated `public/optimized/` images and the updated `src/data/optimizedImages.json` alongside the code. New images continue to work without optimization, but running the script gives them responsive variants.
+
+## Integration
+
+Copy the replacement files to the same relative paths in your project. **Do not delete** your original `public/art/` or `public/portrait.png`; the optimized images are additional files. The code expects the latest bilingual `src/data/achievements.js` and `src/content/localizeEntry.js` from the prior translation update.
+
+Run:
+
+```bash
+npm test
+npm run build
+```
+
+Note: Live browser API requests require an internet connection and can be affected by remote API outages or rate limits. Automated tests use mock responses and do not validate the external service's current uptime.
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/components/ArchiveMosaic.jsx`
+
+````jsx
+import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { layoutMosaic } from '../lib/mosaicLayout.js';
+import { visibleMosaicTiles } from '../lib/visibleMosaicTiles.js';
+import { advanceAutoScroll, initialAutoScrollState, pauseAutoScroll, resumeAutoScroll, SCROLL_RESUME_DELAY_MS } from '../lib/autoScroll.js';
+import Icon from './Icons.jsx';
+import { localizeEntryField } from '../content/localizeEntry.js';
+import { createAmbientBackground } from '../lib/ambientPattern.js';
+import { responsiveImageProps } from '../lib/imageAssets.js';
+
+// The artwork generator is costly when hundreds of SVG backgrounds are encoded.
+// Generate once per tile identity, only when the tile enters the viewport.
+const artworkCache = new Map();
+function artworkFor(id) {
+  if (!artworkCache.has(id)) {
+    if (artworkCache.size > 900) artworkCache.delete(artworkCache.keys().next().value);
+    artworkCache.set(id, createAmbientBackground(id));
+  }
+  return artworkCache.get(id);
+}
+
+const ArchiveTile = memo(function ArchiveTile({ tile, onOpen, lang }) {
+  const { entry, pixels, x, y, decorative } = tile;
+  const style = {
+    '--tile-x': `${x}px`, '--tile-y': `${y}px`, '--tile-size': `${pixels}px`,
+    ...(decorative ? { '--ambient-art': artworkFor(tile.id) } : {}),
+  };
+  if (decorative) {
+    return <div className="mosaic-tile mosaic-tile--ambient" style={style} aria-hidden="true" />;
+  }
+  const title = localizeEntryField(entry, 'title', lang);
+  const category = localizeEntryField(entry, 'category', lang);
+  return (
+    <button type="button"
+      className={`mosaic-tile mosaic-tile--entry ${entry.sample ? 'mosaic-tile--sample' : ''} ${tile.compact ? 'mosaic-tile--responsive' : tile.size === 1 ? 'mosaic-tile--tiny' : ''}`}
+      style={style} onClick={event => onOpen(entry, event.currentTarget)}
+      data-side={tile.side} data-entry-id={entry.id} title={title}
+      aria-label={`${title}${entry.sample ? (lang === 'ar' ? ' — مثال' : ' — sample') : ''}`}>
+      <span className="tile-visual" aria-hidden="true"><img {...responsiveImageProps(entry.image, `${Math.ceil(pixels)}px`)} alt="" loading="lazy" decoding="async" /></span>
+      <span className="tile-content">
+        <span className="tile-category">{entry.sample ? '◇ ' : '✦ '}{category}</span>
+        <span className="tile-title">{title}</span>
+        <span className="tile-corner"><Icon name="upRight" size={14}/></span>
+      </span>
+    </button>
+  );
+});
+
+export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen, layoutSeed = 1 }) {
+  const scrollRef = useRef(null);
+  const pauseUntil = useRef(0);
+  const lastTime = useRef(0);
+  const scrollState = useRef(initialAutoScrollState());
+  const lastWrittenPosition = useRef(0);
+  const [viewTop, setViewTop] = useState(0);
+  const layout = useMemo(() => layoutMosaic(entries, viewport, archive, layoutSeed), [entries, viewport.width, viewport.height, archive, layoutSeed]);
+  const viewportHeight = viewport.height;
+
+  const syncWindow = useCallback((force = false) => {
+    const top = scrollRef.current?.scrollTop ?? 0;
+    // Recalculate the visible set only after crossing a 120px bucket.
+    const bucket = Math.floor(top / 120) * 120;
+    setViewTop(previous => force || previous !== bucket ? bucket : previous);
+  }, []);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    element.scrollTop = 0;
+    syncWindow(true);
+    lastTime.current = 0;
+    scrollState.current = pauseAutoScroll(initialAutoScrollState(), 0, true);
+    lastWrittenPosition.current = 0;
+    pauseUntil.current = performance.now() + SCROLL_RESUME_DELAY_MS;
+  }, [archive, layout.metrics.compact, syncWindow]);
+
+  useEffect(() => {
+    const element = scrollRef.current;
+    if (!element) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Hover/focus ease the current velocity down. Direct scrolling/touch
+    // takes control immediately, so our animation never fights the gesture.
+    const pause = event => {
+      pauseUntil.current = performance.now() + SCROLL_RESUME_DELAY_MS;
+      const manual = ['wheel', 'touchstart', 'pointerdown'].includes(event?.type);
+      scrollState.current = pauseAutoScroll(scrollState.current, element.scrollTop, manual);
+      if (manual) lastWrittenPosition.current = element.scrollTop;
+    };
+    const scroll = () => {
+      // iOS can continue a touch gesture via momentum scroll after touchend.
+      // Re-sync that position without replacing auto-generated subpixel offsets.
+      if (performance.now() < pauseUntil.current &&
+          Math.abs(element.scrollTop - lastWrittenPosition.current) > 1) {
+        scrollState.current = pauseAutoScroll(scrollState.current, element.scrollTop, true);
+        lastWrittenPosition.current = element.scrollTop;
+      }
+      syncWindow();
+    };
+    const hoverEntry = event => {
+      if (event.target.closest?.('.mosaic-tile--entry')) pause(event);
+    };
+    element.addEventListener('wheel', pause, { passive: true });
+    element.addEventListener('touchstart', pause, { passive: true });
+    element.addEventListener('pointerdown', pause, { passive: true });
+    element.addEventListener('pointerover', hoverEntry, { passive: true });
+    element.addEventListener('focusin', pause);
+    element.addEventListener('scroll', scroll, { passive: true });
+    // Animate only the scroll position. React updates the visible-tile set
+    // in 120px buckets, not on every requestAnimationFrame callback.
+    let frame = 0;
+    const tick = time => {
+      const delta = lastTime.current ? Math.min(time - lastTime.current, 100) : 0;
+      lastTime.current = time;
+      if (!document.hidden && !reduce.matches) {
+        const max = element.scrollHeight - element.clientHeight;
+        if (max > 40) {
+          if (time >= pauseUntil.current && scrollState.current.phase === 'paused') {
+            scrollState.current = resumeAutoScroll(scrollState.current);
+          }
+          const next = advanceAutoScroll(scrollState.current, delta, max);
+          scrollState.current = next;
+          if (Math.abs(element.scrollTop - next.position) >= 0.5) {
+            // Keep fractional progress in state rather than rereading rounded
+            // scrollTop values (important for mobile Safari).
+            lastWrittenPosition.current = next.position;
+            element.scrollTop = next.position;
+          }
+        }
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      element.removeEventListener('wheel', pause);
+      element.removeEventListener('touchstart', pause);
+      element.removeEventListener('pointerdown', pause);
+      element.removeEventListener('pointerover', hoverEntry);
+      element.removeEventListener('focusin', pause);
+      element.removeEventListener('scroll', scroll);
+    };
+  }, [syncWindow]);
+
+  const visible = useMemo(() => visibleMosaicTiles(layout.tiles, viewTop, viewportHeight), [layout.tiles, viewTop, viewportHeight]);
+  return (
+    <div ref={scrollRef}
+      className={`mosaic-scroll ${archive ? 'mosaic-scroll--archive' : ''} ${layout.metrics.compact ? 'mosaic-scroll--compact' : ''}`}
+      aria-label={lang === 'ar' ? 'مجموعة الأرشيف التفاعلية' : 'Interactive archive collage'} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="mosaic-plane" style={{ height: `${layout.contentHeight}px` }}>
+        {visible.map(tile => <ArchiveTile key={tile.id} tile={tile} onOpen={onOpen} lang={lang} />)}
+      </div>
+    </div>
+  );
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/components/PortfolioPanel.jsx`
+
+````jsx
+import React, { useEffect, useRef } from 'react';
+import Icon from './Icons.jsx';
+import { localizeEntryField, localizeCaption, localizeImageAlt } from '../content/localizeEntry.js';
+import { responsiveImageProps } from '../lib/imageAssets.js';
+import LiteraryExplorer from './LiteraryExplorer.jsx';
+
+function InternalLink({ children, href, onNavigate, className = 'text-link', item = null }) {
+  return <button type="button" className={className} onClick={(e) => onNavigate(href, e.currentTarget, item)}>{children}</button>;
+}
+
+function ExternalResourceLink({ href, children }) {
+  return (
+    <a className="resource-link" href={href} target="_blank" rel="noopener noreferrer">
+      <span>{children}</span>
+      <span className="resource-link-icon"><Icon name="upRight" size={18}/></span>
+    </a>
+  );
+}
+
+function PanelHeader({ t, onNavigate, pathname }) {
+  return (
+    <div className="panel-heading">
+      <InternalLink className="panel-monogram" href="/" onNavigate={onNavigate}>
+        M<span>.</span>
+      </InternalLink>
+      <span className="panel-label">{t.panelLabel} <span className="tiny-asterisk">✳</span> 2026</span>
+      <span className="panel-index">{pathname === '/' ? '01' : pathname === '/projects' ? '02' : pathname === '/writing' ? '03' : pathname === '/contact' ? '04' : '✦'}</span>
+    </div>
+  );
+}
+
+function HomeView({ t, onNavigate, entries, lang }) {
+  return <>
+    <section className="intro-section">
+      <span className="micro-label">{t.introKicker}</span>
+      <div className="hero-intro">
+        <div className="hero-copy">
+          <span className="hero-greeting">{t.greeting}</span>
+          <h1>{lang === 'ar' ? 'مروان' : 'Marwan'}<br/><em>{lang === 'ar' ? 'الحمدان.' : 'Al-Hamdan.'}</em></h1>
+          <div className="hero-rule" />
+          <p className="hero-role">{t.occupation}</p>
+          <p className="hero-description">{t.lead}</p>
+        </div>
+        <div className="portrait-frame">
+          <img {...responsiveImageProps("/portrait.png", "(max-width: 600px) 140px, 220px")} alt={t.portraitAlt} width="796" height="761" decoding="async" fetchPriority="high" />
+          <span className="portrait-credit">{t.portraitCredit}</span>
+        </div>
+      </div>
+      <div className="hero-actions">
+        <InternalLink className="pill-link pill-link--dark" href="/projects" onNavigate={onNavigate}>{t.seeWork} <Icon name="upRight" size={15}/></InternalLink>
+        <InternalLink className="pill-link pill-link--outline" href="/writing" onNavigate={onNavigate}>{t.writing} <Icon name="arrow" size={15}/></InternalLink>
+        <InternalLink className="pill-link pill-link--outline" href="/contact" onNavigate={onNavigate}>{t.contact} <Icon name="upRight" size={15}/></InternalLink>
+      </div>
+    </section>
+    <section className="editorial-block">
+      <div className="section-heading"><span className="number-label">01 / {t.curiosityKicker.toUpperCase()}</span><span className="section-star">✳</span></div>
+      <h2>{t.curiosityLine}<br/>{t.curiosityAnd} <em>{t.curiosityEmphasis}</em></h2>
+      <p>{t.discover} {t.curiosityBody}</p>
+      <div className="ink-divider" />
+      <span className="number-label">02 / {t.myWork.toUpperCase()}</span>
+      <div className="feature-links">
+        {entries.slice(0, 3).map((item, i) => (
+          <InternalLink key={item.id} href={`/archive/${item.id}`} onNavigate={onNavigate} item={item} className="feature-link">
+            <span className="feature-number">0{i + 1}</span><span>{localizeEntryField(item, 'title', lang)}</span><Icon name="upRight" size={16}/>
+          </InternalLink>
+        ))}
+      </div>
+    </section>
+    <section className="editorial-block editorial-block--bottom">
+      <div className="section-heading"><span className="number-label">03 / {t.readingNext.toUpperCase()}</span></div>
+      <h2>{t.libraryLine}<br/>{t.libraryAnd} <em>{t.libraryEmphasis}</em></h2>
+      <p>{t.readingBody}</p>
+      <InternalLink className="resource-link" href="/writing" onNavigate={onNavigate}>
+        <span>{t.writing}</span><span className="resource-link-icon"><Icon name="arrow" size={18}/></span>
+      </InternalLink>
+    </section>
+  </>;
+}
+
+function ProjectsView({ t, onNavigate, entries, lang }) {
+  const items = entries.filter((e) => !e.sample && ['portfolio-website', 'ecommerce', 'mobile-ui', 'dashboard'].includes(e.id));
+  return <section className="inner-view">
+    <span className="micro-label">02 / {t.projects.toUpperCase()}</span>
+    <h1 className="view-title">{t.projectsTitleLine} <em>{t.projectsTitleEmphasis}</em></h1>
+    <p className="view-lede">{t.workLead}</p>
+    <div className="project-list">
+      {items.map((item, index) => <InternalLink key={item.id} href={`/archive/${item.id}`} onNavigate={onNavigate} item={item} className="project-row">
+        <span className="project-row-number">0{index + 1}</span>
+        <img {...responsiveImageProps(item.image, "68px")} alt="" width="68" height="68" loading="lazy" decoding="async" />
+        <span className="project-row-description"><strong>{localizeEntryField(item, 'title', lang)}</strong><small>{localizeEntryField(item, 'meta', lang)}</small></span>
+        <Icon name="upRight" size={18}/>
+      </InternalLink>)}
+    </div>
+    <div className="source-disclosure">{t.sourceBadge}</div>
+  </section>;
+}
+
+function WritingView({ t, onNavigate, entries, lang, archive }) {
+  return <section className="inner-view">
+    <span className="micro-label">03 / {t.writing.toUpperCase()}</span>
+    <h1 className="view-title">{t.writingTitleLine}<br/><em>{t.writingTitleEmphasis}</em></h1>
+    <p className="view-lede">{t.writingLead}</p>
+    <img className="editorial-illustration" src="/art/reading.svg" alt={t.writingIllustrationAlt} loading="lazy" decoding="async" />
+    <h2 className="subheading">{t.readingTitle}</h2>
+    <p className="body-copy">{t.readingBody}</p>
+    <div className="writing-resource-list">
+      <InternalLink className="resource-link" href="/archive/writing" onNavigate={onNavigate} item={entries.find(e => e.id === 'writing')}>
+        <span>{localizeEntryField(entries.find(e => e.id === 'writing'), 'title', lang) || t.writingTitleLine}</span><span className="resource-link-icon"><Icon name="arrow" size={18}/></span>
+      </InternalLink>
+      <ExternalResourceLink href="https://marwanpgx.substack.com/">Substack</ExternalResourceLink>
+    </div>
+    <LiteraryExplorer t={t} lang={lang} enabled={!archive} />
+  </section>;
+}
+
+function ContactView({ t }) {
+  return <section className="inner-view contact-view">
+    <span className="micro-label">04 / {t.contact.toUpperCase()}</span>
+    <h1 className="view-title">{t.contactTitleLine}<br/><em>{t.contactTitleEmphasis}</em></h1>
+    <p className="view-lede">{t.reachLead}</p>
+    <div className="contact-options">
+      <ExternalResourceLink href="https://www.linkedin.com/in/marwan-al-hamdan-a64043331/">LinkedIn</ExternalResourceLink>
+      <ExternalResourceLink href="https://marwanpgx.substack.com/">Substack</ExternalResourceLink>
+    </div>
+    <p className="fine-print">{t.note}</p>
+  </section>;
+}
+
+function EntryView({ entry, t, lang, onNavigate, archive }) {
+  if (!entry) return <section className="inner-view"><h1 className="view-title">{t.notFound}</h1><InternalLink href="/" onNavigate={onNavigate} className="inline-arrow"><Icon name="back" size={18}/> {t.back}</InternalLink></section>;
+  const title = localizeEntryField(entry, 'title', lang);
+  const summary = localizeEntryField(entry, 'summary', lang);
+  return <article className="entry-view inner-view">
+    <span className="micro-label">{t.archiveEntryLabel.toUpperCase()} / {localizeEntryField(entry, 'category', lang).toUpperCase()}</span>
+    {entry.sample && <div className="sample-alert">{t.sampleBadge}</div>}
+    <h1 className="view-title">{title}</h1>
+    <p className="view-lede">{summary}</p>
+    <figure className="entry-figure">
+      <img {...responsiveImageProps(entry.image, "(max-width: 720px) 82vw, 550px")} className="entry-hero-image" alt={localizeImageAlt(entry, lang)} loading="lazy" decoding="async" />
+      <figcaption className="entry-caption number-label">{localizeCaption(entry, lang)}</figcaption>
+    </figure>
+    <p className="body-copy">{localizeEntryField(entry, 'body', lang)}</p>
+    {['writing', 'lit-club'].includes(entry.id) && <LiteraryExplorer t={t} lang={lang} enabled={!archive} />}
+    {entry.links?.length > 0 && <div className="entry-links">{entry.links.map(link => <ExternalResourceLink key={link.href} href={link.href}>{localizeEntryField(link, 'label', lang)}</ExternalResourceLink>)}</div>}
+    <InternalLink href="/" onNavigate={onNavigate} className="pill-link pill-link--outline"><Icon name="back" size={16}/> {t.back}</InternalLink>
+  </article>;
+}
+
+export default function PortfolioPanel({ pathname, archive, entries, t, lang, onNavigate }) {
+  const scrollRef = useRef(null);
+  useEffect(() => { if (scrollRef.current) scrollRef.current.scrollTop = 0; }, [pathname]);
+  const entry = pathname.startsWith('/archive/') ? entries.find(e => e.id === decodeURIComponent(pathname.slice('/archive/'.length))) : null;
+  return (
+    <main className={`portfolio-panel ${archive ? 'portfolio-panel--hidden' : ''}`} aria-hidden={archive} inert={archive} ref={scrollRef} dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+      <PanelHeader t={t} onNavigate={onNavigate} pathname={pathname}/>
+      {pathname === '/' ? <HomeView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
+        : pathname === '/projects' ? <ProjectsView t={t} onNavigate={onNavigate} entries={entries} lang={lang}/>
+          : pathname === '/writing' ? <WritingView t={t} onNavigate={onNavigate} entries={entries} lang={lang} archive={archive}/>
+            : pathname === '/contact' ? <ContactView t={t}/>
+              : <EntryView entry={entry} t={t} lang={lang} onNavigate={onNavigate} archive={archive}/>}
+      <footer className="panel-footer">
+        <span>© 2026 MARWAN AL-HAMDAN</span><span>{t.footer}</span>
+      </footer>
+    </main>
+  );
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/components/TransitionLayer.jsx`
+
+````jsx
+import React from 'react';
+import { optimizedImageUrl } from '../lib/imageAssets.js';
+
+export default function TransitionLayer({ transition }) {
+  if (!transition) return null;
+  const { phase, origin, image, title } = transition;
+  const vars = {
+    '--origin-x': `${origin.left}px`, '--origin-y': `${origin.top}px`,
+    '--origin-width': `${Math.max(38, origin.width)}px`,
+    '--origin-height': `${Math.max(38, origin.height)}px`,
+    '--transition-image': `url("${optimizedImageUrl(image || '/art/portfolio.svg', 960)}")`,
+  };
+  return (
+    <div className={`transition-layer transition-layer--${phase}`} aria-hidden="true">
+      <div className="transition-image" style={vars}>
+        <span className="transition-title">{title || 'The archive'}</span>
+      </div>
+      <div className="transition-wash" />
+    </div>
+  );
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/components/LiteraryExplorer.jsx`
+
+````jsx
+import React, { useEffect, useMemo, useState } from 'react';
+import { fetchLiteraryAuthor, LITERARY_AUTHORS, wikiquotePageUrl } from '../lib/literaryApis.js';
+
+const FAVORITES_KEY = 'living-archive-literary-favorites-v1';
+const authorCache = new Map();
+
+function readFavorites() {
+  try {
+    const value = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+    return Array.isArray(value) ? value.filter(x => x && typeof x.quote === 'string' && typeof x.authorId === 'string').slice(0, 40) : [];
+  } catch { return []; }
+}
+
+function writeFavorites(value) {
+  try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(value)); } catch { /* Storage is optional */ }
+}
+
+export default function LiteraryExplorer({ t, lang, enabled = true }) {
+  const [authorId, setAuthorId] = useState(LITERARY_AUTHORS[0].id);
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [favorites, setFavorites] = useState(readFavorites);
+  const [savedOnly, setSavedOnly] = useState(false);
+  const author = LITERARY_AUTHORS.find(item => item.id === authorId) || LITERARY_AUTHORS[0];
+
+  useEffect(() => {
+    if (!enabled || savedOnly) return;
+    const cached = authorCache.get(authorId);
+    if (cached && attempt === 0) { setResult(cached); setLoading(false); return; }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    setResult(null);
+    setLoading(true);
+    fetchLiteraryAuthor(author, { signal: controller.signal }).then(data => {
+      if (controller.signal.aborted) return;
+      authorCache.set(authorId, data);
+      setResult(data);
+    }).catch(() => {
+      if (!controller.signal.aborted) setResult({ quotes: [], biography: null, quoteError: true, biographyError: true });
+    }).finally(() => {
+      clearTimeout(timeout);
+      if (!controller.signal.aborted) setLoading(false);
+    });
+    return () => { clearTimeout(timeout); controller.abort(); };
+  }, [authorId, attempt, enabled, savedOnly]);
+
+  const quotes = useMemo(() => savedOnly ? favorites : (result?.quotes || []).map(quote => ({ authorId, quote })), [savedOnly, favorites, result, authorId]);
+  const current = quotes.length ? quotes[Math.min(index, quotes.length - 1)] : null;
+  const currentAuthor = LITERARY_AUTHORS.find(item => item.id === current?.authorId) || author;
+  const isSaved = !!current && favorites.some(item => item.authorId === current.authorId && item.quote === current.quote);
+
+  function toggleFavorite() {
+    if (!current) return;
+    const next = isSaved
+      ? favorites.filter(item => item.authorId !== current.authorId || item.quote !== current.quote)
+      : [...favorites, current].slice(-40);
+    setFavorites(next);
+    writeFavorites(next);
+    if (savedOnly) setIndex(i => Math.max(0, Math.min(i, next.length - 1)));
+  }
+
+  return <section className="literary-explorer" aria-label={t.literaryTitle}>
+    <div className="section-heading"><span className="number-label">{t.literaryKicker}</span><span className="section-star" aria-hidden="true">✳</span></div>
+    <h2 className="literary-explorer-title">{t.literaryTitle}</h2>
+    <p className="literary-explorer-intro">{t.literaryIntro}</p>
+    <div className="literary-explorer-controls">
+      <label className="literary-author-picker">
+        <span>{t.literarySelectAuthor}</span>
+        <select value={authorId} disabled={savedOnly} onChange={event => { setAuthorId(event.target.value); setIndex(0); setAttempt(0); }}>
+          {LITERARY_AUTHORS.map(item => <option key={item.id} value={item.id}>{lang === 'ar' ? item.nameAr : item.name}</option>)}
+        </select>
+      </label>
+      <button type="button" className={`literary-saved-toggle ${savedOnly ? 'literary-saved-toggle--active' : ''}`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(v => !v); setIndex(0); }}>
+        {savedOnly ? t.literaryBrowse : `${t.literarySaved} (${favorites.length})`}
+      </button>
+    </div>
+    {!savedOnly && result?.biography && <div className="literary-author-bio">
+      <strong>{lang === 'ar' ? author.nameAr : result.biography.name}</strong>
+      {(result.biography.birthDate || result.biography.deathDate) && <span dir="ltr">{[result.biography.birthDate, result.biography.deathDate].filter(Boolean).join(' – ')}</span>}
+      {result.biography.topWork && <span>{t.literaryKnownFor}: <em>{result.biography.topWork}</em></span>}
+      {result.biography.url && <a href={result.biography.url} target="_blank" rel="noopener noreferrer">{t.literaryOpenLibrary}</a>}
+    </div>}
+    <div className="literary-quote-card" aria-live="polite" aria-busy={!savedOnly && loading}>
+      {savedOnly && !current ? <p className="literary-message">{t.literaryNoSaved}</p>
+        : !savedOnly && loading ? <p className="literary-message">{t.literaryLoading}</p>
+          : current ? <>
+            <span className="literary-quote-mark" aria-hidden="true">“</span>
+            <blockquote lang="en" dir="ltr">{current.quote}</blockquote>
+            <div className="literary-quote-author">— {lang === 'ar' ? currentAuthor.nameAr : currentAuthor.name}</div>
+            <div className="literary-quote-actions">
+              <button type="button" onClick={toggleFavorite} aria-pressed={isSaved}>{isSaved ? t.literaryUnsave : t.literarySave}</button>
+              <a href={wikiquotePageUrl(currentAuthor)} target="_blank" rel="noopener noreferrer">{t.literarySource}</a>
+            </div>
+          </> : <div className="literary-message">
+            <p>{result?.quoteError ? t.literaryUnavailable : t.literaryEmpty}</p>
+            <button type="button" onClick={() => { authorCache.delete(authorId); setAttempt(n => n + 1); }}>{t.literaryRetry}</button>
+            <a href={wikiquotePageUrl(author)} target="_blank" rel="noopener noreferrer">{t.literarySource}</a>
+          </div>}
+    </div>
+    {quotes.length > 1 && <div className="literary-pagination">
+      <button type="button" disabled={index <= 0} onClick={() => setIndex(n => Math.max(0, n - 1))}>{t.literaryPrev}</button>
+      <span>{Math.min(index + 1, quotes.length)} / {quotes.length}</span>
+      <button type="button" disabled={index >= quotes.length - 1} onClick={() => setIndex(n => Math.min(quotes.length - 1, n + 1))}>{t.literaryNext}</button>
+    </div>}
+    <p className="literary-source-note">{t.literarySourceNote}</p>
+  </section>;
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/content/translations.js`
+
+````javascript
+export const i18n = {
+  en: {
+    archive: 'Explore archive', portfolio: 'Return to portfolio', appearance: 'Change appearance', language: 'Switch language',
+    introKicker: 'DEVELOPER · READER · MAKER', greeting: 'Hello, I’m', occupation: 'Web developer & designer',
+    lead: 'A KFUPM student drawn to building things, reading the classics, and solving difficult puzzles.',
+    seeWork: 'Selected work', explore: 'Explore the archive', discover: 'A collection of ideas, projects, and the things in between.',
+    about: 'About', projects: 'Projects', writing: 'Writing', contact: 'Contact', readMore: 'Discover the story',
+    myWork: 'Selected projects', workLead: 'Projects listed in my original portfolio, brought into a more exploratory space.',
+    readingTitle: 'The library of ideas', readingBody: 'I’m drawn to classic literature, philosophy, poetry, and writing. My original portfolio mentions The Master and Margarita, Aristotle, Blake, Frost, Milton, Orwell, Bacon, Johnson, Sophocles, Browning, and Shakespeare.',
+    readingNext: 'Beyond the code', skillsTitle: 'Tools & disciplines', writingTitle: 'Writing & reading', writingLead: 'Poetry, essays, and the thinkers I return to.',
+    reach: 'Get in touch', reachLead: 'Have an idea or a collaboration in mind? Reach me through one of my linked profiles.',
+    note: 'The original contact form was a local-only demonstration. This redesign does not pretend to send messages.',
+    sourceBadge: 'From original portfolio', sampleBadge: 'EXAMPLE — NOT A REAL ACHIEVEMENT',
+    more: 'Learn more', originalEntry: 'Original portfolio entry', related: 'Explore related entries', back: 'Back to portfolio',
+    demoHeading: 'Mosaic growth demo', demoInfo: 'Temporarily add sample tiles to see how the layout expands.',
+    add: 'Add 4 samples', remove: 'Undo 4 samples', count: 'entries',
+    footer: 'An ongoing archive, never quite finished.',
+    panelLabel: 'PERSONAL ARCHIVE',
+    portraitAlt: 'Portrait of Marwan Al-Hamdan', portraitCredit: 'FIG. 01 / PORTRAIT',
+    curiosityKicker: 'A NOTE ON CURIOSITY', curiosityLine: 'Between code', curiosityAnd: 'and', curiosityEmphasis: 'curiosity.',
+    curiosityBody: 'I enjoy finding the connections between the things I study, build and read.',
+    libraryLine: 'The library', libraryAnd: 'of', libraryEmphasis: 'ideas.',
+    projectsTitleLine: 'Things', projectsTitleEmphasis: 'built.',
+    writingTitleLine: 'Words &', writingTitleEmphasis: 'worlds.',
+    contactTitleLine: "Let's make", contactTitleEmphasis: 'something.',
+    writingIllustrationAlt: 'Abstract illustration of books and reading',
+    archiveEntryLabel: 'ARCHIVE', notFound: 'Not found.',
+    archiveCanvasLabel: 'Interactive archive collage', sampleSuffix: 'sample',
+    literaryKicker: 'THE LITERARY SHELF', literaryTitle: 'Authors & quotations',
+    literaryIntro: 'Explore selected authors and quotations retrieved from Wikiquote, with author details from Open Library.',
+    literarySelectAuthor: 'Choose an author', literaryLoading: 'Fetching quotations…',
+    literaryUnavailable: 'The quotations could not be loaded right now.',
+    literaryEmpty: 'No suitable short quotations were found for this author.',
+    literaryPrev: 'Previous', literaryNext: 'Next', literarySave: 'Save quote',
+    literaryUnsave: 'Remove saved quote', literarySaved: 'Saved quotes',
+    literaryBrowse: 'Browse authors', literarySource: 'View on Wikiquote',
+    literaryKnownFor: 'Notable work', literaryOpenLibrary: 'Open Library profile',
+    literaryRetry: 'Try again', literaryNoSaved: 'No saved quotations yet. Browse an author and save one.',
+    literarySourceNote: 'Quotations are in their source language (English). Wikiquote is community-edited; verify wording and attribution at the source.',
+  },
+  ar: {
+    archive: 'استكشف الأرشيف', portfolio: 'العودة إلى الموقع', appearance: 'تغيير المظهر', language: 'تغيير اللغة',
+    introKicker: 'مطور · قارئ · صانع', greeting: 'مرحبًا، أنا', occupation: 'مطور ومصمم مواقع',
+    lead: 'طالب في جامعة الملك فهد للبترول والمعادن، شغوف بصناعة الأشياء وقراءة الأدب الكلاسيكي وحل الألغاز الصعبة.',
+    seeWork: 'مشاريعي', explore: 'استكشف الأرشيف', discover: 'مجموعة من الأفكار والمشاريع وكل ما يقع بينهما.',
+    about: 'نبذة', projects: 'المشاريع', writing: 'الكتابة', contact: 'تواصل', readMore: 'اقرأ المزيد',
+    myWork: 'مشاريع مختارة', workLead: 'مشاريع مدرجة في موقعي الأصلي، أعرضها الآن في مساحة أكثر تفاعلية.',
+    readingTitle: 'مكتبة الأفكار', readingBody: 'أميل إلى الأدب الكلاسيكي والفلسفة والشعر والكتابة. ويذكر موقعي الشخصي الأصلي «المعلم ومارغريتا»، وأرسطو، وبليك، وفروست، وميلتون، وأورويل، وبيكون، وجونسون، وسوفوكليس، وبراوننغ، وشكسبير.',
+    readingNext: 'خارج عالم البرمجة', skillsTitle: 'مهاراتي واهتماماتي', writingTitle: 'الكتابة والقراءة', writingLead: 'الشعر والمقالات والأفكار التي أعود إليها.',
+    reach: 'تواصل معي', reachLead: 'هل لديك فكرة أو مشروع مشترك؟ يمكنك التواصل من خلال الروابط أدناه.',
+    note: 'كان نموذج التواصل في الموقع الأصلي تجريبيًا، ولا يدّعي هذا التصميم إرسال الرسائل.',
+    sourceBadge: 'من الموقع الأصلي', sampleBadge: 'مثال توضيحي — ليس إنجازًا حقيقيًا',
+    more: 'المزيد', originalEntry: 'من الموقع الأصلي', related: 'موضوعات مرتبطة', back: 'العودة إلى الموقع',
+    demoHeading: 'تجربة نمو الشبكة', demoInfo: 'أضف بطاقات نموذجية مؤقتًا لرؤية كيفية توسّعها.',
+    add: 'أضف ٤ بطاقات', remove: 'تراجع عن ٤ بطاقات', count: 'عنصرًا',
+    footer: 'أرشيف متجدد، لا يكتمل تمامًا.',
+    panelLabel: 'الأرشيف الشخصي',
+    portraitAlt: 'صورة مروان الحمدان الشخصية', portraitCredit: 'صورة ٠١ / صورة شخصية',
+    curiosityKicker: 'تأمل في الفضول', curiosityLine: 'بين البرمجة', curiosityAnd: 'و', curiosityEmphasis: 'الفضول.',
+    curiosityBody: 'أستمتع باكتشاف الروابط بين ما أدرسه وأبنيه وأقرؤه.',
+    libraryLine: 'مكتبة', libraryAnd: '', libraryEmphasis: 'الأفكار.',
+    projectsTitleLine: 'أشياء', projectsTitleEmphasis: 'بنيتها.',
+    writingTitleLine: 'كلمات', writingTitleEmphasis: 'وعوالم.',
+    contactTitleLine: 'لنصنع', contactTitleEmphasis: 'شيئًا معًا.',
+    writingIllustrationAlt: 'رسم تجريدي للكتب والقراءة',
+    archiveEntryLabel: 'الأرشيف', notFound: 'العنصر غير موجود.',
+    archiveCanvasLabel: 'مجموعة الأرشيف التفاعلية', sampleSuffix: 'مثال',
+    literaryKicker: 'رف الأدب', literaryTitle: 'كتّاب واقتباسات',
+    literaryIntro: 'استكشف اقتباسات مختارة من ويكي الاقتباس، ومعلومات عن الكتّاب من المكتبة المفتوحة.',
+    literarySelectAuthor: 'اختر كاتبًا', literaryLoading: 'جارٍ جلب الاقتباسات…',
+    literaryUnavailable: 'تعذّر تحميل الاقتباسات حاليًا.',
+    literaryEmpty: 'لم يُعثر على اقتباسات قصيرة مناسبة لهذا الكاتب.',
+    literaryPrev: 'السابق', literaryNext: 'التالي', literarySave: 'حفظ الاقتباس',
+    literaryUnsave: 'إزالة الاقتباس المحفوظ', literarySaved: 'الاقتباسات المحفوظة',
+    literaryBrowse: 'تصفّح الكتّاب', literarySource: 'عرض المصدر في ويكي الاقتباس',
+    literaryKnownFor: 'عمل بارز', literaryOpenLibrary: 'ملف الكاتب في المكتبة المفتوحة',
+    literaryRetry: 'إعادة المحاولة', literaryNoSaved: 'لا توجد اقتباسات محفوظة بعد. تصفّح الكتّاب واحفظ ما يعجبك.',
+    literarySourceNote: 'الاقتباسات معروضة بلغتها الأصلية (الإنجليزية). ويكي الاقتباس مشروع تعاوني؛ يُنصح بالتحقق من نص الاقتباس ونسبته في المصدر.',
+  },
+};
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/lib/literaryApis.js`
+
+````javascript
+// A deliberately small, curated list: requests are made only when the visitor
+// opens a literary page and selects an author, never in bulk.
+export const LITERARY_AUTHORS = Object.freeze([
+  { id: 'shakespeare', name: 'William Shakespeare', nameAr: 'وليام شكسبير', wikiquote: 'William Shakespeare' },
+  { id: 'austen', name: 'Jane Austen', nameAr: 'جين أوستن', wikiquote: 'Jane Austen' },
+  { id: 'johnson', name: 'Samuel Johnson', nameAr: 'صمويل جونسون', wikiquote: 'Samuel Johnson' },
+  { id: 'woolf', name: 'Virginia Woolf', nameAr: 'فرجينيا وولف', wikiquote: 'Virginia Woolf' },
+  { id: 'dostoevsky', name: 'Fyodor Dostoevsky', nameAr: 'فيودور دوستويفسكي', wikiquote: 'Fyodor Dostoyevsky' },
+  { id: 'aristotle', name: 'Aristotle', nameAr: 'أرسطو', wikiquote: 'Aristotle' },
+]);
+
+export function wikiquotePageUrl(author) {
+  return `https://en.wikiquote.org/wiki/${encodeURIComponent(author.wikiquote.replaceAll(' ', '_'))}`;
+}
+
+export function wikiquoteApiUrl(author) {
+  const params = new URLSearchParams({
+    action: 'parse', page: author.wikiquote, prop: 'wikitext', format: 'json', origin: '*', redirects: '1',
+  });
+  return `https://en.wikiquote.org/w/api.php?${params}`;
+}
+
+export function openLibraryApiUrl(author) {
+  const params = new URLSearchParams({ q: author.name, limit: '5' });
+  return `https://openlibrary.org/search/authors.json?${params}`;
+}
+
+function plainWikiText(input) {
+  let text = input.replace(/<!--[^]*?-->/g, '').replace(/<ref\b[^>]*>[^]*?<\/ref>/gi, '').replace(/<ref\b[^>]*\/>/gi, '');
+  // Drop templates instead of accidentally displaying their parameters as quotes.
+  for (let i = 0; i < 5; i++) text = text.replace(/\{\{[^{}]*\}\}/g, '');
+  text = text.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, '$2').replace(/\[\[([^\]]+)\]\]/g, '$1');
+  text = text.replace(/\[(?:https?:\/\/)[^\s\]]+\s+([^\]]+)\]/g, '$1');
+  text = text.replace(/''+/g, '').replace(/<br\s*\/?\s*>/gi, ' ').replace(/<[^>]+>/g, '');
+  text = text.replace(/&nbsp;|&#160;/gi, ' ').replace(/&amp;/gi, '&').replace(/&quot;/gi, '"').replace(/&lt;/gi, '<').replace(/&gt;/gi, '>');
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+// Wikiquote pages are community-edited and vary in structure. Only use
+// first-level quotation bullets in sections that are not flagged as dubious.
+// Never synthesize or truncate a quotation to fill empty results.
+export function extractWikiquoteQuotes(wikitext, limit = 9) {
+  if (typeof wikitext !== 'string') return [];
+  const result = [];
+  const seen = new Set();
+  const excludedLevels = [];
+  for (const line of wikitext.split(/\r?\n/)) {
+    const heading = line.match(/^(={2,6})\s*(.*?)\s*\1\s*$/);
+    if (heading) {
+      const level = heading[1].length;
+      while (excludedLevels.length && excludedLevels.at(-1) >= level) excludedLevels.pop();
+      if (/misattributed|disputed|unsourced|unverified|attributed|quotes about|external links|see also|references|further reading|notes|bibliography|translations/i.test(plainWikiText(heading[2]))) {
+        excludedLevels.push(level);
+      }
+      continue;
+    }
+    if (excludedLevels.length || !/^\*\s*\S/.test(line) || /^\*\s*[*#:]/.test(line)) continue;
+    const raw = line.replace(/^\*\s*/, '');
+    if (/\{\||\[\[(?:File|Image|Category):|https?:\/\//i.test(raw)) continue;
+    const quote = plainWikiText(raw);
+    if (quote.length < 35 || quote.length > 230 || quote.split(/\s+/).length < 7) continue;
+    if (/\{\{|\}\}|\[\[|\]\]|\b(?:ISBN|Wikiquote|Wikisource)\b/i.test(quote)) continue;
+    if (/^(?:See also|Read more|From |For more|Source:|Translation:|Image:)/i.test(quote)) continue;
+    const key = quote.toLocaleLowerCase('en');
+    if (!seen.has(key)) {
+      seen.add(key);
+      result.push(quote);
+      if (result.length >= limit) break;
+    }
+  }
+  return result;
+}
+
+export function parseOpenLibraryAuthor(json, author) {
+  const docs = Array.isArray(json?.docs) ? json.docs : [];
+  const match = docs.find(doc => doc.name?.toLocaleLowerCase('en') === author.name.toLocaleLowerCase('en'));
+  if (!match) return null; // Don't attach a similarly named person's biography.
+  const key = String(match.key || '').replace(/^\/authors\//, '');
+  return {
+    name: match.name,
+    birthDate: typeof match.birth_date === 'string' ? match.birth_date : '',
+    deathDate: typeof match.death_date === 'string' ? match.death_date : '',
+    workCount: Number.isFinite(match.work_count) ? match.work_count : null,
+    topWork: typeof match.top_work === 'string' ? match.top_work : '',
+    url: /^OL\d+A$/.test(key) ? `https://openlibrary.org/authors/${key}` : '',
+  };
+}
+
+async function getJson(url, signal, fetchImpl) {
+  const response = await fetchImpl(url, { signal });
+  if (!response.ok) throw new Error(`API request failed (${response.status})`);
+  return response.json();
+}
+
+// Both independent APIs are queried in parallel. One failing never hides
+// successful data from the other. Errors are surfaced to the component.
+export async function fetchLiteraryAuthor(author, { signal, fetchImpl = fetch } = {}) {
+  const [quotesResult, bioResult] = await Promise.allSettled([
+    getJson(wikiquoteApiUrl(author), signal, fetchImpl),
+    getJson(openLibraryApiUrl(author), signal, fetchImpl),
+  ]);
+  const quoteData = quotesResult.status === 'fulfilled' ? quotesResult.value : null;
+  const bioData = bioResult.status === 'fulfilled' ? bioResult.value : null;
+  const wikitext = quoteData?.parse?.wikitext?.['*'];
+  return {
+    quotes: extractWikiquoteQuotes(wikitext),
+    biography: parseOpenLibraryAuthor(bioData, author),
+    quoteError: quotesResult.status === 'rejected' || !!quoteData?.error || typeof wikitext !== 'string',
+    biographyError: bioResult.status === 'rejected',
+  };
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/lib/imageAssets.js`
+
+````javascript
+import optimizedImages from '../data/optimizedImages.json';
+
+// Images not present in the manifest (including SVGs and future additions)
+// retain their original URL and continue working normally.
+export function responsiveImageProps(path, sizes = '100vw') {
+  const variants = optimizedImages[path];
+  if (!variants?.length) return { src: path };
+  return {
+    src: path,
+    srcSet: variants.map(item => `${item.src} ${item.width}w`).join(', '),
+    sizes,
+  };
+}
+
+export function optimizedImageUrl(path, targetWidth = 960) {
+  const variants = optimizedImages[path];
+  if (!variants?.length) return path;
+  return variants.find(item => item.width >= targetWidth)?.src || variants.at(-1).src;
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/data/optimizedImages.json`
+
+````json
+{
+  "/portrait.png": [
+    {
+      "width": 320,
+      "src": "/optimized/portrait-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/portrait-640w.webp"
+    },
+    {
+      "width": 796,
+      "src": "/optimized/portrait-796w.webp"
+    }
+  ],
+  "/art/GESpeech.jpeg": [
+    {
+      "width": 320,
+      "src": "/optimized/GESpeech-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/GESpeech-640w.webp"
+    },
+    {
+      "width": 720,
+      "src": "/optimized/GESpeech-720w.webp"
+    }
+  ],
+  "/art/LitClubMeet.jpeg": [
+    {
+      "width": 320,
+      "src": "/optimized/LitClubMeet-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/LitClubMeet-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/LitClubMeet-960w.webp"
+    },
+    {
+      "width": 1048,
+      "src": "/optimized/LitClubMeet-1048w.webp"
+    }
+  ],
+  "/art/MPortfolio.png": [
+    {
+      "width": 320,
+      "src": "/optimized/MPortfolio-320w.webp"
+    },
+    {
+      "width": 396,
+      "src": "/optimized/MPortfolio-396w.webp"
+    }
+  ],
+  "/art/MarwanWriting.jpeg": [
+    {
+      "width": 320,
+      "src": "/optimized/MarwanWriting-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/MarwanWriting-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/MarwanWriting-960w.webp"
+    },
+    {
+      "width": 1213,
+      "src": "/optimized/MarwanWriting-1213w.webp"
+    }
+  ],
+  "/art/PotentialBOT.png": [
+    {
+      "width": 320,
+      "src": "/optimized/PotentialBOT-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/PotentialBOT-640w.webp"
+    },
+    {
+      "width": 701,
+      "src": "/optimized/PotentialBOT-701w.webp"
+    }
+  ],
+  "/art/Sec+.webp": [
+    {
+      "width": 320,
+      "src": "/optimized/Sec+-320w.webp"
+    },
+    {
+      "width": 480,
+      "src": "/optimized/Sec+-480w.webp"
+    }
+  ],
+  "/art/TrafficLightSystem.jpg": [
+    {
+      "width": 320,
+      "src": "/optimized/TrafficLightSystem-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/TrafficLightSystem-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/TrafficLightSystem-960w.webp"
+    },
+    {
+      "width": 1280,
+      "src": "/optimized/TrafficLightSystem-1280w.webp"
+    }
+  ],
+  "/art/circuit.jpg": [
+    {
+      "width": 320,
+      "src": "/optimized/circuit-320w.webp"
+    },
+    {
+      "width": 640,
+      "src": "/optimized/circuit-640w.webp"
+    },
+    {
+      "width": 960,
+      "src": "/optimized/circuit-960w.webp"
+    }
+  ]
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `src/styles/global.css`
+
+````css
+:root {
+  font-family: 'DM Sans', 'Segoe UI', Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --world: #161b20;
+  --world-grid: rgba(239, 229, 211, .035);
+  --paper: #f0ede6;
+  --paper-soft: #e7e1d7;
+  --ink: #232823;
+  --muted: #78786f;
+  --lede-color: #6b7169;
+  --paper-line: #cbc7bc;
+  --accent: #777157;
+  --tile-outline: rgba(246, 238, 219, .64);
+  /* One continuous spatial palette, not a palette repeated per tiling module. */
+  --mosaic-horizontal: linear-gradient(90deg,
+    #bfd0d0 0%, #c4d2d0 24%, #cad3cc 49%,
+    #d1cec5 73%, #c7d1cf 100%);
+  --mosaic-vertical: linear-gradient(180deg,
+    rgba(255,255,255,0) 0%, rgba(255,255,255,.09) 25%,
+    rgba(124,145,136,.085) 55%, rgba(255,255,255,.065) 78%,
+    rgba(255,255,255,0) 100%);
+}
+:root[data-theme="dark"] {
+  --world: #090e14;
+  --world-grid: rgba(226, 234, 244, .035);
+  --paper: #21272b;
+  --paper-soft: #2b3236;
+  --ink: #eeeae1;
+  --muted: #a2aaa6;
+  --lede-color: #909995;
+  --paper-line: #47504f;
+  --accent: #d1b99a;
+  --tile-outline: rgba(233, 239, 239, .48);
+  --mosaic-horizontal: linear-gradient(90deg,
+    #203036 0%, #283a3e 24%, #30403e 49%,
+    #383d3a 73%, #29393d 100%);
+  --mosaic-vertical: linear-gradient(180deg,
+    rgba(255,255,255,0) 0%, rgba(161,173,164,.045) 25%,
+    rgba(105,123,121,.065) 55%, rgba(255,255,255,.025) 78%,
+    rgba(255,255,255,0) 100%);
+}
+* { box-sizing: border-box; }
+html, body, #root { min-width: 280px; min-height: 100%; margin: 0; }
+html { overflow: hidden; }
+body { background: var(--world); color: var(--ink); }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 2px solid #89adc1; outline-offset: 3px; }
+a { color: inherit; }
+.site-shell { width: 100%; min-height: 100svh; isolation: isolate; background: var(--world); overflow: hidden; }
+.site-grain { pointer-events: none; position: fixed; inset: 0; z-index: 5; opacity: .3; background-image: repeating-linear-gradient(90deg,transparent 0, transparent 31px, var(--world-grid) 32px), repeating-linear-gradient(0deg,transparent 0, transparent 31px, var(--world-grid) 32px); }
+/* The mosaic remains scrollable under the independently scrolling portfolio. */
+.mosaic-scroll { position: fixed; inset: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; background: var(--world); }
+.mosaic-scroll::-webkit-scrollbar, .portfolio-panel::-webkit-scrollbar { display: none; }
+/* A shared, gently varying field sits below every square. Transparent ambient
+   tiles expose the exact same color at their edges, so adjacent squares never
+   switch abruptly between unrelated module palettes. */
+.mosaic-plane {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--world);
+  background-image: var(--mosaic-vertical), var(--mosaic-horizontal);
+  background-size: 100% 2200px, 100% 2200px;
+  background-position: left top, left top;
+  background-repeat: repeat-y, repeat-y;
+}
+.mosaic-tile { appearance: none; position: absolute; top: 0; left: 0; padding: 0; margin: 0; width: var(--tile-size); height: var(--tile-size); display: block; overflow: hidden; border-radius: 0; border: 1px solid var(--tile-outline); transform: translate3d(var(--tile-x), var(--tile-y), 0); transition: transform .58s cubic-bezier(.23,.87,.24,1), width .58s cubic-bezier(.23,.87,.24,1), height .58s cubic-bezier(.23,.87,.24,1), border-color .22s ease, opacity .3s ease; container-type: inline-size; background: #1b292e; }
+.mosaic-tile--entry { cursor: pointer; text-align: left; color: #faf7f0; z-index: 1; }
+.mosaic-tile--entry:hover, .mosaic-tile--entry:focus-visible { z-index: 3; border-color: #f9e5c9; }
+.tile-visual { position: absolute; inset: 0; display: block; transform: scale(1.005); transition: transform .4s cubic-bezier(.2,.75,.2,1), filter .25s; filter: saturate(.76) brightness(.86); }
+.tile-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(5,11,16,.87),rgba(5,11,16,.06) 70%); }
+.mosaic-tile--entry:hover .tile-visual, .mosaic-tile--entry:focus-visible .tile-visual { transform: scale(1.085); filter: saturate(1) brightness(1.06); }
+.tile-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(11px, 1.2vw, 22px); text-shadow: 0 1px 12px #06090fb0; min-width: 0; }
+.tile-category { display: block; font-size: clamp(10px, 3.8cqi, 13px); letter-spacing: .08em; line-height: 1.25; text-transform: uppercase; font-weight: 700; opacity: .9; margin-bottom: 6px; }
+.tile-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; font: normal clamp(18px, 9cqi, 35px)/1.06 'Instrument Serif', Georgia, serif; max-width: 100%; overflow-wrap: anywhere; text-wrap: balance; }
+.tile-corner { position: absolute; top: 10px; right: 9px; opacity: 0; transform: translate(-3px,3px); transition: opacity .2s, transform .2s; }
+.mosaic-tile:hover .tile-corner, .mosaic-tile:focus-visible .tile-corner { opacity: 1; transform: none; }
+.mosaic-tile--sample .tile-category { color: #e8d7b7; }
+/* Tiny squares are decorative only; entry sizing is enforced by the layout generator. */
+.mosaic-tile--tiny .tile-content { padding: 9px; }
+.mosaic-tile--tiny .tile-title { font-size: clamp(15px, 8cqi, 20px); }
+@container (max-width: 185px) { .tile-category { font-size: 10px; letter-spacing: .03em; } .tile-content { padding: 10px; } .tile-title { font-size: clamp(16px, 10cqi, 21px); } }
+/* Ambient squares supply only their artwork and outline. The common canvas
+   supplies the colors and stays visually continuous through tile boundaries. */
+.mosaic-tile--ambient {
+  pointer-events: none;
+  border-color: var(--tile-outline);
+  background-color: transparent;
+  background-image: var(--ambient-art);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: normal;
+}
+.ambient-mark { display: none; }
+.panel-shadow { position: fixed; z-index: 6; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: var(--panel-width, min(600px,max(468px,43vw))); box-shadow: 0 25px 95px #05080da8,0 0 0 1px rgba(255,255,255,.1); pointer-events: none; transition: opacity .4s, transform .6s; }
+.site-shell--archive .panel-shadow { opacity: 0; transform: translateX(-50%) translateY(50px) scale(.94); }
+.portfolio-panel { position: fixed; z-index: 7; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: var(--panel-width, min(600px,max(468px,43vw))); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 27px clamp(25px,3.1vw,49px) 16px; background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); box-shadow: 0 0 0 1px rgba(0,0,0,.06); transition: transform .63s cubic-bezier(.25,.72,.15,1), opacity .45s ease; }
+.portfolio-panel--hidden { opacity: 0; transform: translateX(-50%) translateY(72px) scale(.9); pointer-events: none; }
+.panel-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom: 27px; border-bottom:1px solid var(--paper-line); }
+.panel-monogram { border:0; background:transparent; color:var(--ink); padding:0; font:bold 27px 'Instrument Serif',Georgia,serif; cursor:pointer; }
+.panel-monogram span { color: var(--accent); }
+.panel-label,.panel-index,.micro-label,.number-label,.panel-footer,.portrait-credit,.source-disclosure { font: 500 9px/1.3 'DM Mono',monospace; letter-spacing:.12em; }
+.panel-label { color:var(--muted); }
+.tiny-asterisk { color: var(--accent); font-size: 16px; vertical-align:-2px; }
+.panel-index { color:var(--muted); }
+.intro-section { padding-top: 49px; }
+.micro-label,.number-label { display:block; color:var(--muted); }
+.hero-intro { display:flex; align-items:flex-end; gap:18px; margin-top:27px; }
+.hero-copy { min-width:0; flex:1; }
+.hero-greeting { font:italic 26px 'Instrument Serif',Georgia,serif; }
+.hero-copy h1 { margin:10px 0 0; font:normal clamp(34px,3.65vw,52px)/1.02 'Instrument Serif',Georgia,serif; letter-spacing:-.035em; white-space:normal; }
+.hero-copy h1 em, .editorial-block h2 em,.view-title em { font-weight:400; color:var(--accent); }
+.hero-rule { width:45px; height:1px; background:var(--accent); margin:18px 0; }
+.hero-role { font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; margin:0 0 8px; }
+.hero-description { font-size:12px; line-height:1.7; color:var(--muted); margin:0; }
+.portrait-frame { width: 32%; flex:none; aspect-ratio: .77; display:flex; flex-direction:column; align-self:center; position:relative; }
+.portrait-frame img { display:block; width:100%; height:100%; object-fit:cover; object-position:center 34%; filter:saturate(.72); border:1px solid var(--paper-line); }
+.portrait-credit { position:absolute; bottom:-17px; left:0; color:var(--muted); white-space:nowrap; font-size:7px; }
+.hero-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:39px; }
+.pill-link { text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:12px; border:1px solid var(--ink); border-radius:100px; padding:11px 14px; font-size:11px; font-weight:600; cursor:pointer; transition:transform .18s,background .18s,color .18s; }
+.pill-link:hover { transform:translateY(-2px); }
+.pill-link:active { transform:scale(.96); }
+.pill-link--dark { background:var(--ink); color:var(--paper); }
+.pill-link--outline { background:transparent; color:var(--ink); }
+.pill-link--outline:hover { background:var(--paper-soft); }
+.editorial-block { margin-top:66px; padding-top:23px; border-top:1px solid var(--paper-line); }
+.section-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.section-star { color:var(--accent); }
+.editorial-block h2 { margin:22px 0 20px; font:normal clamp(38px,4vw,56px)/.97 'Instrument Serif',Georgia,serif; letter-spacing:-.02em; }
+.editorial-block p,.body-copy { color:var(--muted); font-size:13px; line-height:1.85; letter-spacing:.018em; max-width:52ch; }
+.ink-divider { width:100%; height:1px; background:var(--paper-line); margin:27px 0 22px; }
+.feature-links { margin-top:13px; }
+.feature-link { display:flex; justify-content:space-between; align-items:center; gap:12px; width:100%; padding:13px 0; background:none; color:var(--ink); border:0; border-bottom:1px solid var(--paper-line); text-align:start; cursor:pointer; font:normal 20px/1.2 'Instrument Serif',Georgia,serif; }
+.feature-link:hover { color:var(--accent); }
+.feature-number { font:9px 'DM Mono',monospace; color:var(--muted); margin-inline-end:auto; min-width:28px; }
+.feature-link > svg:last-child { margin-inline-start:auto; }
+.editorial-block--bottom { padding-bottom:40px; }
+.inline-arrow { display:inline-flex;align-items:center;gap:9px;padding:0;border:0;background:none;color:var(--ink);font-size:12px;font-weight:600;text-decoration:none;cursor:pointer; }
+.inline-arrow:hover { color:var(--accent); }
+.inner-view { padding-top:51px; min-height:65%; }
+.view-title { font:normal clamp(44px,5vw,72px)/.97 'Instrument Serif',Georgia,serif; letter-spacing:-.025em; margin:23px 0 19px; }
+.view-lede { max-width:45ch; color:var(--lede-color); font-size:clamp(16px,1.4vw,18px); font-weight:400; line-height:1.66; letter-spacing:.012em; margin:0 0 39px; }
+.project-list { border-top:1px solid var(--paper-line); }
+.project-row { width:100%; padding:17px 0; display:flex; align-items:center; gap:12px; border:0; border-bottom:1px solid var(--paper-line); background:none; text-align:start; color:var(--ink); cursor:pointer; }
+.project-row:hover .project-row-description strong { color:var(--accent); }
+.project-row img { width:68px;height:68px;object-fit:cover;border:1px solid var(--paper-line); }
+.project-row-number { font:9px 'DM Mono',monospace;color:var(--muted); }
+.project-row-description { flex:1; min-width:0;display:flex;flex-direction:column;gap:7px; }
+.project-row-description strong { font:normal 24px 'Instrument Serif',Georgia,serif; }
+.project-row-description small { color:var(--muted);font:9px 'DM Mono',monospace; }
+.source-disclosure { margin:24px 0;line-height:1.7;color:var(--muted);letter-spacing:0; }
+.editorial-illustration,.entry-hero-image { display:block;width:100%;aspect-ratio:1.55;object-fit:cover;border:1px solid var(--paper-line); }
+.subheading { font:normal 33px 'Instrument Serif',Georgia,serif;margin:34px 0 12px; }
+.contact-options { display:grid; gap:10px; margin:38px 0 25px; }
+.fine-print { color:var(--muted);font-size:11px;line-height:1.7; }
+.sample-alert { margin-top:18px; padding:10px 12px; background:var(--paper-soft);border-left:2px solid var(--accent);font-size:10px;font-weight:700;letter-spacing:.06em; }
+.entry-view .view-title { overflow-wrap:anywhere; }
+.entry-figure { margin:0 0 22px; }
+.entry-caption { margin-top:17px; font-size:10px; letter-spacing:.16em; line-height:1.5; }
+.entry-links,.writing-resource-list { display:grid; gap:10px; margin:27px 0 24px; }
+.resource-link { width:100%; min-height:66px; display:flex; align-items:center; justify-content:space-between; gap:14px; padding:15px 16px 15px 18px; background:transparent; color:var(--ink); border:1px solid var(--paper-line); border-radius:2px; text-decoration:none; text-align:start; cursor:pointer; font:600 clamp(14px,1.25vw,17px)/1.4 'DM Sans','Segoe UI',Arial,sans-serif; letter-spacing:.018em; transition:background .2s,border-color .2s,transform .2s; }
+.resource-link:hover { background:var(--paper-soft); border-color:var(--accent); transform:translateY(-2px); }
+.resource-link:active { transform:translateY(0); }
+.resource-link-icon { width:36px; height:36px; flex:none; display:grid; place-items:center; border:1px solid var(--paper-line); border-radius:2px; transition:transform .2s,border-color .2s; }
+.resource-link:hover .resource-link-icon, .resource-link:focus-visible .resource-link-icon { transform:translate(2px,-2px); border-color:var(--accent); }
+[dir="rtl"] .resource-link:hover .resource-link-icon, [dir="rtl"] .resource-link:focus-visible .resource-link-icon { transform:translate(-2px,-2px); }
+.entry-view .pill-link { margin-top:28px; }
+.panel-footer { margin-top:58px; padding:20px 0 26px; border-top:1px solid var(--paper-line);display:flex;justify-content:space-between;gap:15px;color:var(--muted);font-size:8px;letter-spacing:.02em; }
+/* Floating controls overlap the collage only while the user is active. */
+.floating-controls { position:fixed;z-index:45;top:24px;right:26px;display:flex;align-items:center;gap:14px;pointer-events:none;opacity:1;transform:translateY(0);transition:opacity .32s ease,transform .32s ease; }
+.floating-controls--hidden { opacity:0;transform:translateY(-6px); }
+.floating-controls--hidden .orb-button { pointer-events:none; }
+.orb-button { width:46px;height:46px;display:grid;place-items:center;position:relative;pointer-events:auto; border-radius:50%; border:1px solid rgba(237,237,231,.58);color:#f6f1e7;background:rgba(23,29,35,.68);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;box-shadow:0 3px 17px rgba(0,0,0,.22);transition:transform .2s cubic-bezier(.2,.8,.2,1),background .2s,border-color .2s,box-shadow .2s; }
+.orb-button:hover { transform:scale(1.1);background:rgba(58,68,74,.9);border-color:#f5ead7;box-shadow:0 4px 24px rgba(0,0,0,.35); }
+.orb-button:active { transform:scale(.92); }
+.orb-button.is-active { background:#e8e0d1;color:#1c2529;border-color:#fff8ea; }
+.language-button span:first-child { font:500 12px 'DM Mono',monospace; }
+.orb-tooltip { position:absolute;right:50%;top:calc(100% + 10px);transform:translate(50%,-4px);white-space:nowrap;max-width:190px;pointer-events:none;opacity:0;border-radius:4px;background:#f2eadf;color:#252626;font-size:10px;padding:6px 9px;transition:opacity .2s,transform .2s; }
+.orb-button:hover .orb-tooltip,.orb-button:focus-visible .orb-tooltip { opacity:1;transform:translate(50%,0); }
+.archive-demo-dock { position:fixed;z-index:46;left:24px;bottom:24px;max-width:calc(100% - 48px);display:flex;gap:18px;align-items:center;padding:12px 13px 12px 16px;color:#e8e6df;background:rgba(17,23,29,.9);border:1px solid rgba(248,244,231,.35);backdrop-filter:blur(16px);box-shadow:0 10px 40px #0007; }
+.dock-copy { display:flex;flex-direction:column;gap:5px;font-size:10px;color:#d3d4d0; }
+.dock-kicker { letter-spacing:.1em;font-size:9px;text-transform:uppercase;font-weight:700;color:#eae9e4; }
+.dock-hint { color:#aab3b4; }
+.dock-actions { display:flex;gap:6px; }
+.dock-actions button { width:48px;height:34px;display:flex;align-items:center;justify-content:center;gap:2px;border:1px solid #ffffff60;background:#ffffff0e;color:#faf7f0;cursor:pointer; }
+.dock-actions button:hover { background:#ffffff2b; }
+.dock-actions button:disabled { opacity:.3;cursor:default; }
+.dock-actions button span { font-size:11px; }
+.transition-layer { position:fixed;z-index:90;inset:0;pointer-events:none;overflow:hidden; }
+.transition-image { position:fixed;left:var(--origin-x);top:var(--origin-y);width:var(--origin-width);height:var(--origin-height);background-image:linear-gradient(0deg,rgba(8,13,17,.55),rgba(8,13,17,.26)),var(--transition-image);background-position:center;background-size:cover;box-shadow:0 0 0 2px #f2e5d0;transition:left .42s cubic-bezier(.2,.74,.12,1),top .42s cubic-bezier(.2,.74,.12,1),width .42s cubic-bezier(.2,.74,.12,1),height .42s cubic-bezier(.2,.74,.12,1),opacity .32s;display:grid;place-items:center; }
+.transition-title { opacity:0;color:#f5ede3;font:normal clamp(34px,6vw,84px) 'Instrument Serif',Georgia,serif;letter-spacing:-.04em;text-align:center;transition:opacity .18s .18s; }
+.transition-layer--zoom .transition-image,.transition-layer--reveal .transition-image { left:-3vw;top:-3vh;width:106vw;height:106vh; }
+.transition-layer--zoom .transition-title { opacity:1; }
+.transition-layer--reveal { opacity:0;transition:opacity .30s ease; }
+.transition-wash { position:absolute;inset:0;background:#efe7d8;opacity:0;transition:opacity .35s ease; }
+.transition-layer--zoom .transition-wash { opacity:.1; }
+/* Narrow screens retain a readable paper column and two square-only side streams.
+   The same achievement buttons join a grid when Archive Mode opens. */
+/* Both mobile side streams share one vertical scroll plane. Keep it scrollable
+   in Portfolio Mode as well as Archive Mode, including on iOS Safari. */
+.mosaic-scroll--compact { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+.mosaic-scroll--archive .mosaic-tile--concealed { opacity: 0; pointer-events: none; }
+.mosaic-scroll--compact .mosaic-tile--responsive .tile-title { font-size: clamp(16px, 9cqi, 28px); line-height: 1.08; white-space: normal; }
+.mosaic-scroll--compact .mosaic-tile--responsive .tile-category { font-size: clamp(9px, 3cqi, 11px); }
+.mosaic-scroll--compact:not(.mosaic-scroll--archive) .tile-content { opacity: .65; }
+.mosaic-scroll--compact.mosaic-scroll--archive .tile-content { padding: clamp(10px, 2.3vw, 18px); }
+.site-shell--compact .portfolio-panel,
+.site-shell--compact .panel-shadow { top: 0; bottom: 0; }
+.site-shell--compact .portfolio-panel {
+  padding: max(16px, env(safe-area-inset-top, 0px)) clamp(17px, 3vw, 30px) 18px;
+}
+.site-shell--compact .floating-controls {
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  gap: 10px;
+}
+.site-shell--compact .orb-button { width: 44px; height: 44px; }
+.site-shell--compact .orb-tooltip { display: none; }
+.site-shell--compact .archive-demo-dock {
+  left: max(10px, env(safe-area-inset-left, 0px));
+  bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  max-width: calc(100% - 20px);
+}
+@media (max-width: 1100px) { .panel-label { font-size:8px; } .portrait-frame { width:30%; } }
+@media (max-width: 720px) {
+  .portfolio-panel,.panel-shadow { top:0;bottom:0; }
+  .portfolio-panel { padding: max(16px, env(safe-area-inset-top, 0px)) 23px 15px; }
+  .panel-heading { padding-bottom:18px; }
+  .floating-controls { top:max(12px, env(safe-area-inset-top, 0px));right:max(12px, env(safe-area-inset-right, 0px));gap:10px; }
+  .orb-button { width:44px;height:44px; }
+  .intro-section { padding-top:33px; }
+  .hero-intro { gap:15px; }
+  .hero-copy h1 { font-size:clamp(34px,8.2vw,55px); }
+  .portrait-frame { width:32%; }
+  .hero-greeting { font-size:24px; }
+  .hero-description { font-size:12px; }
+  .editorial-block { margin-top:48px; }
+  .editorial-block h2 { font-size:clamp(38px,9vw,52px); }
+  .view-lede { font-size:16px; line-height:1.7; margin-bottom:32px; }
+  .resource-link { min-height:60px; padding:12px 13px; font-size:15px; }
+  .resource-link-icon { width:32px; height:32px; }
+  .archive-demo-dock { bottom:13px;left:13px;max-width:calc(100% - 26px);padding:9px 10px;gap:10px; }
+  .dock-hint { display:none; }
+  .dock-actions button { width:38px;height:34px; }
+}
+@media (max-width: 380px) {
+  .hero-intro { flex-wrap:wrap; }
+  .hero-copy { flex-basis: 100%; }
+  .portrait-frame { width:104px;aspect-ratio:.77;position:relative;right:auto;top:auto;opacity:1; }
+  .hero-description { max-width:26ch; }
+  .portfolio-panel { padding:16px 17px 14px; }
+  .panel-label { font-size:7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mosaic-scroll--compact .mosaic-tile { animation: none !important; translate: 0 0 !important; }
+  *,*::before,*::after { animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important; }
+}
+
+/* Native scroll animation replaces expensive per-tile keyframe animations. */
+.mosaic-scroll { scroll-behavior: auto; }
+
+
+/* Responsive portfolio: visible square streams and a narrow-screen editorial page.
+   The rails occupy actual layout space instead of being clipped behind paper. */
+@media (max-width: 600px) {
+  .site-shell--compact .portfolio-panel {
+    padding: max(16px, env(safe-area-inset-top, 0px))
+      clamp(12px, 3.3vw, 18px) 20px;
+  }
+  .site-shell--compact .panel-heading { gap: 5px; padding-bottom: 18px; }
+  .site-shell--compact .panel-label { font-size: 7px; letter-spacing: .06em; }
+  .site-shell--compact .panel-index { font-size: 8px; }
+  .site-shell--compact .intro-section { padding-top: 27px; }
+  .site-shell--compact .hero-intro { flex-direction: column; align-items: stretch; gap: 22px; }
+  .site-shell--compact .hero-copy { flex-basis: auto; width: 100%; }
+  .site-shell--compact .hero-copy h1 { font-size: clamp(32px, 8vw, 42px); overflow-wrap: anywhere; }
+  .site-shell--compact .hero-greeting { font-size: 24px; }
+  .site-shell--compact .hero-description { max-width: none; font-size: 13px; line-height: 1.7; }
+  .site-shell--compact .portrait-frame { width: min(44%, 132px); align-self: flex-start; margin-bottom: 9px; }
+  .site-shell--compact .hero-actions { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 33px; }
+  .site-shell--compact .hero-actions .pill-link { min-width: 0; width: 100%; min-height: 44px; justify-content: space-between; padding: 11px 12px; }
+  .site-shell--compact .view-title { font-size: clamp(34px, 9.3vw, 50px); overflow-wrap: anywhere; }
+  .site-shell--compact .editorial-block h2 { font-size: clamp(32px, 9.3vw, 45px); }
+  .site-shell--compact .view-lede { font-size: 15px; }
+  .site-shell--compact .resource-link { min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+  .site-shell--compact .panel-footer { flex-wrap: wrap; }
+  /* Tiny image rails are tappable picture previews, not unreadable text cards.
+     Full titles appear when entering Archive Mode. */
+  .mosaic-scroll--compact:not(.mosaic-scroll--archive) .mosaic-tile--entry .tile-content { display: none; }
+  .mosaic-scroll--compact:not(.mosaic-scroll--archive) .mosaic-tile--entry .tile-visual::after {
+    background: linear-gradient(0deg, rgba(5,11,16,.20),rgba(5,11,16,0) 65%);
+  }
+}
+@media (max-width: 350px) {
+  .site-shell--compact .hero-copy h1 { font-size: 31px; }
+  .site-shell--compact .portrait-frame { width: 108px; }
+  .site-shell--compact .panel-heading .panel-label { font-size: 6px; }
+  .site-shell--compact .floating-controls { gap: 7px; right: 7px; }
+  .site-shell--compact .orb-button { width: 42px; height: 42px; }
+}
+
+/* Literary explorer: native controls, no extra dependencies, and independent
+   loading/error states for the two public data sources. */
+.literary-explorer { margin: 43px 0 26px; padding-top: 25px; border-top: 1px solid var(--paper-line); }
+.literary-explorer-title { font: normal clamp(29px, 3vw, 39px)/1.12 'Instrument Serif', Georgia, serif; margin: 19px 0 10px; }
+.literary-explorer-intro { color: var(--lede-color); font-size: 12px; line-height: 1.7; margin: 0 0 18px; }
+.literary-explorer-controls { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+.literary-author-picker { flex: 1 1 180px; display: grid; gap: 7px; color: var(--muted); font: 500 10px/1.4 'DM Mono', monospace; letter-spacing: .03em; }
+.literary-author-picker select { width: 100%; min-width: 0; border: 1px solid var(--paper-line); background: var(--paper); color: var(--ink); border-radius: 2px; padding: 12px 10px; font: 600 13px 'DM Sans', sans-serif; }
+.literary-saved-toggle, .literary-quote-actions button, .literary-pagination button, .literary-message button { border: 1px solid var(--paper-line); border-radius: 2px; background: transparent; color: var(--ink); padding: 11px 12px; cursor: pointer; font: 600 11px 'DM Sans', sans-serif; }
+.literary-saved-toggle:hover, .literary-quote-actions button:hover, .literary-pagination button:hover, .literary-message button:hover { background: var(--paper-soft); border-color: var(--accent); }
+.literary-saved-toggle--active { background: var(--paper-soft); }
+.literary-author-bio { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; color: var(--muted); font-size: 11px; line-height: 1.5; margin-bottom: 15px; }
+.literary-author-bio strong { color: var(--ink); font-size: 12px; }
+.literary-author-bio a, .literary-quote-actions a, .literary-message a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.literary-quote-card { position: relative; min-height: 174px; border: 1px solid var(--paper-line); background: var(--paper-soft); padding: 24px 22px 18px; }
+.literary-quote-mark { display: block; color: var(--accent); opacity: .7; font: normal 49px/.6 'Instrument Serif', Georgia, serif; }
+.literary-quote-card blockquote { margin: 10px 0 13px; font: normal clamp(18px, 2vw, 25px)/1.35 'Instrument Serif', Georgia, serif; overflow-wrap: anywhere; }
+.literary-quote-author { font: 500 11px/1.5 'DM Sans', sans-serif; color: var(--muted); }
+.literary-quote-actions { display: flex; gap: 13px; align-items: center; flex-wrap: wrap; margin-top: 18px; font-size: 11px; }
+.literary-pagination { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; font: 10px 'DM Mono', monospace; color: var(--muted); }
+.literary-pagination button:disabled { opacity: .35; cursor: not-allowed; }
+.literary-message { color: var(--lede-color); font-size: 12px; line-height: 1.65; }
+.literary-message a, .literary-message button { display: inline-block; margin: 8px 10px 0 0; }
+.literary-source-note { font-size: 10px; line-height: 1.65; color: var(--muted); margin-top: 12px; }
+.tile-visual img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 380px) {
+  .literary-quote-card { padding: 19px 14px; }
+  .literary-explorer-controls { align-items: stretch; }
+  .literary-saved-toggle { flex: 1; }
+}
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `scripts/optimize-images.py`
+
+````python
+"""Generate responsive WebP variants and a manifest for the React portfolio.
+
+Run from any directory:
+    python -m pip install Pillow
+    python scripts/optimize-images.py
+
+Original images remain untouched. SVGs are kept as vectors.
+"""
+
+import json
+from pathlib import Path
+from PIL import Image, ImageOps
+
+ROOT = Path(__file__).resolve().parents[1]
+PUBLIC = ROOT / 'public'
+DEST = PUBLIC / 'optimized'
+MANIFEST = ROOT / 'src' / 'data' / 'optimizedImages.json'
+WIDTHS = (320, 640, 960, 1280)
+FORMATS = {'.jpg', '.jpeg', '.png', '.webp'}
+
+
+def optimize():
+    DEST.mkdir(parents=True, exist_ok=True)
+    files = [PUBLIC / 'portrait.png'] + sorted((PUBLIC / 'art').iterdir())
+    manifest = {}
+    for source in files:
+        if not source.is_file() or source.suffix.lower() not in FORMATS:
+            continue
+        with Image.open(source) as original:
+            image = ImageOps.exif_transpose(original)
+            if image.mode not in ('RGB', 'RGBA'):
+                image = image.convert('RGBA' if 'A' in image.getbands() else 'RGB')
+            original_width = image.width
+            sizes = sorted(set([width for width in WIDTHS if width < original_width] + [original_width]))
+            url = '/' + source.relative_to(PUBLIC).as_posix()
+            variants = []
+            for width in sizes:
+                filename = f'{source.stem}-{width}w.webp'
+                destination = DEST / filename
+                resized = image if width == original_width else image.resize(
+                    (width, max(1, round(image.height * width / image.width))), Image.Resampling.LANCZOS
+                )
+                resized.save(destination, format='WEBP', quality=78, method=6)
+                variants.append({'width': width, 'src': f'/optimized/{filename}'})
+            manifest[url] = variants
+    MANIFEST.parent.mkdir(parents=True, exist_ok=True)
+    MANIFEST.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    print(f'Optimized {len(manifest)} images into {DEST}; wrote {MANIFEST}')
+
+
+if __name__ == '__main__':
+    optimize()
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `tests/literaryApis.test.js`
+
+````javascript
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  LITERARY_AUTHORS, wikiquoteApiUrl, openLibraryApiUrl,
+  extractWikiquoteQuotes, parseOpenLibraryAuthor, fetchLiteraryAuthor,
+} from '../src/lib/literaryApis.js';
+
+const sample = `== Quotes ==
+* ''A quotation can be an entire thought, expressed in words that deserve to be remembered.''
+** Source: Some book
+* A quotation can be an entire thought, expressed in words that deserve to be remembered.
+* Another original observation about books and ideas can help us understand the world in a different way.
+== Misattributed ==
+* This sentence has been incorrectly attributed to this author by many people over the years.
+=== Incorrect attribution details ===
+* Another incorrectly credited sentence in a nested section should also be skipped by the parser.
+== Works ==
+* An additional line from a literary work can be shown here without inventing any source material.
+== External links ==
+* Follow this external link for additional quotations and other information about the author.
+`;
+
+test('authors are curated and have safe API URLs', () => {
+  assert.equal(LITERARY_AUTHORS.length, 6);
+  const author = LITERARY_AUTHORS[0];
+  const wiki = new URL(wikiquoteApiUrl(author));
+  assert.equal(wiki.searchParams.get('origin'), '*');
+  assert.equal(wiki.searchParams.get('prop'), 'wikitext');
+  assert.equal(new URL(openLibraryApiUrl(author)).searchParams.get('q'), author.name);
+});
+
+test('wikiquote parser excludes disputed content and does not truncate quotations', () => {
+  const quotes = extractWikiquoteQuotes(sample);
+  assert.equal(quotes.length, 3);
+  assert.equal(quotes[0], 'A quotation can be an entire thought, expressed in words that deserve to be remembered.');
+  assert.ok(!quotes.some(quote => quote.includes('incorrectly attributed')));
+  assert.ok(!quotes.some(quote => quote.includes('external link')));
+});
+
+test('wikiquote parser removes wiki markup and rejects non-quote markup', () => {
+  const quotes = extractWikiquoteQuotes(`== Quotes ==\n* A good [[Book|book]] is a thoughtful companion when we are travelling through an unfamiliar world.\n* {{template|unknown}}\n* Short.`);
+  assert.deepEqual(quotes, ['A good book is a thoughtful companion when we are travelling through an unfamiliar world.']);
+});
+
+test('Open Library metadata only accepts an exact author name', () => {
+  const author = LITERARY_AUTHORS[1];
+  const json = { docs: [
+    { name: 'Jane Austen Jr.', key: 'OL111A' },
+    { name: 'Jane Austen', key: 'OL222A', birth_date: '1775', work_count: 45, top_work: 'Pride and Prejudice' },
+  ] };
+  const result = parseOpenLibraryAuthor(json, author);
+  assert.equal(result.url, 'https://openlibrary.org/authors/OL222A');
+  assert.equal(result.topWork, 'Pride and Prejudice');
+  assert.equal(parseOpenLibraryAuthor({ docs: [{ name: 'Jane Austen Jr.' }] }, author), null);
+});
+
+test('partial API failure preserves successful quotations', async () => {
+  const fetchImpl = async url => {
+    if (url.includes('wikiquote')) return { ok: true, json: async () => ({ parse: { wikitext: { '*': sample } } }) };
+    return { ok: false, status: 503 };
+  };
+  const result = await fetchLiteraryAuthor(LITERARY_AUTHORS[0], { fetchImpl });
+  assert.equal(result.quotes.length, 3);
+  assert.equal(result.quoteError, false);
+  assert.equal(result.biographyError, true);
+  assert.equal(result.biography, null);
+});
+
+test('partial API failure preserves successful author metadata', async () => {
+  const fetchImpl = async url => {
+    if (url.includes('wikiquote')) return { ok: false, status: 500 };
+    return { ok: true, json: async () => ({ docs: [{ name: 'Jane Austen', key: 'OL222A' }] }) };
+  };
+  const result = await fetchLiteraryAuthor(LITERARY_AUTHORS[1], { fetchImpl });
+  assert.equal(result.quoteError, true);
+  assert.equal(result.quotes.length, 0);
+  assert.equal(result.biography.name, 'Jane Austen');
+});
+````
+
+### `portfolio-literary-apis-image-optimization-replacements.zip` → `tests/optimizedImages.test.js`
+
+````javascript
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync, statSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const manifest = JSON.parse(readFileSync(path.join(root, 'src/data/optimizedImages.json'), 'utf8'));
+
+test('every optimized image variant exists and is a real WebP file', () => {
+  assert.equal(Object.keys(manifest).length, 9);
+  for (const [original, variants] of Object.entries(manifest)) {
+    assert.ok(statSync(path.join(root, 'public', original.slice(1))).size > 0);
+    assert.ok(variants.length >= 1);
+    for (const variant of variants) {
+      const bytes = readFileSync(path.join(root, 'public', variant.src.slice(1)));
+      assert.equal(bytes.toString('ascii', 0, 4), 'RIFF');
+      assert.equal(bytes.toString('ascii', 8, 12), 'WEBP');
+      assert.ok(variant.width >= 1);
+    }
+  }
+});
+
+test('responsive variants are ordered smallest to largest', () => {
+  for (const variants of Object.values(manifest)) {
+    const widths = variants.map(item => item.width);
+    assert.deepEqual(widths, [...widths].sort((a, b) => a - b));
+  }
+});
+````
+
+### `portfolio-literary-explorer-polish.zip` → `src/components/LiteraryExplorer.jsx`
+
+````jsx
+import React, { useEffect, useMemo, useState } from 'react';
+import Icon from './Icons.jsx';
+import { fetchLiteraryAuthor, LITERARY_AUTHORS, wikiquotePageUrl } from '../lib/literaryApis.js';
+
+const FAVORITES_KEY = 'living-archive-literary-favorites-v1';
+const authorCache = new Map();
+
+function readFavorites() {
+  try {
+    const value = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]');
+    return Array.isArray(value) ? value.filter(x => x && typeof x.quote === 'string' && typeof x.authorId === 'string').slice(0, 40) : [];
+  } catch { return []; }
+}
+
+function writeFavorites(value) {
+  try { localStorage.setItem(FAVORITES_KEY, JSON.stringify(value)); } catch { /* Storage is optional */ }
+}
+
+export default function LiteraryExplorer({ t, lang, enabled = true }) {
+  const [authorId, setAuthorId] = useState(LITERARY_AUTHORS[0].id);
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  const [index, setIndex] = useState(0);
+  const [favorites, setFavorites] = useState(readFavorites);
+  const [savedOnly, setSavedOnly] = useState(false);
+  const author = LITERARY_AUTHORS.find(item => item.id === authorId) || LITERARY_AUTHORS[0];
+
+  useEffect(() => {
+    if (!enabled || savedOnly) return;
+    const cached = authorCache.get(authorId);
+    if (cached && attempt === 0) { setResult(cached); setLoading(false); return; }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    setResult(null);
+    setLoading(true);
+    fetchLiteraryAuthor(author, { signal: controller.signal }).then(data => {
+      if (controller.signal.aborted) return;
+      authorCache.set(authorId, data);
+      setResult(data);
+    }).catch(() => {
+      if (!controller.signal.aborted) setResult({ quotes: [], biography: null, quoteError: true, biographyError: true });
+    }).finally(() => {
+      clearTimeout(timeout);
+      if (!controller.signal.aborted) setLoading(false);
+    });
+    return () => { clearTimeout(timeout); controller.abort(); };
+  }, [authorId, attempt, enabled, savedOnly]);
+
+  const quotes = useMemo(() => savedOnly ? favorites : (result?.quotes || []).map(quote => ({ authorId, quote })), [savedOnly, favorites, result, authorId]);
+  const currentIndex = Math.min(index, Math.max(0, quotes.length - 1));
+  const current = quotes[currentIndex] || null;
+  const currentAuthor = LITERARY_AUTHORS.find(item => item.id === current?.authorId) || author;
+  const isSaved = !!current && favorites.some(item => item.authorId === current.authorId && item.quote === current.quote);
+  const authorName = lang === 'ar' ? author.nameAr : result?.biography?.name || author.name;
+
+  function toggleFavorite() {
+    if (!current) return;
+    const next = isSaved
+      ? favorites.filter(item => item.authorId !== current.authorId || item.quote !== current.quote)
+      : [...favorites, current].slice(-40);
+    setFavorites(next);
+    writeFavorites(next);
+    if (savedOnly) setIndex(i => Math.max(0, Math.min(i, next.length - 1)));
+  }
+
+  return <section className="literary-explorer" aria-label={t.literaryTitle}>
+    <div className="section-heading literary-explorer-eyebrow">
+      <span className="number-label">{t.literaryKicker}</span>
+      <span className="section-star" aria-hidden="true">✳</span>
+    </div>
+    <h2 className="literary-explorer-title">{t.literaryTitle}</h2>
+    <p className="literary-explorer-intro">{t.literaryIntro}</p>
+
+    <div className="literary-explorer-controls">
+      <label className="literary-author-picker">
+        <span className="literary-control-label">{t.literarySelectAuthor}</span>
+        <span className="literary-select-wrap">
+          <select value={authorId} disabled={savedOnly} onChange={event => { setAuthorId(event.target.value); setIndex(0); setAttempt(0); }}>
+            {LITERARY_AUTHORS.map(item => <option key={item.id} value={item.id}>{lang === 'ar' ? item.nameAr : item.name}</option>)}
+          </select>
+          <span className="literary-select-chevron" aria-hidden="true" />
+        </span>
+      </label>
+      <button type="button" className={`literary-saved-toggle ${savedOnly ? 'literary-saved-toggle--active' : ''}`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(v => !v); setIndex(0); }}>
+        <Icon name="spark" size={15} />
+        <span>{savedOnly ? t.literaryBrowse : t.literarySaved}</span>
+        {!savedOnly && <span className="literary-saved-count">{favorites.length}</span>}
+      </button>
+    </div>
+
+    {!savedOnly && result?.biography && <div className="literary-author-bio">
+      <div className="literary-author-primary">
+        <strong>{authorName}</strong>
+        {(result.biography.birthDate || result.biography.deathDate) && <span className="literary-author-dates" dir="ltr">{[result.biography.birthDate, result.biography.deathDate].filter(Boolean).join(' – ')}</span>}
+      </div>
+      <div className="literary-author-secondary">
+        {result.biography.topWork && <span className="literary-author-work">{t.literaryKnownFor}: <em>{result.biography.topWork}</em></span>}
+        {result.biography.url && <a className="literary-text-link" href={result.biography.url} target="_blank" rel="noopener noreferrer">{t.literaryOpenLibrary} <Icon name="upRight" size={13} /></a>}
+      </div>
+    </div>}
+
+    <div className="literary-quote-card" aria-live="polite" aria-busy={!savedOnly && loading}>
+      <div className="literary-quote-topline" aria-hidden="true">
+        <span className="literary-quote-ornament">✳</span>
+        {current && <span className="literary-quote-position" dir="ltr">{String(currentIndex + 1).padStart(2, '0')} / {String(quotes.length).padStart(2, '0')}</span>}
+      </div>
+      {savedOnly && !current ? <div className="literary-state"><p>{t.literaryNoSaved}</p></div>
+        : !savedOnly && loading ? <div className="literary-state literary-state--loading" role="status"><span className="literary-loading-indicator" aria-hidden="true"/><p>{t.literaryLoading}</p></div>
+          : current ? <div className="literary-quote-content" key={`${current.authorId}-${currentIndex}-${savedOnly}`}>
+            <blockquote lang="en" dir="ltr">{current.quote}</blockquote>
+            <div className="literary-quote-author">— {lang === 'ar' ? currentAuthor.nameAr : currentAuthor.name}</div>
+            <div className="literary-quote-actions">
+              <button type="button" className={`literary-save-button ${isSaved ? 'literary-save-button--active' : ''}`} onClick={toggleFavorite} aria-pressed={isSaved}>
+                <Icon name={isSaved ? 'close' : 'plus'} size={15} /> {isSaved ? t.literaryUnsave : t.literarySave}
+              </button>
+              <a className="literary-text-link" href={wikiquotePageUrl(currentAuthor)} target="_blank" rel="noopener noreferrer">{t.literarySource} <Icon name="upRight" size={14} /></a>
+            </div>
+          </div> : <div className="literary-state literary-state--error">
+            <p>{result?.quoteError ? t.literaryUnavailable : t.literaryEmpty}</p>
+            <div className="literary-state-actions">
+              <button type="button" onClick={() => { authorCache.delete(authorId); setAttempt(n => n + 1); }}>{t.literaryRetry}</button>
+              <a className="literary-text-link" href={wikiquotePageUrl(author)} target="_blank" rel="noopener noreferrer">{t.literarySource} <Icon name="upRight" size={14} /></a>
+            </div>
+          </div>}
+    </div>
+
+    {quotes.length > 1 && <div className="literary-pagination" aria-label={`${t.literaryPrev} / ${t.literaryNext}`}>
+      <button type="button" className="literary-page-button" disabled={currentIndex <= 0} onClick={() => setIndex(n => Math.max(0, n - 1))}>
+        <Icon name="back" size={15} /> <span>{t.literaryPrev}</span>
+      </button>
+      <div className="literary-progress-track" role="progressbar" aria-valuemin={1} aria-valuemax={quotes.length} aria-valuenow={currentIndex + 1} aria-label={t.literaryTitle}>
+        <span style={{ width: `${((currentIndex + 1) / quotes.length) * 100}%` }} />
+      </div>
+      <button type="button" className="literary-page-button" disabled={currentIndex >= quotes.length - 1} onClick={() => setIndex(n => Math.min(quotes.length - 1, n + 1))}>
+        <span>{t.literaryNext}</span> <Icon name="arrow" size={15} />
+      </button>
+    </div>}
+    <p className="literary-source-note">{t.literarySourceNote}</p>
+  </section>;
+}
+````
+
+### `portfolio-literary-explorer-polish.zip` → `src/styles/global.css`
+
+````css
+:root {
+  font-family: 'DM Sans', 'Segoe UI', Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --world: #161b20;
+  --world-grid: rgba(239, 229, 211, .035);
+  --paper: #f0ede6;
+  --paper-soft: #e7e1d7;
+  --ink: #232823;
+  --muted: #78786f;
+  --lede-color: #6b7169;
+  --paper-line: #cbc7bc;
+  --accent: #777157;
+  --tile-outline: rgba(246, 238, 219, .64);
+  /* One continuous spatial palette, not a palette repeated per tiling module. */
+  --mosaic-horizontal: linear-gradient(90deg,
+    #bfd0d0 0%, #c4d2d0 24%, #cad3cc 49%,
+    #d1cec5 73%, #c7d1cf 100%);
+  --mosaic-vertical: linear-gradient(180deg,
+    rgba(255,255,255,0) 0%, rgba(255,255,255,.09) 25%,
+    rgba(124,145,136,.085) 55%, rgba(255,255,255,.065) 78%,
+    rgba(255,255,255,0) 100%);
+}
+:root[data-theme="dark"] {
+  --world: #090e14;
+  --world-grid: rgba(226, 234, 244, .035);
+  --paper: #21272b;
+  --paper-soft: #2b3236;
+  --ink: #eeeae1;
+  --muted: #a2aaa6;
+  --lede-color: #909995;
+  --paper-line: #47504f;
+  --accent: #d1b99a;
+  --tile-outline: rgba(233, 239, 239, .48);
+  --mosaic-horizontal: linear-gradient(90deg,
+    #203036 0%, #283a3e 24%, #30403e 49%,
+    #383d3a 73%, #29393d 100%);
+  --mosaic-vertical: linear-gradient(180deg,
+    rgba(255,255,255,0) 0%, rgba(161,173,164,.045) 25%,
+    rgba(105,123,121,.065) 55%, rgba(255,255,255,.025) 78%,
+    rgba(255,255,255,0) 100%);
+}
+* { box-sizing: border-box; }
+html, body, #root { min-width: 280px; min-height: 100%; margin: 0; }
+html { overflow: hidden; }
+body { background: var(--world); color: var(--ink); }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 2px solid #89adc1; outline-offset: 3px; }
+a { color: inherit; }
+.site-shell { width: 100%; min-height: 100svh; isolation: isolate; background: var(--world); overflow: hidden; }
+.site-grain { pointer-events: none; position: fixed; inset: 0; z-index: 5; opacity: .3; background-image: repeating-linear-gradient(90deg,transparent 0, transparent 31px, var(--world-grid) 32px), repeating-linear-gradient(0deg,transparent 0, transparent 31px, var(--world-grid) 32px); }
+/* The mosaic remains scrollable under the independently scrolling portfolio. */
+.mosaic-scroll { position: fixed; inset: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; background: var(--world); }
+.mosaic-scroll::-webkit-scrollbar, .portfolio-panel::-webkit-scrollbar { display: none; }
+/* A shared, gently varying field sits below every square. Transparent ambient
+   tiles expose the exact same color at their edges, so adjacent squares never
+   switch abruptly between unrelated module palettes. */
+.mosaic-plane {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--world);
+  background-image: var(--mosaic-vertical), var(--mosaic-horizontal);
+  background-size: 100% 2200px, 100% 2200px;
+  background-position: left top, left top;
+  background-repeat: repeat-y, repeat-y;
+}
+.mosaic-tile { appearance: none; position: absolute; top: 0; left: 0; padding: 0; margin: 0; width: var(--tile-size); height: var(--tile-size); display: block; overflow: hidden; border-radius: 0; border: 1px solid var(--tile-outline); transform: translate3d(var(--tile-x), var(--tile-y), 0); transition: transform .58s cubic-bezier(.23,.87,.24,1), width .58s cubic-bezier(.23,.87,.24,1), height .58s cubic-bezier(.23,.87,.24,1), border-color .22s ease, opacity .3s ease; container-type: inline-size; background: #1b292e; }
+.mosaic-tile--entry { cursor: pointer; text-align: left; color: #faf7f0; z-index: 1; }
+.mosaic-tile--entry:hover, .mosaic-tile--entry:focus-visible { z-index: 3; border-color: #f9e5c9; }
+.tile-visual { position: absolute; inset: 0; display: block; transform: scale(1.005); transition: transform .4s cubic-bezier(.2,.75,.2,1), filter .25s; filter: saturate(.76) brightness(.86); }
+.tile-visual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(5,11,16,.87),rgba(5,11,16,.06) 70%); }
+.mosaic-tile--entry:hover .tile-visual, .mosaic-tile--entry:focus-visible .tile-visual { transform: scale(1.085); filter: saturate(1) brightness(1.06); }
+.tile-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: clamp(11px, 1.2vw, 22px); text-shadow: 0 1px 12px #06090fb0; min-width: 0; }
+.tile-category { display: block; font-size: clamp(10px, 3.8cqi, 13px); letter-spacing: .08em; line-height: 1.25; text-transform: uppercase; font-weight: 700; opacity: .9; margin-bottom: 6px; }
+.tile-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; font: normal clamp(18px, 9cqi, 35px)/1.06 'Instrument Serif', Georgia, serif; max-width: 100%; overflow-wrap: anywhere; text-wrap: balance; }
+.tile-corner { position: absolute; top: 10px; right: 9px; opacity: 0; transform: translate(-3px,3px); transition: opacity .2s, transform .2s; }
+.mosaic-tile:hover .tile-corner, .mosaic-tile:focus-visible .tile-corner { opacity: 1; transform: none; }
+.mosaic-tile--sample .tile-category { color: #e8d7b7; }
+/* Tiny squares are decorative only; entry sizing is enforced by the layout generator. */
+.mosaic-tile--tiny .tile-content { padding: 9px; }
+.mosaic-tile--tiny .tile-title { font-size: clamp(15px, 8cqi, 20px); }
+@container (max-width: 185px) { .tile-category { font-size: 10px; letter-spacing: .03em; } .tile-content { padding: 10px; } .tile-title { font-size: clamp(16px, 10cqi, 21px); } }
+/* Ambient squares supply only their artwork and outline. The common canvas
+   supplies the colors and stays visually continuous through tile boundaries. */
+.mosaic-tile--ambient {
+  pointer-events: none;
+  border-color: var(--tile-outline);
+  background-color: transparent;
+  background-image: var(--ambient-art);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: normal;
+}
+.ambient-mark { display: none; }
+.panel-shadow { position: fixed; z-index: 6; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: var(--panel-width, min(600px,max(468px,43vw))); box-shadow: 0 25px 95px #05080da8,0 0 0 1px rgba(255,255,255,.1); pointer-events: none; transition: opacity .4s, transform .6s; }
+.site-shell--archive .panel-shadow { opacity: 0; transform: translateX(-50%) translateY(50px) scale(.94); }
+.portfolio-panel { position: fixed; z-index: 7; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: var(--panel-width, min(600px,max(468px,43vw))); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; padding: 27px clamp(25px,3.1vw,49px) 16px; background: var(--paper); color: var(--ink); border: 1px solid var(--paper-line); box-shadow: 0 0 0 1px rgba(0,0,0,.06); transition: transform .63s cubic-bezier(.25,.72,.15,1), opacity .45s ease; }
+.portfolio-panel--hidden { opacity: 0; transform: translateX(-50%) translateY(72px) scale(.9); pointer-events: none; }
+.panel-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; padding-bottom: 27px; border-bottom:1px solid var(--paper-line); }
+.panel-monogram { border:0; background:transparent; color:var(--ink); padding:0; font:bold 27px 'Instrument Serif',Georgia,serif; cursor:pointer; }
+.panel-monogram span { color: var(--accent); }
+.panel-label,.panel-index,.micro-label,.number-label,.panel-footer,.portrait-credit,.source-disclosure { font: 500 9px/1.3 'DM Mono',monospace; letter-spacing:.12em; }
+.panel-label { color:var(--muted); }
+.tiny-asterisk { color: var(--accent); font-size: 16px; vertical-align:-2px; }
+.panel-index { color:var(--muted); }
+.intro-section { padding-top: 49px; }
+.micro-label,.number-label { display:block; color:var(--muted); }
+.hero-intro { display:flex; align-items:flex-end; gap:18px; margin-top:27px; }
+.hero-copy { min-width:0; flex:1; }
+.hero-greeting { font:italic 26px 'Instrument Serif',Georgia,serif; }
+.hero-copy h1 { margin:10px 0 0; font:normal clamp(34px,3.65vw,52px)/1.02 'Instrument Serif',Georgia,serif; letter-spacing:-.035em; white-space:normal; }
+.hero-copy h1 em, .editorial-block h2 em,.view-title em { font-weight:400; color:var(--accent); }
+.hero-rule { width:45px; height:1px; background:var(--accent); margin:18px 0; }
+.hero-role { font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; margin:0 0 8px; }
+.hero-description { font-size:12px; line-height:1.7; color:var(--muted); margin:0; }
+.portrait-frame { width: 32%; flex:none; aspect-ratio: .77; display:flex; flex-direction:column; align-self:center; position:relative; }
+.portrait-frame img { display:block; width:100%; height:100%; object-fit:cover; object-position:center 34%; filter:saturate(.72); border:1px solid var(--paper-line); }
+.portrait-credit { position:absolute; bottom:-17px; left:0; color:var(--muted); white-space:nowrap; font-size:7px; }
+.hero-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:39px; }
+.pill-link { text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:12px; border:1px solid var(--ink); border-radius:100px; padding:11px 14px; font-size:11px; font-weight:600; cursor:pointer; transition:transform .18s,background .18s,color .18s; }
+.pill-link:hover { transform:translateY(-2px); }
+.pill-link:active { transform:scale(.96); }
+.pill-link--dark { background:var(--ink); color:var(--paper); }
+.pill-link--outline { background:transparent; color:var(--ink); }
+.pill-link--outline:hover { background:var(--paper-soft); }
+.editorial-block { margin-top:66px; padding-top:23px; border-top:1px solid var(--paper-line); }
+.section-heading { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.section-star { color:var(--accent); }
+.editorial-block h2 { margin:22px 0 20px; font:normal clamp(38px,4vw,56px)/.97 'Instrument Serif',Georgia,serif; letter-spacing:-.02em; }
+.editorial-block p,.body-copy { color:var(--muted); font-size:13px; line-height:1.85; letter-spacing:.018em; max-width:52ch; }
+.ink-divider { width:100%; height:1px; background:var(--paper-line); margin:27px 0 22px; }
+.feature-links { margin-top:13px; }
+.feature-link { display:flex; justify-content:space-between; align-items:center; gap:12px; width:100%; padding:13px 0; background:none; color:var(--ink); border:0; border-bottom:1px solid var(--paper-line); text-align:start; cursor:pointer; font:normal 20px/1.2 'Instrument Serif',Georgia,serif; }
+.feature-link:hover { color:var(--accent); }
+.feature-number { font:9px 'DM Mono',monospace; color:var(--muted); margin-inline-end:auto; min-width:28px; }
+.feature-link > svg:last-child { margin-inline-start:auto; }
+.editorial-block--bottom { padding-bottom:40px; }
+.inline-arrow { display:inline-flex;align-items:center;gap:9px;padding:0;border:0;background:none;color:var(--ink);font-size:12px;font-weight:600;text-decoration:none;cursor:pointer; }
+.inline-arrow:hover { color:var(--accent); }
+.inner-view { padding-top:51px; min-height:65%; }
+.view-title { font:normal clamp(44px,5vw,72px)/.97 'Instrument Serif',Georgia,serif; letter-spacing:-.025em; margin:23px 0 19px; }
+.view-lede { max-width:45ch; color:var(--lede-color); font-size:clamp(16px,1.4vw,18px); font-weight:400; line-height:1.66; letter-spacing:.012em; margin:0 0 39px; }
+.project-list { border-top:1px solid var(--paper-line); }
+.project-row { width:100%; padding:17px 0; display:flex; align-items:center; gap:12px; border:0; border-bottom:1px solid var(--paper-line); background:none; text-align:start; color:var(--ink); cursor:pointer; }
+.project-row:hover .project-row-description strong { color:var(--accent); }
+.project-row img { width:68px;height:68px;object-fit:cover;border:1px solid var(--paper-line); }
+.project-row-number { font:9px 'DM Mono',monospace;color:var(--muted); }
+.project-row-description { flex:1; min-width:0;display:flex;flex-direction:column;gap:7px; }
+.project-row-description strong { font:normal 24px 'Instrument Serif',Georgia,serif; }
+.project-row-description small { color:var(--muted);font:9px 'DM Mono',monospace; }
+.source-disclosure { margin:24px 0;line-height:1.7;color:var(--muted);letter-spacing:0; }
+.editorial-illustration,.entry-hero-image { display:block;width:100%;aspect-ratio:1.55;object-fit:cover;border:1px solid var(--paper-line); }
+.subheading { font:normal 33px 'Instrument Serif',Georgia,serif;margin:34px 0 12px; }
+.contact-options { display:grid; gap:10px; margin:38px 0 25px; }
+.fine-print { color:var(--muted);font-size:11px;line-height:1.7; }
+.sample-alert { margin-top:18px; padding:10px 12px; background:var(--paper-soft);border-left:2px solid var(--accent);font-size:10px;font-weight:700;letter-spacing:.06em; }
+.entry-view .view-title { overflow-wrap:anywhere; }
+.entry-figure { margin:0 0 22px; }
+.entry-caption { margin-top:17px; font-size:10px; letter-spacing:.16em; line-height:1.5; }
+.entry-links,.writing-resource-list { display:grid; gap:10px; margin:27px 0 24px; }
+.resource-link { width:100%; min-height:66px; display:flex; align-items:center; justify-content:space-between; gap:14px; padding:15px 16px 15px 18px; background:transparent; color:var(--ink); border:1px solid var(--paper-line); border-radius:2px; text-decoration:none; text-align:start; cursor:pointer; font:600 clamp(14px,1.25vw,17px)/1.4 'DM Sans','Segoe UI',Arial,sans-serif; letter-spacing:.018em; transition:background .2s,border-color .2s,transform .2s; }
+.resource-link:hover { background:var(--paper-soft); border-color:var(--accent); transform:translateY(-2px); }
+.resource-link:active { transform:translateY(0); }
+.resource-link-icon { width:36px; height:36px; flex:none; display:grid; place-items:center; border:1px solid var(--paper-line); border-radius:2px; transition:transform .2s,border-color .2s; }
+.resource-link:hover .resource-link-icon, .resource-link:focus-visible .resource-link-icon { transform:translate(2px,-2px); border-color:var(--accent); }
+[dir="rtl"] .resource-link:hover .resource-link-icon, [dir="rtl"] .resource-link:focus-visible .resource-link-icon { transform:translate(-2px,-2px); }
+.entry-view .pill-link { margin-top:28px; }
+.panel-footer { margin-top:58px; padding:20px 0 26px; border-top:1px solid var(--paper-line);display:flex;justify-content:space-between;gap:15px;color:var(--muted);font-size:8px;letter-spacing:.02em; }
+/* Floating controls overlap the collage only while the user is active. */
+.floating-controls { position:fixed;z-index:45;top:24px;right:26px;display:flex;align-items:center;gap:14px;pointer-events:none;opacity:1;transform:translateY(0);transition:opacity .32s ease,transform .32s ease; }
+.floating-controls--hidden { opacity:0;transform:translateY(-6px); }
+.floating-controls--hidden .orb-button { pointer-events:none; }
+.orb-button { width:46px;height:46px;display:grid;place-items:center;position:relative;pointer-events:auto; border-radius:50%; border:1px solid rgba(237,237,231,.58);color:#f6f1e7;background:rgba(23,29,35,.68);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);cursor:pointer;box-shadow:0 3px 17px rgba(0,0,0,.22);transition:transform .2s cubic-bezier(.2,.8,.2,1),background .2s,border-color .2s,box-shadow .2s; }
+.orb-button:hover { transform:scale(1.1);background:rgba(58,68,74,.9);border-color:#f5ead7;box-shadow:0 4px 24px rgba(0,0,0,.35); }
+.orb-button:active { transform:scale(.92); }
+.orb-button.is-active { background:#e8e0d1;color:#1c2529;border-color:#fff8ea; }
+.language-button span:first-child { font:500 12px 'DM Mono',monospace; }
+.orb-tooltip { position:absolute;right:50%;top:calc(100% + 10px);transform:translate(50%,-4px);white-space:nowrap;max-width:190px;pointer-events:none;opacity:0;border-radius:4px;background:#f2eadf;color:#252626;font-size:10px;padding:6px 9px;transition:opacity .2s,transform .2s; }
+.orb-button:hover .orb-tooltip,.orb-button:focus-visible .orb-tooltip { opacity:1;transform:translate(50%,0); }
+.archive-demo-dock { position:fixed;z-index:46;left:24px;bottom:24px;max-width:calc(100% - 48px);display:flex;gap:18px;align-items:center;padding:12px 13px 12px 16px;color:#e8e6df;background:rgba(17,23,29,.9);border:1px solid rgba(248,244,231,.35);backdrop-filter:blur(16px);box-shadow:0 10px 40px #0007; }
+.dock-copy { display:flex;flex-direction:column;gap:5px;font-size:10px;color:#d3d4d0; }
+.dock-kicker { letter-spacing:.1em;font-size:9px;text-transform:uppercase;font-weight:700;color:#eae9e4; }
+.dock-hint { color:#aab3b4; }
+.dock-actions { display:flex;gap:6px; }
+.dock-actions button { width:48px;height:34px;display:flex;align-items:center;justify-content:center;gap:2px;border:1px solid #ffffff60;background:#ffffff0e;color:#faf7f0;cursor:pointer; }
+.dock-actions button:hover { background:#ffffff2b; }
+.dock-actions button:disabled { opacity:.3;cursor:default; }
+.dock-actions button span { font-size:11px; }
+.transition-layer { position:fixed;z-index:90;inset:0;pointer-events:none;overflow:hidden; }
+.transition-image { position:fixed;left:var(--origin-x);top:var(--origin-y);width:var(--origin-width);height:var(--origin-height);background-image:linear-gradient(0deg,rgba(8,13,17,.55),rgba(8,13,17,.26)),var(--transition-image);background-position:center;background-size:cover;box-shadow:0 0 0 2px #f2e5d0;transition:left .42s cubic-bezier(.2,.74,.12,1),top .42s cubic-bezier(.2,.74,.12,1),width .42s cubic-bezier(.2,.74,.12,1),height .42s cubic-bezier(.2,.74,.12,1),opacity .32s;display:grid;place-items:center; }
+.transition-title { opacity:0;color:#f5ede3;font:normal clamp(34px,6vw,84px) 'Instrument Serif',Georgia,serif;letter-spacing:-.04em;text-align:center;transition:opacity .18s .18s; }
+.transition-layer--zoom .transition-image,.transition-layer--reveal .transition-image { left:-3vw;top:-3vh;width:106vw;height:106vh; }
+.transition-layer--zoom .transition-title { opacity:1; }
+.transition-layer--reveal { opacity:0;transition:opacity .30s ease; }
+.transition-wash { position:absolute;inset:0;background:#efe7d8;opacity:0;transition:opacity .35s ease; }
+.transition-layer--zoom .transition-wash { opacity:.1; }
+/* Narrow screens retain a readable paper column and two square-only side streams.
+   The same achievement buttons join a grid when Archive Mode opens. */
+/* Both mobile side streams share one vertical scroll plane. Keep it scrollable
+   in Portfolio Mode as well as Archive Mode, including on iOS Safari. */
+.mosaic-scroll--compact { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; touch-action: pan-y; }
+.mosaic-scroll--archive .mosaic-tile--concealed { opacity: 0; pointer-events: none; }
+.mosaic-scroll--compact .mosaic-tile--responsive .tile-title { font-size: clamp(16px, 9cqi, 28px); line-height: 1.08; white-space: normal; }
+.mosaic-scroll--compact .mosaic-tile--responsive .tile-category { font-size: clamp(9px, 3cqi, 11px); }
+.mosaic-scroll--compact:not(.mosaic-scroll--archive) .tile-content { opacity: .65; }
+.mosaic-scroll--compact.mosaic-scroll--archive .tile-content { padding: clamp(10px, 2.3vw, 18px); }
+.site-shell--compact .portfolio-panel,
+.site-shell--compact .panel-shadow { top: 0; bottom: 0; }
+.site-shell--compact .portfolio-panel {
+  padding: max(16px, env(safe-area-inset-top, 0px)) clamp(17px, 3vw, 30px) 18px;
+}
+.site-shell--compact .floating-controls {
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  gap: 10px;
+}
+.site-shell--compact .orb-button { width: 44px; height: 44px; }
+.site-shell--compact .orb-tooltip { display: none; }
+.site-shell--compact .archive-demo-dock {
+  left: max(10px, env(safe-area-inset-left, 0px));
+  bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  max-width: calc(100% - 20px);
+}
+@media (max-width: 1100px) { .panel-label { font-size:8px; } .portrait-frame { width:30%; } }
+@media (max-width: 720px) {
+  .portfolio-panel,.panel-shadow { top:0;bottom:0; }
+  .portfolio-panel { padding: max(16px, env(safe-area-inset-top, 0px)) 23px 15px; }
+  .panel-heading { padding-bottom:18px; }
+  .floating-controls { top:max(12px, env(safe-area-inset-top, 0px));right:max(12px, env(safe-area-inset-right, 0px));gap:10px; }
+  .orb-button { width:44px;height:44px; }
+  .intro-section { padding-top:33px; }
+  .hero-intro { gap:15px; }
+  .hero-copy h1 { font-size:clamp(34px,8.2vw,55px); }
+  .portrait-frame { width:32%; }
+  .hero-greeting { font-size:24px; }
+  .hero-description { font-size:12px; }
+  .editorial-block { margin-top:48px; }
+  .editorial-block h2 { font-size:clamp(38px,9vw,52px); }
+  .view-lede { font-size:16px; line-height:1.7; margin-bottom:32px; }
+  .resource-link { min-height:60px; padding:12px 13px; font-size:15px; }
+  .resource-link-icon { width:32px; height:32px; }
+  .archive-demo-dock { bottom:13px;left:13px;max-width:calc(100% - 26px);padding:9px 10px;gap:10px; }
+  .dock-hint { display:none; }
+  .dock-actions button { width:38px;height:34px; }
+}
+@media (max-width: 380px) {
+  .hero-intro { flex-wrap:wrap; }
+  .hero-copy { flex-basis: 100%; }
+  .portrait-frame { width:104px;aspect-ratio:.77;position:relative;right:auto;top:auto;opacity:1; }
+  .hero-description { max-width:26ch; }
+  .portfolio-panel { padding:16px 17px 14px; }
+  .panel-label { font-size:7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mosaic-scroll--compact .mosaic-tile { animation: none !important; translate: 0 0 !important; }
+  *,*::before,*::after { animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important; }
+}
+
+/* Native scroll animation replaces expensive per-tile keyframe animations. */
+.mosaic-scroll { scroll-behavior: auto; }
+
+
+/* Responsive portfolio: visible square streams and a narrow-screen editorial page.
+   The rails occupy actual layout space instead of being clipped behind paper. */
+@media (max-width: 600px) {
+  .site-shell--compact .portfolio-panel {
+    padding: max(16px, env(safe-area-inset-top, 0px))
+      clamp(12px, 3.3vw, 18px) 20px;
+  }
+  .site-shell--compact .panel-heading { gap: 5px; padding-bottom: 18px; }
+  .site-shell--compact .panel-label { font-size: 7px; letter-spacing: .06em; }
+  .site-shell--compact .panel-index { font-size: 8px; }
+  .site-shell--compact .intro-section { padding-top: 27px; }
+  .site-shell--compact .hero-intro { flex-direction: column; align-items: stretch; gap: 22px; }
+  .site-shell--compact .hero-copy { flex-basis: auto; width: 100%; }
+  .site-shell--compact .hero-copy h1 { font-size: clamp(32px, 8vw, 42px); overflow-wrap: anywhere; }
+  .site-shell--compact .hero-greeting { font-size: 24px; }
+  .site-shell--compact .hero-description { max-width: none; font-size: 13px; line-height: 1.7; }
+  .site-shell--compact .portrait-frame { width: min(44%, 132px); align-self: flex-start; margin-bottom: 9px; }
+  .site-shell--compact .hero-actions { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 33px; }
+  .site-shell--compact .hero-actions .pill-link { min-width: 0; width: 100%; min-height: 44px; justify-content: space-between; padding: 11px 12px; }
+  .site-shell--compact .view-title { font-size: clamp(34px, 9.3vw, 50px); overflow-wrap: anywhere; }
+  .site-shell--compact .editorial-block h2 { font-size: clamp(32px, 9.3vw, 45px); }
+  .site-shell--compact .view-lede { font-size: 15px; }
+  .site-shell--compact .resource-link { min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+  .site-shell--compact .panel-footer { flex-wrap: wrap; }
+  /* Tiny image rails are tappable picture previews, not unreadable text cards.
+     Full titles appear when entering Archive Mode. */
+  .mosaic-scroll--compact:not(.mosaic-scroll--archive) .mosaic-tile--entry .tile-content { display: none; }
+  .mosaic-scroll--compact:not(.mosaic-scroll--archive) .mosaic-tile--entry .tile-visual::after {
+    background: linear-gradient(0deg, rgba(5,11,16,.20),rgba(5,11,16,0) 65%);
+  }
+}
+@media (max-width: 350px) {
+  .site-shell--compact .hero-copy h1 { font-size: 31px; }
+  .site-shell--compact .portrait-frame { width: 108px; }
+  .site-shell--compact .panel-heading .panel-label { font-size: 6px; }
+  .site-shell--compact .floating-controls { gap: 7px; right: 7px; }
+  .site-shell--compact .orb-button { width: 42px; height: 42px; }
+}
+
+/* Literary explorer — the same editorial palette, border rhythm, and type scale as the portfolio. */
+.literary-explorer {
+  margin: 54px 0 34px;
+  padding-top: 24px;
+  border-top: 1px solid var(--paper-line);
+  min-width: 0;
+}
+.literary-explorer-eyebrow .number-label { letter-spacing: .13em; }
+.literary-explorer-title {
+  font: normal clamp(35px, 3.5vw, 46px)/1.08 'Instrument Serif', Georgia, serif;
+  letter-spacing: -.025em;
+  margin: 20px 0 12px;
+}
+.literary-explorer-intro {
+  color: var(--lede-color);
+  font-size: 13px;
+  line-height: 1.78;
+  max-width: 50ch;
+  margin: 0 0 26px;
+}
+.literary-explorer-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 14px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background: var(--paper-soft);
+  border: 1px solid var(--paper-line);
+}
+.literary-author-picker { display: grid; gap: 9px; min-width: 0; }
+.literary-control-label {
+  color: var(--muted);
+  font: 500 9px/1.35 'DM Mono', monospace;
+  letter-spacing: .085em;
+  text-transform: uppercase;
+}
+.literary-select-wrap { position: relative; display: block; min-width: 0; }
+.literary-author-picker select {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-height: 46px;
+  padding: 12px 38px 12px 13px;
+  padding-inline: 13px 38px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--paper-line);
+  border-radius: 0;
+  font: 600 12px/1.4 'DM Sans', 'Segoe UI', Arial, sans-serif;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+.literary-author-picker select:hover, .literary-author-picker select:focus-visible { border-color: var(--accent); }
+.literary-author-picker select:disabled { opacity: .48; cursor: not-allowed; }
+.literary-select-chevron {
+  position: absolute;
+  right: 17px;
+  inset-inline-end: 17px;
+  inset-inline-start: auto;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border: solid var(--accent);
+  border-width: 0 1.5px 1.5px 0;
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+.literary-saved-toggle {
+  -webkit-appearance: none;
+  appearance: none;
+  min-height: 46px;
+  border: 1px solid var(--paper-line);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 10px 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  white-space: nowrap;
+  cursor: pointer;
+  font: 600 11px/1.3 'DM Sans', 'Segoe UI', Arial, sans-serif;
+  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.literary-saved-toggle:hover { border-color: var(--accent); background: var(--paper-soft); }
+.literary-saved-toggle:active { transform: scale(.975); }
+.literary-saved-toggle--active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.literary-saved-toggle--active:hover { background: var(--ink); color: var(--paper); }
+.literary-saved-count {
+  min-width: 22px;
+  height: 22px;
+  padding-inline: 5px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--paper-line);
+  color: var(--muted);
+  font: 500 10px 'DM Mono', monospace;
+}
+.literary-author-bio {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+  gap: 12px 18px;
+  margin-bottom: 20px;
+  padding: 3px 0 18px;
+  border-bottom: 1px solid var(--paper-line);
+}
+.literary-author-primary, .literary-author-secondary { min-width: 0; display: grid; gap: 5px; }
+.literary-author-primary strong {
+  color: var(--ink);
+  font: normal 23px/1.1 'Instrument Serif', Georgia, serif;
+  letter-spacing: -.012em;
+}
+.literary-author-dates {
+  color: var(--muted);
+  font: 500 10px/1.5 'DM Mono', monospace;
+  text-align: start;
+}
+.literary-author-secondary { gap: 8px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+.literary-author-work { max-width: 28ch; overflow-wrap: anywhere; }
+.literary-author-work em { font-style: normal; color: var(--ink); }
+.literary-text-link {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  font: 600 11px/1.5 'DM Sans', 'Segoe UI', Arial, sans-serif;
+  text-decoration: none;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 2px;
+  transition: color .2s ease, border-color .2s ease;
+}
+.literary-text-link:hover { color: var(--accent); border-color: currentColor; }
+.literary-text-link svg { flex: none; }
+.literary-quote-card {
+  min-width: 0;
+  min-height: 260px;
+  padding: clamp(22px, 4.6vw, 34px);
+  background: var(--paper-soft);
+  border: 1px solid var(--paper-line);
+  display: flex;
+  flex-direction: column;
+}
+.literary-quote-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.literary-quote-ornament { font-size: 15px; line-height: 1; color: var(--accent); }
+.literary-quote-position { color: var(--muted); font: 500 10px 'DM Mono', monospace; letter-spacing: .08em; }
+.literary-quote-content { animation: literary-quote-enter .32s cubic-bezier(.22,.75,.35,1) both; }
+@keyframes literary-quote-enter {
+  from { opacity: 0; transform: translateY(7px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.literary-quote-card blockquote {
+  margin: 0 0 23px;
+  padding: 0;
+  color: var(--ink);
+  font: normal clamp(24px, 2.6vw, 32px)/1.31 'Instrument Serif', Georgia, serif;
+  letter-spacing: -.012em;
+  text-align: start;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+.literary-quote-author { color: var(--muted); font: 500 11px/1.5 'DM Mono', monospace; }
+.literary-quote-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  border-top: 1px solid var(--paper-line);
+  padding-top: 18px;
+  margin-top: 27px;
+}
+.literary-save-button, .literary-state-actions button {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--ink);
+  border-radius: 100px;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 10px 15px;
+  cursor: pointer;
+  font: 600 11px/1.3 'DM Sans', 'Segoe UI', Arial, sans-serif;
+  transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+.literary-save-button:hover, .literary-state-actions button:hover { transform: translateY(-2px); }
+.literary-save-button:active, .literary-state-actions button:active { transform: scale(.97); }
+.literary-save-button--active { color: var(--ink); background: transparent; }
+.literary-save-button--active:hover { background: var(--paper); }
+.literary-state { display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 150px; }
+.literary-state p { margin: 0; max-width: 48ch; color: var(--lede-color); font-size: 13px; line-height: 1.8; }
+.literary-state--loading { align-items: flex-start; gap: 18px; }
+.literary-loading-indicator {
+  width: 23px; height: 23px;
+  border-radius: 50%;
+  border: 1px solid var(--paper-line);
+  border-top-color: var(--accent);
+  animation: literary-spinner .85s linear infinite;
+}
+@keyframes literary-spinner { to { transform: rotate(360deg); } }
+.literary-state-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 17px; margin-top: 18px; }
+.literary-pagination { display: grid; grid-template-columns: auto minmax(20px,1fr) auto; align-items: center; gap: 16px; margin: 17px 0 0; }
+.literary-page-button {
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  padding: 6px 0;
+  cursor: pointer;
+  font: 600 11px/1.4 'DM Sans', 'Segoe UI', Arial, sans-serif;
+  transition: color .2s ease, opacity .2s ease;
+}
+.literary-page-button:hover:not(:disabled) { color: var(--accent); }
+.literary-page-button:disabled { opacity: .32; cursor: not-allowed; }
+.literary-page-button svg { flex: none; }
+.portfolio-panel[dir="rtl"] .literary-page-button svg { transform: scaleX(-1); }
+.literary-progress-track { width: 100%; height: 2px; background: var(--paper-line); overflow: hidden; }
+.literary-progress-track > span { display: block; height: 100%; background: var(--accent); transition: width .3s ease; }
+.literary-source-note { margin: 21px 0 0; padding-top: 15px; border-top: 1px solid var(--paper-line); font: 400 10px/1.8 'DM Sans', 'Segoe UI', Arial, sans-serif; color: var(--muted); }
+@media (max-width: 520px) {
+  .literary-explorer { margin-top: 43px; }
+  .literary-explorer-controls { grid-template-columns: minmax(0, 1fr); padding: 12px; gap: 12px; }
+  .literary-saved-toggle { width: 100%; }
+  .literary-quote-card { min-height: 234px; padding: 23px 18px; }
+  .literary-quote-card blockquote { font-size: clamp(23px, 5.7vw, 29px); }
+  .literary-quote-actions { align-items: flex-start; gap: 16px; }
+  .literary-pagination { gap: 10px; }
+  .literary-page-button { font-size: 10px !important; }
+}
+@media (max-width: 350px) {
+  .literary-pagination { gap: 8px; }
+  .literary-page-button span { display: none; }
+  .literary-quote-actions .literary-text-link { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .literary-quote-content, .literary-loading-indicator { animation: none; }
+  .literary-progress-track > span { transition: none; }
+}
+.tile-visual img { display: block; width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 380px) {
+  .literary-quote-card { padding: 19px 14px; }
+  .literary-explorer-controls { align-items: stretch; }
+  .literary-saved-toggle { flex: 1; }
+}
+````
+
+### `portfolio-literary-explorer-polish.zip` → `README.txt`
+
+````text
+LITERARY EXPLORER — EDITORIAL UI POLISH
+
+Apply this ZIP on top of the previously provided literary API/image optimization patch.
+Replace the files at these exact paths:
+  src/components/LiteraryExplorer.jsx
+  src/styles/global.css
+
+What changed
+- Redesigned native-looking author dropdown as a styled selector.
+- Reorganized filters and saved quotes into a compact controls panel.
+- Gave author name, dates, notable work and Open Library link better hierarchy.
+- Added a spacious quotation card using the site's editorial serif typography.
+- Redesigned save/source actions with the site's pill button and underline link vocabulary.
+- Moved quote position into the card and replaced text-heavy pagination with navigation and a thin progress line.
+- Added subtle fade-and-rise between quotes, a loading indicator, hover and active states.
+- Responsive stacked controls on narrow viewports; RTL navigation arrows; reduced-motion support.
+- Uses existing global CSS variables (--paper, --paper-soft, --ink, --muted, --paper-line, --accent),
+  so it follows both the light and dark themes without an isolated palette.
+- Keeps the same Wikiquote/Open Library API implementation, favorites storage and English/Arabic strings.
+
+The replacement global.css is the full stylesheet, not a short addendum; replacing
+it is important so all literary styles are present alongside the portfolio styles.
+No API data, achievement text, images, tiling logic, or other components were changed.
+
+Verification
+- New JSX parsed successfully with @babel/parser.
+- 14 relevant API, image, translation tests passed (the tested API and image modules are unchanged).
+- CSS inspected in Chromium at 980px and 390px in light/dark modes. Controls are custom-styled,
+  and neither quote card nor selector controls overflow the panel.
+- No live API calls or full production build were performed for this CSS-focused update.
+````
+
+## Exact code changes between API introduction and UI polish
+
+The diffs are computed from matching file paths in `portfolio-literary-apis-image-optimization-replacements.zip` (old) and `portfolio-literary-explorer-polish.zip` (new). They are not illustrative pseudocode. A line prefixed `+` was added; a line prefixed `-` was removed. Unchanged context is included where the diff algorithm selected it.
+
+### `src/components/LiteraryExplorer.jsx` — unified diff
+
+````diff
+--- API-update/src/components/LiteraryExplorer.jsx
++++ UI-polish/src/components/LiteraryExplorer.jsx
+@@ -1,4 +1,5 @@
+ import React, { useEffect, useMemo, useState } from 'react';
++import Icon from './Icons.jsx';
+ import { fetchLiteraryAuthor, LITERARY_AUTHORS, wikiquotePageUrl } from '../lib/literaryApis.js';
+ 
+ const FAVORITES_KEY = 'living-archive-literary-favorites-v1';
+@@ -47,9 +48,11 @@
+   }, [authorId, attempt, enabled, savedOnly]);
+ 
+   const quotes = useMemo(() => savedOnly ? favorites : (result?.quotes || []).map(quote => ({ authorId, quote })), [savedOnly, favorites, result, authorId]);
+-  const current = quotes.length ? quotes[Math.min(index, quotes.length - 1)] : null;
++  const currentIndex = Math.min(index, Math.max(0, quotes.length - 1));
++  const current = quotes[currentIndex] || null;
+   const currentAuthor = LITERARY_AUTHORS.find(item => item.id === current?.authorId) || author;
+   const isSaved = !!current && favorites.some(item => item.authorId === current.authorId && item.quote === current.quote);
++  const authorName = lang === 'ar' ? author.nameAr : result?.biography?.name || author.name;
+ 
+   function toggleFavorite() {
+     if (!current) return;
+@@ -62,47 +65,76 @@
+   }
+ 
+   return <section className="literary-explorer" aria-label={t.literaryTitle}>
+-    <div className="section-heading"><span className="number-label">{t.literaryKicker}</span><span className="section-star" aria-hidden="true">✳</span></div>
++    <div className="section-heading literary-explorer-eyebrow">
++      <span className="number-label">{t.literaryKicker}</span>
++      <span className="section-star" aria-hidden="true">✳</span>
++    </div>
+     <h2 className="literary-explorer-title">{t.literaryTitle}</h2>
+     <p className="literary-explorer-intro">{t.literaryIntro}</p>
++
+     <div className="literary-explorer-controls">
+       <label className="literary-author-picker">
+-        <span>{t.literarySelectAuthor}</span>
+-        <select value={authorId} disabled={savedOnly} onChange={event => { setAuthorId(event.target.value); setIndex(0); setAttempt(0); }}>
+-          {LITERARY_AUTHORS.map(item => <option key={item.id} value={item.id}>{lang === 'ar' ? item.nameAr : item.name}</option>)}
+-        </select>
++        <span className="literary-control-label">{t.literarySelectAuthor}</span>
++        <span className="literary-select-wrap">
++          <select value={authorId} disabled={savedOnly} onChange={event => { setAuthorId(event.target.value); setIndex(0); setAttempt(0); }}>
++            {LITERARY_AUTHORS.map(item => <option key={item.id} value={item.id}>{lang === 'ar' ? item.nameAr : item.name}</option>)}
++          </select>
++          <span className="literary-select-chevron" aria-hidden="true" />
++        </span>
+       </label>
+       <button type="button" className={`literary-saved-toggle ${savedOnly ? 'literary-saved-toggle--active' : ''}`} aria-pressed={savedOnly} onClick={() => { setSavedOnly(v => !v); setIndex(0); }}>
+-        {savedOnly ? t.literaryBrowse : `${t.literarySaved} (${favorites.length})`}
++        <Icon name="spark" size={15} />
++        <span>{savedOnly ? t.literaryBrowse : t.literarySaved}</span>
++        {!savedOnly && <span className="literary-saved-count">{favorites.length}</span>}
+       </button>
+     </div>
++
+     {!savedOnly && result?.biography && <div className="literary-author-bio">
+-      <strong>{lang === 'ar' ? author.nameAr : result.biography.name}</strong>
+-      {(result.biography.birthDate || result.biography.deathDate) && <span dir="ltr">{[result.biography.birthDate, result.biography.deathDate].filter(Boolean).join(' – ')}</span>}
+-      {result.biography.topWork && <span>{t.literaryKnownFor}: <em>{result.biography.topWork}</em></span>}
+-      {result.biography.url && <a href={result.biography.url} target="_blank" rel="noopener noreferrer">{t.literaryOpenLibrary}</a>}
++      <div className="literary-author-primary">
++        <strong>{authorName}</strong>
++        {(result.biography.birthDate || result.biography.deathDate) && <span className="literary-author-dates" dir="ltr">{[result.biography.birthDate, result.biography.deathDate].filter(Boolean).join(' – ')}</span>}
++      </div>
++      <div className="literary-author-secondary">
++        {result.biography.topWork && <span className="literary-author-work">{t.literaryKnownFor}: <em>{result.biography.topWork}</em></span>}
++        {result.biography.url && <a className="literary-text-link" href={result.biography.url} target="_blank" rel="noopener noreferrer">{t.literaryOpenLibrary} <Icon name="upRight" size={13} /></a>}
++      </div>
+     </div>}
++
+     <div className="literary-quote-card" aria-live="polite" aria-busy={!savedOnly && loading}>
+-      {savedOnly && !current ? <p className="literary-message">{t.literaryNoSaved}</p>
+-        : !savedOnly && loading ? <p className="literary-message">{t.literaryLoading}</p>
+-          : current ? <>
+-            <span className="literary-quote-mark" aria-hidden="true">“</span>
++      <div className="literary-quote-topline" aria-hidden="true">
++        <span className="literary-quote-ornament">✳</span>
++        {current && <span className="literary-quote-position" dir="ltr">{String(currentIndex + 1).padStart(2, '0')} / {String(quotes.length).padStart(2, '0')}</span>}
++      </div>
++      {savedOnly && !current ? <div className="literary-state"><p>{t.literaryNoSaved}</p></div>
++        : !savedOnly && loading ? <div className="literary-state literary-state--loading" role="status"><span className="literary-loading-indicator" aria-hidden="true"/><p>{t.literaryLoading}</p></div>
++          : current ? <div className="literary-quote-content" key={`${current.authorId}-${currentIndex}-${savedOnly}`}>
+             <blockquote lang="en" dir="ltr">{current.quote}</blockquote>
+             <div className="literary-quote-author">— {lang === 'ar' ? currentAuthor.nameAr : currentAuthor.name}</div>
+             <div className="literary-quote-actions">
+-              <button type="button" onClick={toggleFavorite} aria-pressed={isSaved}>{isSaved ? t.literaryUnsave : t.literarySave}</button>
+-              <a href={wikiquotePageUrl(currentAuthor)} target="_blank" rel="noopener noreferrer">{t.literarySource}</a>
++              <button type="button" className={`literary-save-button ${isSaved ? 'literary-save-button--active' : ''}`} onClick={toggleFavorite} aria-pressed={isSaved}>
++                <Icon name={isSaved ? 'close' : 'plus'} size={15} /> {isSaved ? t.literaryUnsave : t.literarySave}
++              </button>
++              <a className="literary-text-link" href={wikiquotePageUrl(currentAuthor)} target="_blank" rel="noopener noreferrer">{t.literarySource} <Icon name="upRight" size={14} /></a>
+             </div>
+-          </> : <div className="literary-message">
++          </div> : <div className="literary-state literary-state--error">
+             <p>{result?.quoteError ? t.literaryUnavailable : t.literaryEmpty}</p>
+-            <button type="button" onClick={() => { authorCache.delete(authorId); setAttempt(n => n + 1); }}>{t.literaryRetry}</button>
+-            <a href={wikiquotePageUrl(author)} target="_blank" rel="noopener noreferrer">{t.literarySource}</a>
++            <div className="literary-state-actions">
++              <button type="button" onClick={() => { authorCache.delete(authorId); setAttempt(n => n + 1); }}>{t.literaryRetry}</button>
++              <a className="literary-text-link" href={wikiquotePageUrl(author)} target="_blank" rel="noopener noreferrer">{t.literarySource} <Icon name="upRight" size={14} /></a>
++            </div>
+           </div>}
+     </div>
+-    {quotes.length > 1 && <div className="literary-pagination">
+-      <button type="button" disabled={index <= 0} onClick={() => setIndex(n => Math.max(0, n - 1))}>{t.literaryPrev}</button>
+-      <span>{Math.min(index + 1, quotes.length)} / {quotes.length}</span>
+-      <button type="button" disabled={index >= quotes.length - 1} onClick={() => setIndex(n => Math.min(quotes.length - 1, n + 1))}>{t.literaryNext}</button>
++
++    {quotes.length > 1 && <div className="literary-pagination" aria-label={`${t.literaryPrev} / ${t.literaryNext}`}>
++      <button type="button" className="literary-page-button" disabled={currentIndex <= 0} onClick={() => setIndex(n => Math.max(0, n - 1))}>
++        <Icon name="back" size={15} /> <span>{t.literaryPrev}</span>
++      </button>
++      <div className="literary-progress-track" role="progressbar" aria-valuemin={1} aria-valuemax={quotes.length} aria-valuenow={currentIndex + 1} aria-label={t.literaryTitle}>
++        <span style={{ width: `${((currentIndex + 1) / quotes.length) * 100}%` }} />
++      </div>
++      <button type="button" className="literary-page-button" disabled={currentIndex >= quotes.length - 1} onClick={() => setIndex(n => Math.min(quotes.length - 1, n + 1))}>
++        <span>{t.literaryNext}</span> <Icon name="arrow" size={15} />
++      </button>
+     </div>}
+     <p className="literary-source-note">{t.literarySourceNote}</p>
+   </section>;
+````
+
+### `src/styles/global.css` — unified diff
+
+````diff
+--- API-update/src/styles/global.css
++++ UI-polish/src/styles/global.css
+@@ -303,30 +303,265 @@
+   .site-shell--compact .orb-button { width: 42px; height: 42px; }
+ }
+ 
+-/* Literary explorer: native controls, no extra dependencies, and independent
+-   loading/error states for the two public data sources. */
+-.literary-explorer { margin: 43px 0 26px; padding-top: 25px; border-top: 1px solid var(--paper-line); }
+-.literary-explorer-title { font: normal clamp(29px, 3vw, 39px)/1.12 'Instrument Serif', Georgia, serif; margin: 19px 0 10px; }
+-.literary-explorer-intro { color: var(--lede-color); font-size: 12px; line-height: 1.7; margin: 0 0 18px; }
+-.literary-explorer-controls { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+-.literary-author-picker { flex: 1 1 180px; display: grid; gap: 7px; color: var(--muted); font: 500 10px/1.4 'DM Mono', monospace; letter-spacing: .03em; }
+-.literary-author-picker select { width: 100%; min-width: 0; border: 1px solid var(--paper-line); background: var(--paper); color: var(--ink); border-radius: 2px; padding: 12px 10px; font: 600 13px 'DM Sans', sans-serif; }
+-.literary-saved-toggle, .literary-quote-actions button, .literary-pagination button, .literary-message button { border: 1px solid var(--paper-line); border-radius: 2px; background: transparent; color: var(--ink); padding: 11px 12px; cursor: pointer; font: 600 11px 'DM Sans', sans-serif; }
+-.literary-saved-toggle:hover, .literary-quote-actions button:hover, .literary-pagination button:hover, .literary-message button:hover { background: var(--paper-soft); border-color: var(--accent); }
+-.literary-saved-toggle--active { background: var(--paper-soft); }
+-.literary-author-bio { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; color: var(--muted); font-size: 11px; line-height: 1.5; margin-bottom: 15px; }
+-.literary-author-bio strong { color: var(--ink); font-size: 12px; }
+-.literary-author-bio a, .literary-quote-actions a, .literary-message a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+-.literary-quote-card { position: relative; min-height: 174px; border: 1px solid var(--paper-line); background: var(--paper-soft); padding: 24px 22px 18px; }
+-.literary-quote-mark { display: block; color: var(--accent); opacity: .7; font: normal 49px/.6 'Instrument Serif', Georgia, serif; }
+-.literary-quote-card blockquote { margin: 10px 0 13px; font: normal clamp(18px, 2vw, 25px)/1.35 'Instrument Serif', Georgia, serif; overflow-wrap: anywhere; }
+-.literary-quote-author { font: 500 11px/1.5 'DM Sans', sans-serif; color: var(--muted); }
+-.literary-quote-actions { display: flex; gap: 13px; align-items: center; flex-wrap: wrap; margin-top: 18px; font-size: 11px; }
+-.literary-pagination { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 12px; font: 10px 'DM Mono', monospace; color: var(--muted); }
+-.literary-pagination button:disabled { opacity: .35; cursor: not-allowed; }
+-.literary-message { color: var(--lede-color); font-size: 12px; line-height: 1.65; }
+-.literary-message a, .literary-message button { display: inline-block; margin: 8px 10px 0 0; }
+-.literary-source-note { font-size: 10px; line-height: 1.65; color: var(--muted); margin-top: 12px; }
++/* Literary explorer — the same editorial palette, border rhythm, and type scale as the portfolio. */
++.literary-explorer {
++  margin: 54px 0 34px;
++  padding-top: 24px;
++  border-top: 1px solid var(--paper-line);
++  min-width: 0;
++}
++.literary-explorer-eyebrow .number-label { letter-spacing: .13em; }
++.literary-explorer-title {
++  font: normal clamp(35px, 3.5vw, 46px)/1.08 'Instrument Serif', Georgia, serif;
++  letter-spacing: -.025em;
++  margin: 20px 0 12px;
++}
++.literary-explorer-intro {
++  color: var(--lede-color);
++  font-size: 13px;
++  line-height: 1.78;
++  max-width: 50ch;
++  margin: 0 0 26px;
++}
++.literary-explorer-controls {
++  display: grid;
++  grid-template-columns: minmax(0, 1fr) auto;
++  align-items: end;
++  gap: 14px;
++  padding: 15px;
++  margin-bottom: 20px;
++  background: var(--paper-soft);
++  border: 1px solid var(--paper-line);
++}
++.literary-author-picker { display: grid; gap: 9px; min-width: 0; }
++.literary-control-label {
++  color: var(--muted);
++  font: 500 9px/1.35 'DM Mono', monospace;
++  letter-spacing: .085em;
++  text-transform: uppercase;
++}
++.literary-select-wrap { position: relative; display: block; min-width: 0; }
++.literary-author-picker select {
++  -webkit-appearance: none;
++  appearance: none;
++  display: block;
++  width: 100%;
++  max-width: 100%;
++  min-height: 46px;
++  padding: 12px 38px 12px 13px;
++  padding-inline: 13px 38px;
++  color: var(--ink);
++  background: var(--paper);
++  border: 1px solid var(--paper-line);
++  border-radius: 0;
++  font: 600 12px/1.4 'DM Sans', 'Segoe UI', Arial, sans-serif;
++  cursor: pointer;
++  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
++}
++.literary-author-picker select:hover, .literary-author-picker select:focus-visible { border-color: var(--accent); }
++.literary-author-picker select:disabled { opacity: .48; cursor: not-allowed; }
++.literary-select-chevron {
++  position: absolute;
++  right: 17px;
++  inset-inline-end: 17px;
++  inset-inline-start: auto;
++  top: 50%;
++  width: 7px;
++  height: 7px;
++  border: solid var(--accent);
++  border-width: 0 1.5px 1.5px 0;
++  transform: translateY(-70%) rotate(45deg);
++  pointer-events: none;
++}
++.literary-saved-toggle {
++  -webkit-appearance: none;
++  appearance: none;
++  min-height: 46px;
++  border: 1px solid var(--paper-line);
++  background: var(--paper);
++  color: var(--ink);
++  padding: 10px 13px;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  gap: 9px;
++  white-space: nowrap;
++  cursor: pointer;
++  font: 600 11px/1.3 'DM Sans', 'Segoe UI', Arial, sans-serif;
++  transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
++}
++.literary-saved-toggle:hover { border-color: var(--accent); background: var(--paper-soft); }
++.literary-saved-toggle:active { transform: scale(.975); }
++.literary-saved-toggle--active { background: var(--ink); border-color: var(--ink); color: var(--paper); }
++.literary-saved-toggle--active:hover { background: var(--ink); color: var(--paper); }
++.literary-saved-count {
++  min-width: 22px;
++  height: 22px;
++  padding-inline: 5px;
++  display: inline-grid;
++  place-items: center;
++  border: 1px solid var(--paper-line);
++  color: var(--muted);
++  font: 500 10px 'DM Mono', monospace;
++}
++.literary-author-bio {
++  min-width: 0;
++  display: flex;
++  flex-wrap: wrap;
++  justify-content: space-between;
++  align-items: end;
++  gap: 12px 18px;
++  margin-bottom: 20px;
++  padding: 3px 0 18px;
++  border-bottom: 1px solid var(--paper-line);
++}
++.literary-author-primary, .literary-author-secondary { min-width: 0; display: grid; gap: 5px; }
++.literary-author-primary strong {
++  color: var(--ink);
++  font: normal 23px/1.1 'Instrument Serif', Georgia, serif;
++  letter-spacing: -.012em;
++}
++.literary-author-dates {
++  color: var(--muted);
++  font: 500 10px/1.5 'DM Mono', monospace;
++  text-align: start;
++}
++.literary-author-secondary { gap: 8px; color: var(--muted); font-size: 10px; line-height: 1.55; }
++.literary-author-work { max-width: 28ch; overflow-wrap: anywhere; }
++.literary-author-work em { font-style: normal; color: var(--ink); }
++.literary-text-link {
++  width: fit-content;
++  display: inline-flex;
++  align-items: center;
++  gap: 6px;
++  color: var(--ink);
++  font: 600 11px/1.5 'DM Sans', 'Segoe UI', Arial, sans-serif;
++  text-decoration: none;
++  border-bottom: 1px solid var(--accent);
++  padding-bottom: 2px;
++  transition: color .2s ease, border-color .2s ease;
++}
++.literary-text-link:hover { color: var(--accent); border-color: currentColor; }
++.literary-text-link svg { flex: none; }
++.literary-quote-card {
++  min-width: 0;
++  min-height: 260px;
++  padding: clamp(22px, 4.6vw, 34px);
++  background: var(--paper-soft);
++  border: 1px solid var(--paper-line);
++  display: flex;
++  flex-direction: column;
++}
++.literary-quote-topline {
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  gap: 12px;
++  margin-bottom: 18px;
++}
++.literary-quote-ornament { font-size: 15px; line-height: 1; color: var(--accent); }
++.literary-quote-position { color: var(--muted); font: 500 10px 'DM Mono', monospace; letter-spacing: .08em; }
++.literary-quote-content { animation: literary-quote-enter .32s cubic-bezier(.22,.75,.35,1) both; }
++@keyframes literary-quote-enter {
++  from { opacity: 0; transform: translateY(7px); }
++  to { opacity: 1; transform: translateY(0); }
++}
++.literary-quote-card blockquote {
++  margin: 0 0 23px;
++  padding: 0;
++  color: var(--ink);
++  font: normal clamp(24px, 2.6vw, 32px)/1.31 'Instrument Serif', Georgia, serif;
++  letter-spacing: -.012em;
++  text-align: start;
++  overflow-wrap: anywhere;
++  text-wrap: pretty;
++}
++.literary-quote-author { color: var(--muted); font: 500 11px/1.5 'DM Mono', monospace; }
++.literary-quote-actions {
++  display: flex;
++  justify-content: space-between;
++  align-items: center;
++  flex-wrap: wrap;
++  gap: 16px;
++  border-top: 1px solid var(--paper-line);
++  padding-top: 18px;
++  margin-top: 27px;
++}
++.literary-save-button, .literary-state-actions button {
++  appearance: none;
++  -webkit-appearance: none;
++  min-height: 40px;
++  display: inline-flex;
++  align-items: center;
++  justify-content: center;
++  gap: 8px;
++  border: 1px solid var(--ink);
++  border-radius: 100px;
++  color: var(--paper);
++  background: var(--ink);
++  padding: 10px 15px;
++  cursor: pointer;
++  font: 600 11px/1.3 'DM Sans', 'Segoe UI', Arial, sans-serif;
++  transition: background .2s ease, color .2s ease, transform .2s ease;
++}
++.literary-save-button:hover, .literary-state-actions button:hover { transform: translateY(-2px); }
++.literary-save-button:active, .literary-state-actions button:active { transform: scale(.97); }
++.literary-save-button--active { color: var(--ink); background: transparent; }
++.literary-save-button--active:hover { background: var(--paper); }
++.literary-state { display: flex; flex-direction: column; justify-content: center; flex: 1; min-height: 150px; }
++.literary-state p { margin: 0; max-width: 48ch; color: var(--lede-color); font-size: 13px; line-height: 1.8; }
++.literary-state--loading { align-items: flex-start; gap: 18px; }
++.literary-loading-indicator {
++  width: 23px; height: 23px;
++  border-radius: 50%;
++  border: 1px solid var(--paper-line);
++  border-top-color: var(--accent);
++  animation: literary-spinner .85s linear infinite;
++}
++@keyframes literary-spinner { to { transform: rotate(360deg); } }
++.literary-state-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 17px; margin-top: 18px; }
++.literary-pagination { display: grid; grid-template-columns: auto minmax(20px,1fr) auto; align-items: center; gap: 16px; margin: 17px 0 0; }
++.literary-page-button {
++  appearance: none;
++  -webkit-appearance: none;
++  min-width: 0;
++  display: inline-flex;
++  align-items: center;
++  gap: 7px;
++  border: none;
++  background: transparent;
++  color: var(--ink);
++  padding: 6px 0;
++  cursor: pointer;
++  font: 600 11px/1.4 'DM Sans', 'Segoe UI', Arial, sans-serif;
++  transition: color .2s ease, opacity .2s ease;
++}
++.literary-page-button:hover:not(:disabled) { color: var(--accent); }
++.literary-page-button:disabled { opacity: .32; cursor: not-allowed; }
++.literary-page-button svg { flex: none; }
++.portfolio-panel[dir="rtl"] .literary-page-button svg { transform: scaleX(-1); }
++.literary-progress-track { width: 100%; height: 2px; background: var(--paper-line); overflow: hidden; }
++.literary-progress-track > span { display: block; height: 100%; background: var(--accent); transition: width .3s ease; }
++.literary-source-note { margin: 21px 0 0; padding-top: 15px; border-top: 1px solid var(--paper-line); font: 400 10px/1.8 'DM Sans', 'Segoe UI', Arial, sans-serif; color: var(--muted); }
++@media (max-width: 520px) {
++  .literary-explorer { margin-top: 43px; }
++  .literary-explorer-controls { grid-template-columns: minmax(0, 1fr); padding: 12px; gap: 12px; }
++  .literary-saved-toggle { width: 100%; }
++  .literary-quote-card { min-height: 234px; padding: 23px 18px; }
++  .literary-quote-card blockquote { font-size: clamp(23px, 5.7vw, 29px); }
++  .literary-quote-actions { align-items: flex-start; gap: 16px; }
++  .literary-pagination { gap: 10px; }
++  .literary-page-button { font-size: 10px !important; }
++}
++@media (max-width: 350px) {
++  .literary-pagination { gap: 8px; }
++  .literary-page-button span { display: none; }
++  .literary-quote-actions .literary-text-link { font-size: 10px; }
++}
++@media (prefers-reduced-motion: reduce) {
++  .literary-quote-content, .literary-loading-indicator { animation: none; }
++  .literary-progress-track > span { transition: none; }
++}
+ .tile-visual img { display: block; width: 100%; height: 100%; object-fit: cover; }
+ @media (max-width: 380px) {
+   .literary-quote-card { padding: 19px 14px; }
+````
+
+## Final artifact coverage statement
+
+- The original 42 entries and 64 earlier embedded source snapshots are retained from the first documentation file.
+- **4 additional exchanges** (43–46) cover the API requirements, implementation, visual polish, and this documentation request.
+- **2 additional ZIP inventories**, **17 additional text source snapshots**, and **2 exact unified diffs** have been added.
+- The recent user prompts are quoted from the available conversation, and the agent deliveries reproduce their principal text with light formatting simplification. Earlier requests and replies remain explicitly identified as reconstructed summaries.
+- Images are supplied as clickable links; their binary pixel contents are not encoded inside the Markdown document. WebP variants are indexed with sizes and SHA-256 hashes.
+- Previous test/build claims are historical and are not presented as fresh independent test results.
+- The complete verbatim historical transcript remains unavailable in this execution context. The document is therefore a faithful **development-history reconstruction** with actual linked artifacts and source code, not a guaranteed exact message-by-message export.
+
 ## Provenance and limitations
 
-- Embedded text snapshots: **64 files** from replacement archives.
+- Embedded text snapshots: **81 files** from replacement archives, including **17** additional UTF-8 files from the newest two patches.
 - Large project ZIPs are linked and indexed, but their full contents are not inlined because they include binary media and potentially dependency trees.
 - The full verbatim text of every assistant message cannot be recovered from the available conversation context; the chronological section therefore explicitly uses summaries.
 - Automated test claims are historical statements from the assistant responses; they are not newly reverified here.
 - Later revisions supersede earlier ones; apply the latest relevant files, not every ZIP sequentially without conflict review.
+- This updated edition includes the new feature and UI patches, with exact diffs for the files modified in both patches.
