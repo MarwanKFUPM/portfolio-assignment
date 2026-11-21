@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { layoutMosaic } from '../lib/mosaicLayout.js';
 import { visibleMosaicTiles } from '../lib/visibleMosaicTiles.js';
-import { advanceAutoScroll, initialAutoScrollState, SCROLL_RESUME_DELAY_MS } from '../lib/autoScroll.js';
+import { advanceAutoScroll, initialAutoScrollState, pauseAutoScroll, resumeAutoScroll, SCROLL_RESUME_DELAY_MS } from '../lib/autoScroll.js';
 import Icon from './Icons.jsx';
 import { createAmbientBackground } from '../lib/ambientPattern.js';
 
@@ -18,11 +18,9 @@ function artworkFor(id) {
 
 const ArchiveTile = memo(function ArchiveTile({ tile, onOpen, lang }) {
   const { entry, pixels, x, y, decorative } = tile;
-  const tone = tile.globalModuleIndex ?? tile.moduleIndex ?? tile.row ?? 0;
   const style = {
     '--tile-x': `${x}px`, '--tile-y': `${y}px`, '--tile-size': `${pixels}px`,
     '--tile-image': entry ? `url("${entry.image}")` : undefined,
-    '--tile-tone': `var(--tile-tone-${Math.abs(tone) % 6})`,
     ...(decorative ? { '--ambient-art': artworkFor(tile.id) } : {}),
   };
   if (decorative) {
@@ -51,6 +49,7 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
   const pauseUntil = useRef(0);
   const lastTime = useRef(0);
   const scrollState = useRef(initialAutoScrollState());
+  const lastWrittenPosition = useRef(0);
   const [viewTop, setViewTop] = useState(0);
   const layout = useMemo(() => layoutMosaic(entries, viewport, archive, layoutSeed), [entries, viewport.width, viewport.height, archive, layoutSeed]);
   const viewportHeight = viewport.height;
@@ -68,7 +67,8 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
     element.scrollTop = 0;
     syncWindow(true);
     lastTime.current = 0;
-    scrollState.current = initialAutoScrollState();
+    scrollState.current = pauseAutoScroll(initialAutoScrollState(), 0, true);
+    lastWrittenPosition.current = 0;
     pauseUntil.current = performance.now() + SCROLL_RESUME_DELAY_MS;
   }, [archive, layout.metrics.compact, syncWindow]);
 
@@ -76,23 +76,26 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
     const element = scrollRef.current;
     if (!element) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const pause = () => {
+    // Hover/focus ease the current velocity down. Direct scrolling/touch
+    // takes control immediately, so our animation never fights the gesture.
+    const pause = event => {
       pauseUntil.current = performance.now() + SCROLL_RESUME_DELAY_MS;
-      // Manual touch/wheel input takes precedence and restarts the motion from
-      // the user's actual position. The fractional auto-scroll offset is kept
-      // separately so iOS scrollTop rounding cannot freeze subpixel movement.
-      scrollState.current = { ...initialAutoScrollState(), position: element.scrollTop };
+      const manual = ['wheel', 'touchstart', 'pointerdown'].includes(event?.type);
+      scrollState.current = pauseAutoScroll(scrollState.current, element.scrollTop, manual);
+      if (manual) lastWrittenPosition.current = element.scrollTop;
     };
     const scroll = () => {
-      // Touch gestures can continue moving after touchstart (momentum scroll).
-      // Remember the *latest* manual position so autoplay resumes smoothly.
-      if (performance.now() < pauseUntil.current) {
-        scrollState.current = { ...initialAutoScrollState(), position: element.scrollTop };
+      // iOS can continue a touch gesture via momentum scroll after touchend.
+      // Re-sync that position without replacing auto-generated subpixel offsets.
+      if (performance.now() < pauseUntil.current &&
+          Math.abs(element.scrollTop - lastWrittenPosition.current) > 1) {
+        scrollState.current = pauseAutoScroll(scrollState.current, element.scrollTop, true);
+        lastWrittenPosition.current = element.scrollTop;
       }
       syncWindow();
     };
     const hoverEntry = event => {
-      if (event.target.closest?.('.mosaic-tile--entry')) pause();
+      if (event.target.closest?.('.mosaic-tile--entry')) pause(event);
     };
     element.addEventListener('wheel', pause, { passive: true });
     element.addEventListener('touchstart', pause, { passive: true });
@@ -100,23 +103,24 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
     element.addEventListener('pointerover', hoverEntry, { passive: true });
     element.addEventListener('focusin', pause);
     element.addEventListener('scroll', scroll, { passive: true });
-    // Drive the 2-second eased rewind with requestAnimationFrame. The DOM
-    // scroll position changes per frame; React only updates at 120px buckets.
-    // This is smoother than the previous 25fps interval without re-rendering
-    // hundreds of tiles every frame.
+    // Animate only the scroll position. React updates the visible-tile set
+    // in 120px buckets, not on every requestAnimationFrame callback.
     let frame = 0;
     const tick = time => {
       const delta = lastTime.current ? Math.min(time - lastTime.current, 100) : 0;
       lastTime.current = time;
-      if (!document.hidden && !reduce.matches && time >= pauseUntil.current) {
+      if (!document.hidden && !reduce.matches) {
         const max = element.scrollHeight - element.clientHeight;
         if (max > 40) {
-          // Do not read scrollTop back on each frame: mobile WebKit may round
-          // it to whole pixels, while each frame only advances ~0.4px.
-          // Reinjecting the rounded value loses that fraction forever.
+          if (time >= pauseUntil.current && scrollState.current.phase === 'paused') {
+            scrollState.current = resumeAutoScroll(scrollState.current);
+          }
           const next = advanceAutoScroll(scrollState.current, delta, max);
           scrollState.current = next;
           if (Math.abs(element.scrollTop - next.position) >= 0.5) {
+            // Keep fractional progress in state rather than rereading rounded
+            // scrollTop values (important for mobile Safari).
+            lastWrittenPosition.current = next.position;
             element.scrollTop = next.position;
           }
         }

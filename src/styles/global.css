@@ -13,14 +13,14 @@
   --paper-line: #cbc7bc;
   --accent: #777157;
   --tile-outline: rgba(246, 238, 219, .64);
-  --tile-tone-0: #9eb9b7;
-  --tile-tone-1: #c0a795;
-  --tile-tone-2: #9eb5c8;
-  --tile-tone-3: #c1bca5;
-  --tile-tone-4: #b5a9ba;
-  --tile-tone-5: #a7b8a5;
-  --ambient-art-opacity: .52;
-  --ambient-surface-brightness: 1.28;
+  /* One continuous spatial palette, not a palette repeated per tiling module. */
+  --mosaic-horizontal: linear-gradient(90deg,
+    #bfd0d0 0%, #c4d2d0 24%, #cad3cc 49%,
+    #d1cec5 73%, #c7d1cf 100%);
+  --mosaic-vertical: linear-gradient(180deg,
+    rgba(255,255,255,0) 0%, rgba(255,255,255,.09) 25%,
+    rgba(124,145,136,.085) 55%, rgba(255,255,255,.065) 78%,
+    rgba(255,255,255,0) 100%);
 }
 :root[data-theme="dark"] {
   --world: #090e14;
@@ -33,14 +33,13 @@
   --paper-line: #47504f;
   --accent: #d1b99a;
   --tile-outline: rgba(233, 239, 239, .48);
-  --tile-tone-0: #1b3236;
-  --tile-tone-1: #382c2a;
-  --tile-tone-2: #263548;
-  --tile-tone-3: #36312a;
-  --tile-tone-4: #302731;
-  --tile-tone-5: #2c3731;
-  --ambient-art-opacity: .38;
-  --ambient-surface-brightness: .85;
+  --mosaic-horizontal: linear-gradient(90deg,
+    #203036 0%, #283a3e 24%, #30403e 49%,
+    #383d3a 73%, #29393d 100%);
+  --mosaic-vertical: linear-gradient(180deg,
+    rgba(255,255,255,0) 0%, rgba(161,173,164,.045) 25%,
+    rgba(105,123,121,.065) 55%, rgba(255,255,255,.025) 78%,
+    rgba(255,255,255,0) 100%);
 }
 * { box-sizing: border-box; }
 html, body, #root { min-width: 280px; min-height: 100%; margin: 0; }
@@ -55,8 +54,20 @@ a { color: inherit; }
 /* The mosaic remains scrollable under the independently scrolling portfolio. */
 .mosaic-scroll { position: fixed; inset: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: none; background: var(--world); }
 .mosaic-scroll::-webkit-scrollbar, .portfolio-panel::-webkit-scrollbar { display: none; }
-.mosaic-plane { position: relative; width: 100%; min-height: 100%; }
-.mosaic-tile { appearance: none; position: absolute; top: 0; left: 0; padding: 0; margin: 0; width: var(--tile-size); height: var(--tile-size); display: block; overflow: hidden; border-radius: 0; border: 1px solid var(--tile-outline); transform: translate3d(var(--tile-x), var(--tile-y), 0); transition: transform .58s cubic-bezier(.23,.87,.24,1), width .58s cubic-bezier(.23,.87,.24,1), height .58s cubic-bezier(.23,.87,.24,1), border-color .22s ease, opacity .3s ease; container-type: inline-size; background: var(--tile-tone); }
+/* A shared, gently varying field sits below every square. Transparent ambient
+   tiles expose the exact same color at their edges, so adjacent squares never
+   switch abruptly between unrelated module palettes. */
+.mosaic-plane {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  background-color: var(--world);
+  background-image: var(--mosaic-vertical), var(--mosaic-horizontal);
+  background-size: 100% 2200px, 100% 2200px;
+  background-position: left top, left top;
+  background-repeat: repeat-y, repeat-y;
+}
+.mosaic-tile { appearance: none; position: absolute; top: 0; left: 0; padding: 0; margin: 0; width: var(--tile-size); height: var(--tile-size); display: block; overflow: hidden; border-radius: 0; border: 1px solid var(--tile-outline); transform: translate3d(var(--tile-x), var(--tile-y), 0); transition: transform .58s cubic-bezier(.23,.87,.24,1), width .58s cubic-bezier(.23,.87,.24,1), height .58s cubic-bezier(.23,.87,.24,1), border-color .22s ease, opacity .3s ease; container-type: inline-size; background: #1b292e; }
 .mosaic-tile--entry { cursor: pointer; text-align: left; color: #faf7f0; z-index: 1; }
 .mosaic-tile--entry:hover, .mosaic-tile--entry:focus-visible { z-index: 3; border-color: #f9e5c9; }
 .tile-visual { position: absolute; inset: 0; display: block; background-image: var(--tile-image); background-position: center; background-size: cover; transform: scale(1.005); transition: transform .4s cubic-bezier(.2,.75,.2,1), filter .25s; filter: saturate(.76) brightness(.86); }
@@ -72,14 +83,17 @@ a { color: inherit; }
 .mosaic-tile--tiny .tile-content { padding: 9px; }
 .mosaic-tile--tiny .tile-title { font-size: clamp(15px, 8cqi, 20px); }
 @container (max-width: 185px) { .tile-category { font-size: 10px; letter-spacing: .03em; } .tile-content { padding: 10px; } .tile-title { font-size: clamp(16px, 10cqi, 21px); } }
-.mosaic-tile--ambient { border-color: var(--tile-outline); pointer-events: none; filter: brightness(var(--ambient-surface-brightness)); }
-.mosaic-tile--ambient::after { content: ''; position: absolute; inset: 0; background: linear-gradient(140deg, rgba(255,255,255,.12),transparent 55%,rgba(0,0,0,.28)); }
+/* Ambient squares supply only their artwork and outline. The common canvas
+   supplies the colors and stays visually continuous through tile boundaries. */
 .mosaic-tile--ambient {
-  background-color: var(--tile-tone);
-  background-image: var(--ambient-art), linear-gradient(135deg, rgba(255,255,255,.13), rgba(0,0,0,.08));
+  pointer-events: none;
+  border-color: var(--tile-outline);
+  background-color: transparent;
+  background-image: var(--ambient-art);
   background-position: center;
   background-size: cover;
-  background-blend-mode: multiply, normal;
+  background-repeat: no-repeat;
+  background-blend-mode: normal;
 }
 .ambient-mark { display: none; }
 .panel-shadow { position: fixed; z-index: 6; top: 0; bottom: 0; left: 50%; transform: translateX(-50%); width: var(--panel-width, min(600px,max(468px,43vw))); box-shadow: 0 25px 95px #05080da8,0 0 0 1px rgba(255,255,255,.1); pointer-events: none; transition: opacity .4s, transform .6s; }
@@ -249,7 +263,6 @@ a { color: inherit; }
 /* Native scroll animation replaces expensive per-tile keyframe animations. */
 .mosaic-scroll { scroll-behavior: auto; }
 
-:root[data-theme="dark"] .mosaic-tile--ambient { background-blend-mode: screen, normal; }
 
 /* Responsive portfolio: visible square streams and a narrow-screen editorial page.
    The rails occupy actual layout space instead of being clipped behind paper. */
