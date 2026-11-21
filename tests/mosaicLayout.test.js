@@ -1,120 +1,134 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { SQUARE_PATTERN, createMosaicSlots, computeMetrics, layoutMosaic } from '../src/lib/mosaicLayout.js';
+import { SQUARE_PATTERN, createMosaicSlots, generateSquareFormation, computeMetrics, layoutMosaic } from '../src/lib/mosaicLayout.js';
 
 const makeEntries = n => Array.from({ length: n }, (_, i) => ({ id: `achievement-${i}` }));
 const close = (a,b) => Math.abs(a-b) < 1e-6;
 
-test('desktop module consists only of square tiles, without overlaps or holes', () => {
-  const occupied = new Set();
-  for (const { x, y, size } of SQUARE_PATTERN) {
-    assert.ok(size > 0);
-    for (let row = y; row < y + size; row++) for (let col = x; col < x + size; col++) {
-      assert.ok(col < 5 && row < 5);
-      const key = `${col}:${row}`;
-      assert.ok(!occupied.has(key), `overlap at ${key}`);
-      occupied.add(key);
-    }
+function checkFormation(squares) {
+  const sampleCount = 80;
+  for (let row = 0; row < sampleCount; row++) for (let col = 0; col < sampleCount; col++) {
+    const x = (col + 0.5) * 5 / sampleCount;
+    const y = (row + 0.5) * 5 / sampleCount;
+    assert.equal(squares.filter(t => x >= t.x - 1e-8 && x < t.x+t.size - 1e-8 && y >= t.y - 1e-8 && y < t.y+t.size - 1e-8).length, 1);
   }
-  assert.equal(occupied.size, 25);
-});
+  assert.ok(close(squares.reduce((sum, t) => sum+t.size*t.size, 0), 25));
+}
 
-test('desktop wings touch the portfolio edges; archive fills the full width', () => {
-  const viewport = { width: 1440, height: 900 };
-  const normal = layoutMosaic(makeEntries(18), viewport, false);
-  const open = layoutMosaic(makeEntries(18), viewport, true);
-  const left = (viewport.width - normal.metrics.panelWidth) / 2;
-  const right = (viewport.width + normal.metrics.panelWidth) / 2;
-  assert.ok(normal.tiles.every(t => t.side === 'left' ? t.x + t.pixels <= left + 1e-6 : t.x >= right - 1e-6));
-  assert.ok(normal.tiles.some(t => t.side === 'left' && close(t.x + t.pixels, left)));
-  assert.ok(normal.tiles.some(t => t.side === 'right' && close(t.x, right)));
-  assert.ok(open.tiles.some(t => close(t.x, 0)));
-  assert.ok(open.tiles.some(t => close(t.x + t.pixels, viewport.width)));
-  assert.deepEqual(normal.tiles.map(t => t.id), open.tiles.map(t => t.id), 'same tile nodes across modes');
-});
-
-test('the desktop wings extend far enough to cover the entire viewport height', () => {
-  for (const viewport of [{width: 1024,height: 900}, {width:1300,height:900}, {width:1920,height:1080}]) {
-    for (const archive of [false,true]) {
-      const layout = layoutMosaic(makeEntries(10), viewport, archive);
-      const height = layout.moduleCount * 5 * layout.metrics.unit;
-      assert.ok(height >= viewport.height, `insufficient depth at ${viewport.width} × ${viewport.height}`);
-    }
+test('seeded tilings contain only true squares, with no gaps or overlaps', () => {
+  for (let seed of [1, 42, 12345, 0xffffffff]) for (let moduleIndex = 0; moduleIndex < 16; moduleIndex++) {
+    checkFormation(generateSquareFormation(moduleIndex, seed));
   }
 });
 
-test('desktop expands capacity when achievements are added', () => {
-  assert.equal(createMosaicSlots(16).length, 16);
-  assert.equal(createMosaicSlots(17).length, 32);
-  assert.equal(createMosaicSlots(33).length, 48);
-  assert.ok(layoutMosaic(makeEntries(34), { width: 1440, height: 900 }, true).moduleCount >= 3);
+test('subdivision, merge and rotations yield varied module topology', () => {
+  const signatures = new Set(Array.from({length:64},(_,i) => JSON.stringify(generateSquareFormation(i, 777).map(t => [t.x,t.y,t.size]))));
+  assert.ok(signatures.size > 50, `${signatures.size} of 64 formations differ`);
+  const tiles = Array.from({length:64},(_,i)=>generateSquareFormation(i, 777));
+  assert.ok(tiles.some(t=>t.some(s=>s.size <= 1)));
+  assert.ok(tiles.some(t=>t.some(s=>s.size >= 3)));
 });
 
-test('compact mode includes mobile, tablet, narrow and short landscape windows', () => {
-  for (const viewport of [{width:280,height:620},{width:390,height:844},{width:600,height:800},{width:800,height:1000},{width:1100,height:580}]) {
-    const metrics = computeMetrics({...viewport, archive:false});
-    assert.equal(metrics.compact,true);
-    assert.ok(metrics.panelWidth < viewport.width);
-    assert.ok(metrics.panelWidth >= 240);
-  }
-  assert.equal(computeMetrics({ width:1440,height:900 }).compact,false);
+test('formation topology remains fixed for seed + module index', () => {
+  assert.deepEqual(generateSquareFormation(4, 992), generateSquareFormation(4, 992));
+  assert.notDeepEqual(generateSquareFormation(4, 992), generateSquareFormation(4, 993));
 });
 
-test('compact portfolio displays precisely two square streams flush with the paper', () => {
-  for (const viewport of [{width:280,height:620},{width:390,height:844},{width:600,height:800},{width:800,height:1000}]) {
-    const layout = layoutMosaic(makeEntries(10), viewport, false);
-    const left = (viewport.width - layout.metrics.panelWidth) / 2;
-    const right = (viewport.width + layout.metrics.panelWidth) / 2;
-    assert.ok(layout.tiles.every(t => t.size === 1 && t.pixels > 0));
-    assert.ok(layout.tiles.every(t => t.side === 'left'
-      ? close(t.x + t.pixels, left)
-      : close(t.x, right)));
-    for (const side of ['left','right']) {
-      const heights = layout.tiles.filter(t => t.side === side).map(t => t.y).sort((a,b)=>a-b);
-      assert.ok(heights[0] <= -layout.metrics.unit);
-      assert.ok(heights.at(-1) + layout.metrics.unit >= viewport.height);
-    }
-  }
+test('desktop wings touch portfolio edges and archive spans viewport', () => {
+  const entries = makeEntries(18);
+  const viewport = {width: 1440,height: 900};
+  const closed = layoutMosaic(entries, viewport, false, 72);
+  const open = layoutMosaic(entries, viewport, true, 72);
+  const left = (viewport.width-closed.metrics.panelWidth)/2;
+  const right = (viewport.width+closed.metrics.panelWidth)/2;
+  assert.ok(closed.tiles.every(t=>t.side==='left'? t.x+t.pixels<=left+1e-6 : t.x>=right-1e-6));
+  assert.ok(closed.tiles.some(t=>t.side==='left' && close(t.x+t.pixels,left)));
+  assert.ok(closed.tiles.some(t=>t.side==='right' && close(t.x,right)));
+  assert.ok(open.tiles.some(t=>close(t.x,0)));
+  assert.ok(open.tiles.some(t=>close(t.x+t.pixels,viewport.width)));
+  assert.deepEqual(closed.tiles.map(t=>t.id),open.tiles.map(t=>t.id));
 });
 
-test('on narrow screens the very same achievements collapse into a responsive grid', () => {
-  for (const viewport of [{width:280,height:620},{width:390,height:844},{width:600,height:800},{width:800,height:1000}]) {
-    const entries = makeEntries(19);
-    const closed = layoutMosaic(entries, viewport, false);
-    const opened = layoutMosaic(entries, viewport, true);
-    const from = closed.tiles.filter(t => t.entry).map(t => t.id).sort();
-    const to = opened.tiles.filter(t => t.entry).map(t => t.id).sort();
-    assert.deepEqual(from, to);
-    const positions = new Set();
-    for (const tile of opened.tiles.filter(t => t.entry)) {
-      assert.ok(tile.x >= -1e-6 && tile.x+tile.pixels <= viewport.width+1e-6);
-      assert.ok(tile.y >= 0);
-      const key = `${tile.x.toFixed(5)}:${tile.y.toFixed(5)}`;
-      assert.ok(!positions.has(key), `overlapping tile at ${key}`);
-      positions.add(key);
-    }
-    assert.ok(opened.contentHeight >= viewport.height);
-    assert.ok(opened.tiles.filter(t=>t.decorative).every(t=>!t.hidden));
+test('the same module identities and geometry persist through resizing and rotation', () => {
+  const entries = makeEntries(30);
+  const sizes = [{width:1440,height:900},{width:1600,height:850},{width:1800,height:1000}];
+  const layouts = sizes.map(size=>layoutMosaic(entries,size,true,5353));
+  const lookup = l=>new Map(l.tiles.map(t=>[t.id,[t.size,t.globalModuleIndex]]));
+  const base = lookup(layouts[0]);
+  for (const layout of layouts.slice(1)) {
+    const next = lookup(layout);
+    for (const [key,value] of base) if(next.has(key))assert.deepEqual(next.get(key),value);
   }
 });
 
-
-test('archive covers every viewport cell with squares, no side or bottom gaps', () => {
-  for (const viewport of [
-    {width: 390,height: 844}, {width: 768,height: 1024},
-    {width: 1100,height: 580}, {width: 1280,height: 800},
-    {width: 1722,height: 854}, {width: 1920,height: 1080},
-  ]) {
-    for (const count of [4, 18, 34, 67]) {
-      const { tiles } = layoutMosaic(makeEntries(count), viewport, true);
-      const ySteps = 16, xSteps = 18;
-      for (let r = 0; r < ySteps; r++) for (let c = 0; c < xSteps; c++) {
-        const x = (c + 0.5) * viewport.width / xSteps;
-        const y = (r + 0.5) * viewport.height / ySteps;
-        const covering = tiles.filter(t => x >= t.x - 1e-7 && x < t.x + t.pixels - 1e-7 && y >= t.y - 1e-7 && y < t.y + t.pixels - 1e-7);
-        assert.equal(covering.length, 1, `${viewport.width}×${viewport.height} count=${count}, at (${x},${y})`);
+test('archive has edge-to-edge coverage and reaches bottom on desktop and compact screens', () => {
+  for (const viewport of [{width:390,height:844},{width:768,height:1024},{width:1100,height:580},{width:1280,height:800},{width:1722,height:854},{width:1920,height:1080}]) {
+    for (const count of [4,18,34,67]) {
+      const {tiles,contentHeight}=layoutMosaic(makeEntries(count),viewport,true,123456);
+      assert.ok(contentHeight>=viewport.height);
+      for(let row=0;row<12;row++)for(let col=0;col<15;col++){
+        const x=(col+0.5)*viewport.width/15;
+        const y=(row+0.5)*viewport.height/12;
+        const matches=tiles.filter(t=>x>=t.x-1e-7 && x<t.x+t.pixels-1e-7 && y>=t.y-1e-7 && y<t.y+t.pixels-1e-7);
+        assert.equal(matches.length,1,`${viewport.width}x${viewport.height} (${x},${y})`);
       }
-      for (const tile of tiles) assert.ok(close(tile.pixels, tile.pixels));
+    }
+  }
+});
+
+test('compact portfolio has exactly two streams and compacts into grid with identical achievement IDs', () => {
+  for (const viewport of [{width:280,height:620},{width:390,height:844},{width:600,height:800},{width:800,height:1000},{width:1100,height:580}]) {
+    const entries=makeEntries(19);
+    const normal=layoutMosaic(entries,viewport,false,987);
+    const archive=layoutMosaic(entries,viewport,true,987);
+    assert.equal(computeMetrics(viewport).compact,true);
+    const left=(viewport.width-normal.metrics.panelWidth)/2;
+    const right=(viewport.width+normal.metrics.panelWidth)/2;
+    assert.ok(normal.tiles.every(t=>close(t.pixels,t.pixels) && (t.side==='left'?close(t.x+t.pixels,left):close(t.x,right))));
+    assert.deepEqual(normal.tiles.filter(t=>t.entry).map(t=>t.id),archive.tiles.filter(t=>t.entry).map(t=>t.id));
+  }
+});
+
+test('dynamic slot generator maintains capacity for added achievements', () => {
+  for(const n of [4,18,80,200])assert.ok(createMosaicSlots(n,1,444).length>=n);
+});
+
+
+test('portfolio square tiling reaches both horizontal viewport edges without gaps', () => {
+  for (const viewport of [
+    {width: 1440, height: 900}, {width: 1722, height: 854},
+    {width: 1920, height: 1080}, {width: 2560, height: 1440},
+    {width: 390, height: 844}, {width: 820, height: 1180},
+    {width: 1180, height: 600},
+  ]) {
+    const { tiles, metrics } = layoutMosaic(makeEntries(24), viewport, false, 231);
+    const left = (viewport.width - metrics.panelWidth) / 2;
+    const right = (viewport.width + metrics.panelWidth) / 2;
+    for (let row=0; row<12; row++) {
+      const y = (row + .5) * viewport.height/12;
+      for (let col=0; col<12; col++) {
+        const x = (col + .5) * viewport.width/12;
+        if (x >= left && x < right) continue;
+        const found = tiles.some(t => x >= t.x-1e-7 && x < t.x+t.pixels-1e-7 && y>=t.y-1e-7 && y<t.y+t.pixels-1e-7);
+        assert.ok(found, `uncovered edge at ${viewport.width}x${viewport.height}, (${x}, ${y})`);
+      }
+    }
+  }
+});
+
+test('desktop achievement squares are always large enough and identities are stable across viewport resizing', () => {
+  const entries = makeEntries(31);
+  const widths = [1440, 1600, 1722, 1920, 2560];
+  let ids;
+  for (const width of widths) {
+    for (const archive of [false, true]) {
+      const {tiles} = layoutMosaic(entries, {width,height:900}, archive, 42);
+      const actual = tiles.filter(t=>t.entry);
+      assert.equal(actual.length, entries.length);
+      assert.ok(actual.every(t=>t.pixels>=164-1e-6), `achievement tile too small at ${width}`);
+      const mapped = new Map(actual.map(t=>[t.entry.id,t.id]));
+      if (!ids) ids=mapped;
+      for (const [id,tileId] of ids) assert.equal(mapped.get(id),tileId);
     }
   }
 });

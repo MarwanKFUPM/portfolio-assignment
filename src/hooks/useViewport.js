@@ -4,16 +4,21 @@ function readSize() {
   return { width: window.innerWidth, height: window.innerHeight };
 }
 
+// Delay expensive re-projection until the browser finishes a burst of resize events.
+// Geometry stays unchanged during a resize; only its scale/placement is recomputed.
 export function useViewport() {
   const [viewport, setViewport] = useState(readSize);
   useEffect(() => {
-    let frame = 0;
+    let timer;
     const onResize = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => setViewport(readSize()));
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const next = readSize();
+        setViewport(previous => previous.width === next.width && previous.height === next.height ? previous : next);
+      }, 140);
     };
     window.addEventListener('resize', onResize, { passive: true });
-    return () => { window.removeEventListener('resize', onResize); cancelAnimationFrame(frame); };
+    return () => { window.clearTimeout(timer); window.removeEventListener('resize', onResize); };
   }, []);
   return viewport;
 }

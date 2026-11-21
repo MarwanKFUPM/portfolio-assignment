@@ -78,6 +78,18 @@ export const achievements = [
     sample: false,
   },
   {
+    id: 'lit-club',
+    category: 'Interests', categoryAr: 'اهتمامات',
+    title: 'Literature Club', titleAr: 'القراءة والأدب',
+    summary: 'Founded the KFUPM Literature CLUB in 2026, semester 261',
+    summaryAr: 'الأدب والفلسفة والشعر والأفكار التي تصل بينها.',
+    body: 'Fostered interest in critical thinking and analysis with regards to works of art, media, and entertainment, by founding the literature club in KFUPM and hosting semi-weekly meetings.',
+    image: '/art/LitClubMeet.jpeg',
+    meta: 'Literature · Philosophy',
+    links: [],
+    sample: false,
+  },
+  {
     id: 'sample-research', sample: true,
     category: 'Sample', categoryAr: 'مثال',
     title: 'Research Notebook', titleAr: 'دفتر بحث تجريبي',

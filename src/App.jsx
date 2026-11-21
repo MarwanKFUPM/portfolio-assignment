@@ -17,6 +17,11 @@ function readPathname() { return window.location.pathname.replace(/\/$/, '') || 
 
 export default function App() {
   const viewport = useViewport();
+  // Generated once per page load. Do not change it during viewport reflow.
+  const [layoutSeed] = useState(() => {
+    try { return window.crypto.getRandomValues(new Uint32Array(1))[0]; }
+    catch { return Math.floor(Math.random() * 0xffffffff); }
+  });
   const responsive = useMemo(() => computeMetrics({ ...viewport, archive: false }), [viewport]);
   const [pathname, setPathname] = useState(readPathname);
   const [theme, setTheme] = useState(() => readPreference('living-archive-theme', 'light'));
@@ -77,7 +82,7 @@ export default function App() {
   return (
     <div className={`site-shell ${archive ? 'site-shell--archive' : ''} ${responsive.compact ? 'site-shell--compact' : ''}`} style={{ '--panel-width': `${responsive.panelWidth}px` }}>
       <div className="site-grain" aria-hidden="true" />
-      <ArchiveMosaic entries={entries} viewport={viewport} archive={archive} lang={lang} onOpen={onTileOpen} />
+      <ArchiveMosaic entries={entries} viewport={viewport} archive={archive} lang={lang} onOpen={onTileOpen} layoutSeed={layoutSeed} />
       <div className="panel-shadow" aria-hidden="true" />
       <PortfolioPanel pathname={pathname} archive={archive} entries={entries} t={t} lang={lang} onNavigate={navigate} />
       <FloatingControls archive={archive} onToggleArchive={() => setArchive(v => !v)} theme={theme} onToggleTheme={() => setTheme(v => v === 'dark' ? 'light' : 'dark')} lang={lang} onToggleLanguage={() => setLang(v => v === 'en' ? 'ar' : 'en')} t={t} />
