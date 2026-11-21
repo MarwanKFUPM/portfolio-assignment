@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Illustrative artwork for WORDS &amp; IDEAS">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#493a40"/><stop offset="1" stop-color="#121c20"/></linearGradient><pattern id="noise" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 0H28M0 0V28" stroke="#fff" stroke-opacity=".07" stroke-width=".7"/></pattern></defs>
+<rect width="800" height="800" fill="url(#g)"/><circle cx="790" cy="50" r="490" fill="#e4d2bc" opacity=".08"/><rect width="800" height="800" fill="url(#noise)"/><rect x="37" y="37" width="726" height="726" rx="3" fill="none" stroke="#e4d2bc" stroke-opacity=".3" stroke-width="2"/>
+<text x="62" y="100" fill="#e4d2bc" font-family="monospace" font-size="20" letter-spacing="5">ARCHIVE / WRITING</text>
+<rect x="223" y="203" width="365" height="459" rx="2" transform="rotate(-7 405 433)" fill="#e8d9be"/><path d="M255 290L527 256M248 335L534 300M244 377L532 341M241 425L525 391M232 476L513 439M227 518L523 477M220 561L509 520" stroke="#8b746c" stroke-width="5" opacity=".52"/><path d="M550 166L600 210L340 529L307 551L315 512Z" fill="#b79c7c" stroke="#4e413e" stroke-width="5"/>
+<path d="M62 677H738" stroke="#e4d2bc" stroke-opacity=".8" stroke-width="2"/>
+<text x="62" y="716" fill="#e4d2bc" font-family="Georgia,serif" font-size="37">WORDS &amp; IDEAS</text>
+<text x="62" y="748" fill="#e4d2bc" fill-opacity=".8" font-family="monospace" font-size="15" letter-spacing="2">poetry / essay / note</text>
+</svg>

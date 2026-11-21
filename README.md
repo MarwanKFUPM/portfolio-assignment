@@ -1,56 +1,105 @@
-# Portfolio-Assignment
+# Marwan's Living Archive — React redesign
 
-## Description
+A responsive React/Vite redesign of the supplied SWE363 portfolio, featuring a centered, independently scrolling portfolio surrounded by an interactive **square-only collage**. The three circular controls float directly over the collage (no conventional navbar).
 
-This is the portfolio assignment for SWE363. AI Use will be documented in ai-usage-report.md. The repository contains 3 html files, index.html, project.html, and contact.html, index.html being the landing page, project and contact serving as additional features if you need more information or want to contact me.
+## Start
 
-The purpose of this repository is to fulfill the requirements of the SWE363 course rubric and demonstrate my understanding of HTML, CSS, and Javascript. The website as of now does not have any online functionality or connects to anything via the internet, it is entirely local, meaning it needs to be downloaded before viewing.
+Requires Node.js 20.19+ or 22.12+ and npm, with network access for initial installation.
 
+```bash
+npm install
+npm run dev
+```
 
-## Dependencies
+Open the local URL printed by Vite (usually http://localhost:5173). To create production files:
 
-There are no special dependancies needed, any readily-available browser will be able to run these files and allow for viewing and interactivity.
+```bash
+npm run build
+npm run preview
+```
 
-## Installing 
+To run geometry tests without installing dependencies:
 
-To install the project, you may simply install the entire repository as a zip file, extract the files into a file and run index.html to get started.
+```bash
+npm test
+```
 
-## Executing
+For production hosting, configure the server to fall back to `index.html` for app routes such as `/archive/writing` and `/projects`.
 
-Running index.html begins the webpage. There are no additional features or any command-line based controls provided to the user. Use your mouse and keyboard to navigate the web pages and input details if necessary.
+## Features
 
-## Contents
+- A fixed, centered and vertically scrollable portfolio with a full-viewport, independently scrollable mosaic behind it.
+- Genuine square tiles — no arbitrary rectangular achievement cards in the collage.
+- Tiles align exactly with both side edges of the central portfolio; their layout reassembles when Archive Mode opens.
+- Archive Mode builds one continuous 10-unit-wide (desktop) square grid, without a compulsory mathematically perfect squared-square solution.
+- Floating circular controls for theme, English/Arabic UI, and archive expansion.
+- Clicking a collage item or internal navigation link uses the same cinematic zoom transition and updates the URL using the History API; browser Back works.
+- Respect for reduced-motion preferences, keyboard focus states, image alt text, and touch input.
+- An Archive Mode demonstration dock adds/removes four **clearly labeled example** entries so you can see expansion and reflow.
+- Uses the portrait image from the original portfolio. Achievement art is locally authored SVG illustration, **not purported project screenshots**.
 
-You will be greeted with index.html, which is ordered in three segments, the introduction, which contains a short line regarding my interests and a picture of myself. The second segment consists of listing my interests in more details with references to share in case you were interested. The third documents what skills I have in any technical fields.
+## Your content and example content
 
-The header of the pages contains navigation buttons to move between pages, a universal nav with the name of the project, and a light/dark mode button to match the preferences of the user. The footer contains a simple trademark featuring my name.
-The project features interactive modules such as remembering and storing light/dark mode settings, input checking for comments in the contact me page, and interactive hover window in the about me page. It safely fulfills the interactive features requirement.
+`src/data/achievements.js` is the sole source of archive entries. The first six come directly from the material in your supplied portfolio: Portfolio Website, E-Commerce Website, Mobile App UI, Analytics Dashboard, Poetry & Essays (with the existing Substack link), and Classics & Reading (an interest, not an award). The next **four** are explicitly marked placeholders: Research Notebook, A Talk Worth Sharing, Personal Library, and Creative Experiment. Add real images/screenshots and real working URLs as they become available.
 
+Each item can contain:
 
-## Authors
+```js
+{
+  id: 'new-project',
+  title: 'Your achievement',
+  category: 'Development',
+  summary: 'One-sentence summary',
+  body: 'Detailed story',
+  image: '/art/your-image.jpg',
+  meta: 'Year · Tools',
+  links: [{ label: 'Open project', href: 'https://example.com' }],
+  sample: false,
+}
+```
 
-Marwan Khalid Al-Hamdan
-Contact info is provided in the project.
+Place new pictures under `public/art/` and reference them as `/art/your-image.jpg`. Remove any existing item object to delete it. Demo-generated entries are temporary and reset on reload.
 
-## Version History
+The original contact form could not actually send messages, so it has **not** been replaced with another fake form. LinkedIn and Substack are working external links from the source material. An email integration can be added when a verified destination is provided.
 
-* Version 2
-    Added more interactive features and user-input. More rigorously detailed documentation and reporting.
-* Version 1
-    * Simple webpage built with clean visuals using the AI built within Visual Studio Code.
+## Layout geometry and growth
 
-## License
+The layout is designed around one complete 5×5-unit module per side, using the square side lengths **3, 2, 2, 2, 1, 1, 1, 1**. Their areas total 25 units², and the set tiles the entire 5×5 module without overlap or gaps.
 
-This project is not licensed.
+- **Portfolio Mode:** two five-unit-wide wings touch the central page exactly at its left and right edges; its center remains free. Some outer squares may be clipped on narrow viewports.
+- **Desktop Archive Mode:** the central page recedes, the wings slide together to become 10 units wide, and the same tile elements remain interactive.
+- **Mobile Archive Mode:** the two five-unit wings stack vertically so text remains usable.
+- **Growing:** Each five-unit-tall row pair can hold up to 16 archive entries (eight slots per wing). Entries 1–16 require one tier; 17–32 require two; 33–48 require three, and so on. Unused slots are subtle, **non-interactive decorative squares**, not fabricated achievements. Width is held constant in each mode while height increases; the mosaic is scrollable when it grows.
 
-## Acknowledgements
+A picture of this behavior is in `docs/mosaic-growth.png` and `docs/mosaic-growth.svg`.
 
-AI usage, as mentioned in the description, will be mentioned in ai-usage-report.md
-References: 
-https://gist.github.com/DomPizzie/7a5ff55ffa9081f2de27c315f5018afc
-https://www.awwwards.com/sites/hanseatic-media-harbour
-https://aashay-dev-ed.develop.my.site.com/AashayWase/s
-https://www.abdallaahmed.icu/en
-https://www.w3schools.com/html/html_intro.asp
-https://www.w3schools.com/css/
-https://www.w3schools.com/js/default.asp
+## File map
+
+```text
+src/
+  App.jsx                        state, navigation, transitions
+  components/
+    ArchiveMosaic.jsx            square tiles / click-to-open
+    PortfolioPanel.jsx           about, projects, writing, contact, details
+    FloatingControls.jsx         global circular controls
+    TransitionLayer.jsx          flashback handoff
+    Icons.jsx                    reusable SVG icons
+  content/translations.js        EN/AR UI strings
+  data/achievements.js           editable archive content
+  hooks/useViewport.js           responsive dimensions
+  lib/mosaicLayout.js            pure, tested tiling and positioning
+  styles/global.css              shared layout, motion, themes
+public/
+  portrait.png                   original uploaded image
+  art/*.svg                      local illustrative cover artwork
+tests/mosaicLayout.test.js       deterministic geometry tests
+docs/mosaic-growth.*             growth diagram
+```
+
+## Notes and limitations
+
+- The imagery for the four original source projects is an **illustration**, since actual screenshots were not provided.
+- Browser transitions are built as a reusable React overlay, rather than using the experimental cross-document View Transitions API. That keeps the navigation behavior consistent across React routes.
+- The archive deliberately permits repeated square sizes. It is square-only, not a perfect squared square.
+- English/Arabic toggling translates the main UI and card headings/summaries. Original English-only entry bodies remain in English until translated.
+- Fonts load from Google Fonts when available; system and Georgia fallbacks remain usable offline **after installing dependencies**.

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Illustrative artwork for THE READING ROOM">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#3a4230"/><stop offset="1" stop-color="#121c20"/></linearGradient><pattern id="noise" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 0H28M0 0V28" stroke="#fff" stroke-opacity=".07" stroke-width=".7"/></pattern></defs>
+<rect width="800" height="800" fill="url(#g)"/><circle cx="790" cy="50" r="490" fill="#ebdeac" opacity=".08"/><rect width="800" height="800" fill="url(#noise)"/><rect x="37" y="37" width="726" height="726" rx="3" fill="none" stroke="#ebdeac" stroke-opacity=".3" stroke-width="2"/>
+<text x="62" y="100" fill="#ebdeac" font-family="monospace" font-size="20" letter-spacing="5">ARCHIVE / READING</text>
+<rect x="140" y="260" width="122" height="320" fill="#8f8d65"/><rect x="268" y="226" width="103" height="354" fill="#b3a178"/><rect x="378" y="279" width="112" height="301" fill="#66806b"/><rect x="500" y="204" width="120" height="376" fill="#9d765f"/><path d="M157 289H247M157 539H247M281 254H357M281 545H357M391 308H480M391 546H480M514 233H604M514 548H604" stroke="#efe6c2" stroke-width="5"/><path d="M155 580H628" stroke="#efe6c2" stroke-width="15"/>
+<path d="M62 677H738" stroke="#ebdeac" stroke-opacity=".8" stroke-width="2"/>
+<text x="62" y="716" fill="#ebdeac" font-family="Georgia,serif" font-size="37">THE READING ROOM</text>
+<text x="62" y="748" fill="#ebdeac" fill-opacity=".8" font-family="monospace" font-size="15" letter-spacing="2">a lifetime in margins</text>
+</svg>
