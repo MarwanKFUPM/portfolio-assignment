@@ -5,16 +5,12 @@ function InternalLink({ children, href, onNavigate, className = 'text-link', ite
   return <button type="button" className={className} onClick={(e) => onNavigate(href, e.currentTarget, item)}>{children}</button>;
 }
 
-function IndexNavigation({ t, onNavigate, active }) {
-  const links = [
-    ['/', t.about], ['/projects', t.projects], ['/writing', t.writing], ['/contact', t.contact],
-  ];
+function ExternalResourceLink({ href, children }) {
   return (
-    <nav className="index-nav" aria-label="Portfolio sections">
-      {links.map(([href, label], i) => <InternalLink key={href} href={href} onNavigate={onNavigate} className={`index-nav-link ${active === href ? 'current' : ''}`}>
-        <span className="index-nav-num">0{i + 1}</span> {label}
-      </InternalLink>)}
-    </nav>
+    <a className="resource-link" href={href} target="_blank" rel="noopener noreferrer">
+      <span>{children}</span>
+      <span className="resource-link-icon"><Icon name="upRight" size={18}/></span>
+    </a>
   );
 }
 
@@ -50,6 +46,7 @@ function HomeView({ t, onNavigate, entries }) {
       <div className="hero-actions">
         <InternalLink className="pill-link pill-link--dark" href="/projects" onNavigate={onNavigate}>{t.seeWork} <Icon name="upRight" size={15}/></InternalLink>
         <InternalLink className="pill-link pill-link--outline" href="/writing" onNavigate={onNavigate}>{t.writing} <Icon name="arrow" size={15}/></InternalLink>
+        <InternalLink className="pill-link pill-link--outline" href="/contact" onNavigate={onNavigate}>{t.contact} <Icon name="upRight" size={15}/></InternalLink>
       </div>
     </section>
     <section className="editorial-block">
@@ -70,7 +67,9 @@ function HomeView({ t, onNavigate, entries }) {
       <div className="section-heading"><span className="number-label">03 / {t.readingNext.toUpperCase()}</span></div>
       <h2>The library<br/>of <em>ideas.</em></h2>
       <p>{t.readingBody}</p>
-      <InternalLink className="inline-arrow" href="/writing" onNavigate={onNavigate}>{t.writing} <Icon name="arrow" size={16}/></InternalLink>
+      <InternalLink className="resource-link" href="/writing" onNavigate={onNavigate}>
+        <span>{t.writing}</span><span className="resource-link-icon"><Icon name="arrow" size={18}/></span>
+      </InternalLink>
     </section>
   </>;
 }
@@ -101,10 +100,12 @@ function WritingView({ t, onNavigate, entries, lang }) {
     <img className="editorial-illustration" src="/art/reading.svg" alt="Abstract illustration of books and reading" />
     <h2 className="subheading">{t.readingTitle}</h2>
     <p className="body-copy">{t.readingBody}</p>
-    <InternalLink className="feature-link" href="/archive/writing" onNavigate={onNavigate} item={entries.find(e => e.id === 'writing')}>
-      <span>Poetry & Essays</span><Icon name="arrow" size={18}/>
-    </InternalLink>
-    <a className="inline-arrow external" href="https://marwanpgx.substack.com/" target="_blank" rel="noopener noreferrer">Substack <Icon name="upRight" size={16}/></a>
+    <div className="writing-resource-list">
+      <InternalLink className="resource-link" href="/archive/writing" onNavigate={onNavigate} item={entries.find(e => e.id === 'writing')}>
+        <span>Poetry & Essays</span><span className="resource-link-icon"><Icon name="arrow" size={18}/></span>
+      </InternalLink>
+      <ExternalResourceLink href="https://marwanpgx.substack.com/">Substack</ExternalResourceLink>
+    </div>
   </section>;
 }
 
@@ -114,8 +115,8 @@ function ContactView({ t }) {
     <h1 className="view-title">Let's make<br/><em>something.</em></h1>
     <p className="view-lede">{t.reachLead}</p>
     <div className="contact-options">
-      <a href="https://www.linkedin.com/in/marwan-al-hamdan-a64043331/" target="_blank" rel="noopener noreferrer">LinkedIn <Icon name="upRight" size={18}/></a>
-      <a href="https://marwanpgx.substack.com/" target="_blank" rel="noopener noreferrer">Substack <Icon name="upRight" size={18}/></a>
+      <ExternalResourceLink href="https://www.linkedin.com/in/marwan-al-hamdan-a64043331/">LinkedIn</ExternalResourceLink>
+      <ExternalResourceLink href="https://marwanpgx.substack.com/">Substack</ExternalResourceLink>
     </div>
     <p className="fine-print">{t.note}</p>
   </section>;
@@ -130,10 +131,12 @@ function EntryView({ entry, t, lang, onNavigate }) {
     {entry.sample && <div className="sample-alert">{t.sampleBadge}</div>}
     <h1 className="view-title">{title}</h1>
     <p className="view-lede">{summary}</p>
-    <img src={entry.image} className="entry-hero-image" alt={`Illustrative artwork for ${entry.title}`} />
-    <div className="section-heading"><span className="number-label">{entry.meta}</span></div>
+    <figure className="entry-figure">
+      <img src={entry.image} className="entry-hero-image" alt={`Illustrative artwork for ${entry.title}`} />
+      <figcaption className="entry-caption number-label">{entry.meta}</figcaption>
+    </figure>
     <p className="body-copy">{entry.body}</p>
-    {entry.links?.length > 0 && <div className="entry-links">{entry.links.map(link => <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer" className="inline-arrow">{link.label} <Icon name="upRight" size={16}/></a>)}</div>}
+    {entry.links?.length > 0 && <div className="entry-links">{entry.links.map(link => <ExternalResourceLink key={link.href} href={link.href}>{link.label}</ExternalResourceLink>)}</div>}
     <InternalLink href="/" onNavigate={onNavigate} className="pill-link pill-link--outline"><Icon name="back" size={16}/> {t.back}</InternalLink>
   </article>;
 }
@@ -153,7 +156,6 @@ export default function PortfolioPanel({ pathname, archive, entries, t, lang, on
       <footer className="panel-footer">
         <span>© 2026 MARWAN AL-HAMDAN</span><span>{t.footer}</span>
       </footer>
-      <IndexNavigation t={t} onNavigate={onNavigate} active={pathname}/>
     </main>
   );
 }

@@ -19,7 +19,7 @@ test('desktop module consists only of square tiles, without overlaps or holes', 
   assert.equal(occupied.size, 25);
 });
 
-test('desktop wings touch the portfolio edges; archive wings meet in the center', () => {
+test('desktop wings touch the portfolio edges; archive fills the full width', () => {
   const viewport = { width: 1440, height: 900 };
   const normal = layoutMosaic(makeEntries(18), viewport, false);
   const open = layoutMosaic(makeEntries(18), viewport, true);
@@ -28,8 +28,8 @@ test('desktop wings touch the portfolio edges; archive wings meet in the center'
   assert.ok(normal.tiles.every(t => t.side === 'left' ? t.x + t.pixels <= left + 1e-6 : t.x >= right - 1e-6));
   assert.ok(normal.tiles.some(t => t.side === 'left' && close(t.x + t.pixels, left)));
   assert.ok(normal.tiles.some(t => t.side === 'right' && close(t.x, right)));
-  assert.ok(open.tiles.some(t => t.side === 'left' && close(t.x + t.pixels, viewport.width / 2)));
-  assert.ok(open.tiles.some(t => t.side === 'right' && close(t.x, viewport.width / 2)));
+  assert.ok(open.tiles.some(t => close(t.x, 0)));
+  assert.ok(open.tiles.some(t => close(t.x + t.pixels, viewport.width)));
   assert.deepEqual(normal.tiles.map(t => t.id), open.tiles.map(t => t.id), 'same tile nodes across modes');
 });
 
@@ -88,12 +88,33 @@ test('on narrow screens the very same achievements collapse into a responsive gr
     const positions = new Set();
     for (const tile of opened.tiles.filter(t => t.entry)) {
       assert.ok(tile.x >= -1e-6 && tile.x+tile.pixels <= viewport.width+1e-6);
-      assert.ok(tile.y >= 78);
+      assert.ok(tile.y >= 0);
       const key = `${tile.x.toFixed(5)}:${tile.y.toFixed(5)}`;
       assert.ok(!positions.has(key), `overlapping tile at ${key}`);
       positions.add(key);
     }
     assert.ok(opened.contentHeight >= viewport.height);
-    assert.ok(opened.tiles.filter(t=>t.decorative).every(t=>t.hidden));
+    assert.ok(opened.tiles.filter(t=>t.decorative).every(t=>!t.hidden));
+  }
+});
+
+
+test('archive covers every viewport cell with squares, no side or bottom gaps', () => {
+  for (const viewport of [
+    {width: 390,height: 844}, {width: 768,height: 1024},
+    {width: 1100,height: 580}, {width: 1280,height: 800},
+    {width: 1722,height: 854}, {width: 1920,height: 1080},
+  ]) {
+    for (const count of [4, 18, 34, 67]) {
+      const { tiles } = layoutMosaic(makeEntries(count), viewport, true);
+      const ySteps = 16, xSteps = 18;
+      for (let r = 0; r < ySteps; r++) for (let c = 0; c < xSteps; c++) {
+        const x = (c + 0.5) * viewport.width / xSteps;
+        const y = (r + 0.5) * viewport.height / ySteps;
+        const covering = tiles.filter(t => x >= t.x - 1e-7 && x < t.x + t.pixels - 1e-7 && y >= t.y - 1e-7 && y < t.y + t.pixels - 1e-7);
+        assert.equal(covering.length, 1, `${viewport.width}×${viewport.height} count=${count}, at (${x},${y})`);
+      }
+      for (const tile of tiles) assert.ok(close(tile.pixels, tile.pixels));
+    }
   }
 });
