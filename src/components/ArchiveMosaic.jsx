@@ -91,22 +91,29 @@ export default function ArchiveMosaic({ entries, viewport, archive, lang, onOpen
     element.addEventListener('pointerover', hoverEntry, { passive: true });
     element.addEventListener('focusin', pause);
     element.addEventListener('scroll', scroll, { passive: true });
-    // ~25 fps is enough for this slow motion and avoids a 60 fps React workload.
-    const timer = window.setInterval(() => {
-      const time = performance.now();
+    // Drive the 2-second eased rewind with requestAnimationFrame. The DOM
+    // scroll position changes per frame; React only updates at 120px buckets.
+    // This is smoother than the previous 25fps interval without re-rendering
+    // hundreds of tiles every frame.
+    let frame = 0;
+    const tick = time => {
       const delta = lastTime.current ? Math.min(time - lastTime.current, 100) : 0;
       lastTime.current = time;
-      if (document.hidden || reduce.matches || time < pauseUntil.current) return;
-      const max = element.scrollHeight - element.clientHeight;
-      if (max <= 40) return;
-      const next = advanceAutoScroll(
-        { ...scrollState.current, position: element.scrollTop }, delta, max
-      );
-      scrollState.current = next;
-      element.scrollTop = next.position;
-    }, 40);
+      if (!document.hidden && !reduce.matches && time >= pauseUntil.current) {
+        const max = element.scrollHeight - element.clientHeight;
+        if (max > 40) {
+          const next = advanceAutoScroll(
+            { ...scrollState.current, position: element.scrollTop }, delta, max
+          );
+          scrollState.current = next;
+          element.scrollTop = next.position;
+        }
+      }
+      frame = window.requestAnimationFrame(tick);
+    };
+    frame = window.requestAnimationFrame(tick);
     return () => {
-      window.clearInterval(timer);
+      window.cancelAnimationFrame(frame);
       element.removeEventListener('wheel', pause);
       element.removeEventListener('touchstart', pause);
       element.removeEventListener('pointerdown', pause);

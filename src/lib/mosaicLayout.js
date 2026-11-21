@@ -128,21 +128,30 @@ function archiveGeometry(width) {
 }
 export function computeMetrics({ width, height, archive = false }) {
   const compact = width <= 900 || (width <= 1200 && height <= 640);
-  const sideInset = Math.max(17, Math.min(64, width * 0.065));
+  // In compact portfolio mode, the old 6.5% side insets reduced the
+  // archive streams to barely visible slivers on phones. Reserve visible,
+  // symmetrical rails while keeping enough width for an editorial page.
+  const mobileRail = Math.min(82, Math.max(34, 34 + (width - 280) * 0.21));
+  const compactRail = width <= 600
+    ? mobileRail
+    : Math.min(140, Math.max(88, width * 0.13));
   const panelWidth = compact
-    ? Math.min(620, width - 2 * sideInset)
+    ? (width <= 600 ? width - 2 * mobileRail : Math.min(620, width - 2 * compactRail))
     : Math.min(600, Math.max(468, width * 0.43));
   // Reserve enough physical room for readable achievement squares in desktop wings.
   // Below this width we use the previously agreed responsive side streams.
   const wideSideWidth = (width - panelWidth) / 2;
   const useCompact = compact || wideSideWidth < 410;
+  const finalPanelWidth = useCompact && !compact
+    ? Math.min(620, width - 2 * compactRail)
+    : panelWidth;
   const gridColumns = useCompact ? (width < 480 ? 2 : width < 720 ? 3 : 4) : 10;
   const gridInset = 0;
   const unit = useCompact
     ? archive ? width / gridColumns : Math.max(104, Math.min(170, width * 0.27))
     : archive ? archiveGeometry(width).unit : Math.min(112, Math.max(66, (width - panelWidth) / 7.8));
   return {
-    width, height, panelWidth, unit, compact: useCompact, mobile: useCompact,
+    width, height, panelWidth: finalPanelWidth, unit, compact: useCompact, mobile: useCompact,
     gridColumns, gridInset,
     archiveModuleColumns: useCompact ? null : archiveGeometry(width).columns,
   };
@@ -152,7 +161,9 @@ function layoutCompact(entries, metrics, archive) {
   const { width, height, panelWidth, gridColumns } = metrics;
   const leftEdge = (width - panelWidth) / 2;
   const rightEdge = (width + panelWidth) / 2;
-  const streamUnit = Math.max((width - panelWidth) / 2, Math.max(104, Math.min(170, width * 0.27)));
+  // Every rail tile is exactly as wide as the visible rail, not wider and
+  // clipped off-screen. This preserves squares AND exposes the imagery.
+  const streamUnit = leftEdge;
   const minimumPerSide = Math.ceil(height / streamUnit) + 4;
   const archiveUnit = width / gridColumns;
   const minimumArchiveSlots = gridColumns * Math.ceil(height / archiveUnit);
@@ -167,7 +178,7 @@ function layoutCompact(entries, metrics, archive) {
     const { side, row, entry } = slot;
     const x = archive ? (order % gridColumns) * archiveUnit
       : side === 'left' ? leftEdge - streamUnit : rightEdge;
-    const y = archive ? Math.floor(order / gridColumns) * archiveUnit : (row - 2) * streamUnit;
+    const y = archive ? Math.floor(order / gridColumns) * archiveUnit : row * streamUnit;
     return {
       id: slot.id, side, entry, decorative: !entry, compact: true,
       size: 1, x, y, pixels: archive ? archiveUnit : streamUnit, hidden: false,
@@ -175,7 +186,7 @@ function layoutCompact(entries, metrics, archive) {
   });
   const archiveRows = Math.ceil(slots.length / gridColumns);
   const contentHeight = archive ? Math.max(height + 1, archiveRows * archiveUnit)
-    : Math.max(height + 1, (slotsPerSide + 1) * streamUnit);
+    : Math.max(height + 1, slotsPerSide * streamUnit);
   return { tiles, metrics, contentHeight, moduleCount: archiveRows };
 }
 

@@ -247,3 +247,42 @@ a { color: inherit; }
 .mosaic-scroll { scroll-behavior: auto; }
 
 :root[data-theme="dark"] .mosaic-tile--ambient { background-blend-mode: screen, normal; }
+
+/* Responsive portfolio: visible square streams and a narrow-screen editorial page.
+   The rails occupy actual layout space instead of being clipped behind paper. */
+@media (max-width: 600px) {
+  .site-shell--compact .portfolio-panel {
+    padding: max(76px, calc(env(safe-area-inset-top, 0px) + 64px))
+      clamp(12px, 3.3vw, 18px) 20px;
+  }
+  .site-shell--compact .panel-heading { gap: 5px; padding-bottom: 18px; }
+  .site-shell--compact .panel-label { font-size: 7px; letter-spacing: .06em; }
+  .site-shell--compact .panel-index { font-size: 8px; }
+  .site-shell--compact .intro-section { padding-top: 27px; }
+  .site-shell--compact .hero-intro { flex-direction: column; align-items: stretch; gap: 22px; }
+  .site-shell--compact .hero-copy { flex-basis: auto; width: 100%; }
+  .site-shell--compact .hero-copy h1 { font-size: clamp(32px, 8vw, 42px); overflow-wrap: anywhere; }
+  .site-shell--compact .hero-greeting { font-size: 24px; }
+  .site-shell--compact .hero-description { max-width: none; font-size: 13px; line-height: 1.7; }
+  .site-shell--compact .portrait-frame { width: min(44%, 132px); align-self: flex-start; margin-bottom: 9px; }
+  .site-shell--compact .hero-actions { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 33px; }
+  .site-shell--compact .hero-actions .pill-link { min-width: 0; width: 100%; min-height: 44px; justify-content: space-between; padding: 11px 12px; }
+  .site-shell--compact .view-title { font-size: clamp(34px, 9.3vw, 50px); overflow-wrap: anywhere; }
+  .site-shell--compact .editorial-block h2 { font-size: clamp(32px, 9.3vw, 45px); }
+  .site-shell--compact .view-lede { font-size: 15px; }
+  .site-shell--compact .resource-link { min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+  .site-shell--compact .panel-footer { flex-wrap: wrap; }
+  /* Tiny image rails are tappable picture previews, not unreadable text cards.
+     Full titles appear when entering Archive Mode. */
+  .mosaic-scroll--compact:not(.mosaic-scroll--archive) .mosaic-tile--entry .tile-content { display: none; }
+  .mosaic-scroll--compact:not(.mosaic-scroll--archive) .mosaic-tile--entry .tile-visual::after {
+    background: linear-gradient(0deg, rgba(5,11,16,.20),rgba(5,11,16,0) 65%);
+  }
+}
+@media (max-width: 350px) {
+  .site-shell--compact .hero-copy h1 { font-size: 31px; }
+  .site-shell--compact .portrait-frame { width: 108px; }
+  .site-shell--compact .panel-heading .panel-label { font-size: 6px; }
+  .site-shell--compact .floating-controls { gap: 7px; right: 7px; }
+  .site-shell--compact .orb-button { width: 42px; height: 42px; }
+}

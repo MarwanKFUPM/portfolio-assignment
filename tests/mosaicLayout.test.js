@@ -132,3 +132,21 @@ test('desktop achievement squares are always large enough and identities are sta
     }
   }
 });
+
+
+test('phone-sized portfolio exposes actual square rails at both viewport edges', () => {
+  for (const width of [280, 320, 375, 390, 430, 600]) {
+    for (const height of [568, 844, 932]) {
+      const viewport = { width, height };
+      const normal = layoutMosaic(makeEntries(12), viewport, false, 1212);
+      const archive = layoutMosaic(makeEntries(12), viewport, true, 1212);
+      const rail = (width - normal.metrics.panelWidth) / 2;
+      assert.ok(rail >= (width <= 320 ? 34 : 45), `rail too narrow at ${width}px: ${rail}`);
+      assert.ok(normal.tiles.every(t => close(t.pixels, rail)), 'all strip tiles fill the rail width');
+      assert.ok(normal.tiles.some(t => close(t.x, 0) && close(t.y, 0)), 'left upper edge covered');
+      assert.ok(normal.tiles.some(t => close(t.x + t.pixels, width) && close(t.y, 0)), 'right upper edge covered');
+      assert.ok(normal.contentHeight >= height);
+      assert.deepEqual(normal.tiles.filter(t=>t.entry).map(t=>t.id),archive.tiles.filter(t=>t.entry).map(t=>t.id));
+    }
+  }
+});

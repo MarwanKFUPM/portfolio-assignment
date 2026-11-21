@@ -13,7 +13,7 @@ test('resume delay is two seconds and down-scroll is 33% faster', () => {
   assert.ok(Math.abs(moved.position - 100 * SCROLL_SPEED_PX_PER_MS) < 1e-9);
 });
 
-test('scrolls downward, rewinds quickly at the bottom, and resumes downward', () => {
+test('scrolls downward, eases upward over two seconds, then resumes downward', () => {
   let state = { ...initialAutoScrollState(), position: 498 };
   state = advanceAutoScroll(state, 100, 500);
   assert.equal(state.position, 500);
@@ -44,4 +44,19 @@ test('clamps elapsed time, handles short archives and viewport changes', () => {
   state = advanceAutoScroll(state, 40, 20);
   assert.equal(state.phase, 'down');
   assert.ok(state.position <= 20);
+});
+
+
+test('rewind uses smooth ease-in-out and takes exactly 2000 ms', () => {
+  assert.equal(REWIND_DURATION_MS, 2000);
+  const start = { position: 1200, phase: 'rewind', rewindFrom: 1200, rewindElapsed: 0 };
+  const first = advanceAutoScroll(start, 100, 1200);
+  assert.ok(first.position > 1190, 'starts gently without an abrupt jump');
+  let state = start;
+  for (let i = 0; i < 10; i++) state = advanceAutoScroll(state, 100, 1200);
+  assert.ok(Math.abs(state.position - 600) < 1e-6, 'halfway is halfway up');
+  for (let i = 0; i < 9; i++) state = advanceAutoScroll(state, 100, 1200);
+  assert.ok(state.position >= 0 && state.position < 10, 'finishes gently');
+  state = advanceAutoScroll(state, 100, 1200);
+  assert.deepEqual(state, initialAutoScrollState());
 });
