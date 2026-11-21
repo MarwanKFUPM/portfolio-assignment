@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Illustrative artwork for PORTFOLIO">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18373d"/><stop offset="1" stop-color="#121c20"/></linearGradient><pattern id="noise" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 0H28M0 0V28" stroke="#fff" stroke-opacity=".07" stroke-width=".7"/></pattern></defs>
+<rect width="800" height="800" fill="url(#g)"/><circle cx="790" cy="50" r="490" fill="#b7c6b5" opacity=".08"/><rect width="800" height="800" fill="url(#noise)"/><rect x="37" y="37" width="726" height="726" rx="3" fill="none" stroke="#b7c6b5" stroke-opacity=".3" stroke-width="2"/>
+<text x="62" y="100" fill="#b7c6b5" font-family="monospace" font-size="20" letter-spacing="5">ARCHIVE / PORTFOLIO</text>
+<rect x="130" y="250" width="545" height="332" rx="12" fill="#e1e8db" opacity=".85"/><rect x="130" y="250" width="545" height="41" rx="12" fill="#aab9b1"/><circle cx="162" cy="270" r="6" fill="#53756d"/><circle cx="182" cy="270" r="6" fill="#53756d"/><rect x="165" y="325" width="215" height="218" rx="3" fill="#254b4a"/><rect x="411" y="329" width="228" height="14" fill="#638981"/><rect x="411" y="361" width="191" height="7" fill="#9cab9c"/><rect x="411" y="382" width="215" height="7" fill="#9cab9c"/><rect x="411" y="440" width="130" height="32" rx="16" fill="#4b706c"/>
+<path d="M62 677H738" stroke="#b7c6b5" stroke-opacity=".8" stroke-width="2"/>
+<text x="62" y="716" fill="#b7c6b5" font-family="Georgia,serif" font-size="37">PORTFOLIO</text>
+<text x="62" y="748" fill="#b7c6b5" fill-opacity=".8" font-family="monospace" font-size="15" letter-spacing="2">// a place for everything</text>
+</svg>

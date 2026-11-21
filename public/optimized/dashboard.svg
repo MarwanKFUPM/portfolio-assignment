@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Illustrative artwork for COMMERCE">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4c3b30"/><stop offset="1" stop-color="#121c20"/></linearGradient><pattern id="noise" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M0 0H28M0 0V28" stroke="#fff" stroke-opacity=".07" stroke-width=".7"/></pattern></defs>
+<rect width="800" height="800" fill="url(#g)"/><circle cx="790" cy="50" r="490" fill="#edcbaa" opacity=".08"/><rect width="800" height="800" fill="url(#noise)"/><rect x="37" y="37" width="726" height="726" rx="3" fill="none" stroke="#edcbaa" stroke-opacity=".3" stroke-width="2"/>
+<text x="62" y="100" fill="#edcbaa" font-family="monospace" font-size="20" letter-spacing="5">ARCHIVE / COMMERCE</text>
+<rect x="195" y="305" width="418" height="264" rx="3" fill="#e1c8a8"/><path d="M179 304H629L585 226H224Z" fill="#b36b52"/><path d="M255 226L237 304M337 226L325 304M420 226V304M501 226L512 304M584 226L598 304" stroke="#e8c8a7" stroke-width="15"/><rect x="243" y="346" width="135" height="223" fill="#77594f"/><rect x="413" y="346" width="150" height="110" fill="#876659"/><rect x="437" y="375" width="99" height="58" fill="#e8c8a7"/>
+<path d="M62 677H738" stroke="#edcbaa" stroke-opacity=".8" stroke-width="2"/>
+<text x="62" y="716" fill="#edcbaa" font-family="Georgia,serif" font-size="37">COMMERCE</text>
+<text x="62" y="748" fill="#edcbaa" fill-opacity=".8" font-family="monospace" font-size="15" letter-spacing="2">the constructed storefront</text>
+</svg>
